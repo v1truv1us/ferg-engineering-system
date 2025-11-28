@@ -1,0 +1,19 @@
+{
+  "name": "@ferg-engineering/opencode-plugin",
+  "version": "1.0.0",
+  "description": "Ferg Engineering System plugin for OpenCode",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "keywords": ["opencode", "plugin", "engineering", "workflow"],
+  "author": "ferg-cod3s",
+  "license": "MIT"
+}

@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "description": "Initialize ferg-engineering-system on session start",
+        "hooks": [
+          {
+            "type": "notification",
+            "message": "Ferg Engineering System loaded. Available commands: /plan, /review, /seo, /work, /compound, /deploy"
+          }
+        ]
+      }
+    ]
+  }
+}
