@@ -1,0 +1,19 @@
+{
+  "agents": {
+    "plan": {
+      "description": "Create implementation plans without executing",
+      "mode": "primary",
+      "permission": { "edit": "deny", "bash": "deny" }
+    },
+    "build": {
+      "description": "Execute plans and make code changes",
+      "mode": "primary",
+      "permission": { "edit": "allow", "bash": "ask" }
+    },
+    "review": {
+      "description": "Review code without making changes",
+      "mode": "primary",
+      "permission": { "edit": "deny", "bash": "deny" }
+    }
+  }
+}
