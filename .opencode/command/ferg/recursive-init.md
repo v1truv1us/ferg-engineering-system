@@ -1,0 +1,1 @@
+/home/vitruvius/git/ferg-engineering-system/dist/.opencode/command/ferg/recursive-init.md

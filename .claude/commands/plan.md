@@ -1,1 +1,1 @@
-/home/user/ferg-engineering-system/commands/workflows/plan.md
+/home/vitruvius/git/ferg-engineering-system/dist/.claude-plugin/commands/plan.md

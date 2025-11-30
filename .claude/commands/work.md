@@ -1,1 +1,1 @@
-/home/user/ferg-engineering-system/commands/workflows/work.md
+/home/vitruvius/git/ferg-engineering-system/dist/.claude-plugin/commands/work.md

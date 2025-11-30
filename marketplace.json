@@ -1,0 +1,77 @@
+{
+  "name": "Ferg Engineering Marketplace",
+  "description": "Curated collection of engineering tools, agents, and workflows by ferg-cod3s",
+  "version": "1.0.0",
+  "author": {
+    "name": "ferg-cod3s",
+    "email": "contact@ferg-cod3s.dev",
+    "url": "https://github.com/ferg-cod3s"
+  },
+  "repository": "https://github.com/ferg-cod3s/ferg-marketplace",
+  "license": "MIT",
+  "plugins": [
+    {
+      "name": "ferg-engineering",
+      "description": "Compounding engineering system with shared agents, commands, and skills for Claude Code & OpenCode",
+      "version": "2.0.0",
+      "author": "ferg-cod3s",
+      "repository": "https://github.com/ferg-cod3s/ferg-engineering-system",
+      "homepage": "https://github.com/ferg-cod3s/ferg-engineering-system#readme",
+      "license": "MIT",
+      "keywords": [
+        "engineering",
+        "workflow",
+        "agents",
+        "review",
+        "planning",
+        "deployment",
+        "seo",
+        "optimization"
+      ],
+      "category": "Development Tools",
+      "tags": ["productivity", "code-review", "architecture", "workflow"],
+      "sources": [
+        {
+          "type": "github",
+          "url": "https://github.com/ferg-cod3s/ferg-engineering-system"
+        }
+      ],
+      "compatibility": {
+        "claude-code": ">=1.0.0",
+        "opencode": ">=1.0.0"
+      },
+      "dependencies": {},
+      "assets": {
+        "icon": "https://github.com/ferg-cod3s.png",
+        "screenshots": [
+          "https://github.com/ferg-cod3s/ferg-engineering-system/blob/main/assets/overview.png"
+        ]
+      },
+      "changelog": {
+        "2.0.0": "Major refactor to single-source-of-truth architecture with build system",
+        "1.0.0": "Initial release with basic commands and agents"
+      },
+      "stats": {
+        "downloads": 0,
+        "stars": 0,
+        "last_updated": "2025-11-30"
+      }
+    }
+  ],
+  "categories": [
+    {
+      "name": "Development Tools",
+      "description": "Tools for software development, code review, and workflow automation"
+    },
+    {
+      "name": "Productivity",
+      "description": "Tools to enhance development productivity and workflow efficiency"
+    }
+  ],
+  "metadata": {
+    "created_at": "2025-11-30T16:00:00Z",
+    "updated_at": "2025-11-30T16:00:00Z",
+    "total_plugins": 1,
+    "categories": 2
+  }
+}

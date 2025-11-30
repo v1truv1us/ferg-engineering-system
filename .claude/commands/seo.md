@@ -1,1 +1,1 @@
-/home/user/ferg-engineering-system/commands/workflows/seo.md
+/home/vitruvius/git/ferg-engineering-system/dist/.claude-plugin/commands/seo.md

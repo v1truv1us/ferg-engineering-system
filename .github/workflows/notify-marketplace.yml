@@ -1,0 +1,21 @@
+name: Notify Marketplace
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  notify-marketplace:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger marketplace update
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ferg-cod3s/ferg-marketplace
+          event-type: release
+          client-payload: '{"version": "${{ github.event.release.tag_name }}", "repository": "${{ github.repository }}", "release_url": "${{ github.event.release.html_url }}"}'

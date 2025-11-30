@@ -1,0 +1,1 @@
+/home/vitruvius/git/ferg-engineering-system/dist/.claude-plugin/commands/recursive-init.md

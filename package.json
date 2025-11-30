@@ -1,21 +1,63 @@
 {
-  "name": "ferg-engineering-system",
+  "name": "@ferg-cod3s/engineering-system",
   "version": "2.0.0",
-  "description": "Compounding engineering system for Claude Code and OpenCode",
+  "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, and skills.",
   "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "ferg-install": "scripts/install.js"
+  },
+  "files": [
+    "dist/",
+    "scripts/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "bun run build.ts",
     "build:watch": "bun run build.ts --watch",
     "clean": "rm -rf dist",
-    "validate": "bun run build.ts --validate"
+    "validate": "bun run build.ts --validate",
+    "prepublishOnly": "bun run build",
+    "test": "echo \"No tests specified\" && exit 0",
+    "install:global": "node scripts/install.js --global",
+    "install:local": "node scripts/install.js --local"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "keywords": [
+    "engineering",
+    "workflow",
+    "agents",
+    "claude-code",
+    "opencode",
+    "code-review",
+    "planning",
+    "deployment",
+    "seo",
+    "optimization",
+    "productivity"
+  ],
   "devDependencies": {
     "bun-types": "latest"
   },
-  "author": "ferg-cod3s",
+  "author": {
+    "name": "ferg-cod3s",
+    "email": "contact@ferg-cod3s.dev",
+    "url": "https://github.com/ferg-cod3s"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/ferg-cod3s/ferg-engineering-system"
+  },
+  "bugs": {
+    "url": "https://github.com/ferg-cod3s/ferg-engineering-system/issues"
+  },
+  "homepage": "https://github.com/ferg-cod3s/ferg-engineering-system#readme",
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

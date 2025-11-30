@@ -1,1 +1,1 @@
-/home/user/ferg-engineering-system/commands/utilities/deploy.md
+/home/vitruvius/git/ferg-engineering-system/dist/.claude-plugin/commands/deploy.md

@@ -1,0 +1,1 @@
+/home/vitruvius/git/ferg-engineering-system/dist/.opencode/agent/ferg/seo-specialist.md

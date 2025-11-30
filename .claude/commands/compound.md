@@ -1,1 +1,1 @@
-/home/user/ferg-engineering-system/commands/workflows/compound.md
+/home/vitruvius/git/ferg-engineering-system/dist/.claude-plugin/commands/compound.md

@@ -2,6 +2,51 @@
 
 A compounding engineering system for UnFergettable-Designs and ferg-cod3s. Provides shared agents, commands, and skills for **Claude Code** and **OpenCode** (SST/OpenCode agentic platform).
 
+## 🚀 Easy Installation
+
+### For Claude Code
+
+**Option 1: Marketplace (Recommended)**
+```bash
+/plugin marketplace add ferg-cod3s/ferg-marketplace
+/plugin install ferg-engineering@ferg-cod3s
+```
+
+**Option 2: Direct Repository**
+```bash
+claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
+```
+
+### For OpenCode (Global - Recommended)
+
+**Option 1: Shell Script**
+```bash
+git clone https://github.com/ferg-cod3s/ferg-engineering-system
+cd ferg-engineering-system
+./setup-global.sh  # Installs to ~/.config/opencode with ferg/ namespace
+```
+
+**Option 2: npm Package** (Coming Soon)
+```bash
+npm install -g @ferg-cod3s/engineering-system
+```
+
+### For OpenCode (Project-Local)
+```bash
+git clone https://github.com/ferg-cod3s/ferg-engineering-system
+cd ferg-engineering-system
+./setup.sh  # Creates symlinks in current project
+```
+
+> **No Bun required for installation** - pre-built `dist/` is included. Bun only needed if you want to modify the system.
+
+## 📋 Quick Reference
+
+| Platform | Installation | Commands | Agents | Example Usage |
+|----------|-------------|----------|--------|---------------|
+| **Claude Code** | `/plugin marketplace add ferg-cod3s/ferg-marketplace`<br>`/plugin install ferg-engineering@ferg-cod3s` | `/plan`, `/review`, `/optimize`, `/seo`, `/deploy`, `/compound`, `/recursive-init`, `/work` | N/A | `/plan "Add user authentication"` |
+| **OpenCode** | `npm install -g @ferg-cod3s/engineering-system` | `/ferg/plan`, `/ferg/review`, `/ferg/optimize`, etc. | `ferg/architect-advisor`, `ferg/frontend-reviewer`, `ferg/seo-specialist`, `ferg/prompt-optimizer` | `/ferg/optimize 'Fix this slow query'` or `Use ferg/architect-advisor to evaluate...` |
+
 ## Architecture (v2.0)
 
 This system uses a **single source of truth** architecture with automated build:
@@ -55,6 +100,11 @@ claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
 **OpenCode (project-local):**
 ```bash
 ./setup.sh  # Creates symlinks in current project
+```
+
+**Verify Installation:**
+```bash
+./verify-install.sh  # Check both platforms are working
 ```
 
 ## Commands Available
@@ -139,6 +189,7 @@ Use `/optimize` to apply these techniques to your own prompts.
 
 ## Documentation
 
+- **[📖 Installation Guide](INSTALLATION.md)** — Complete installation options and troubleshooting
 - **[PLUGIN.md](PLUGIN.md)** — Installation and usage for Claude Code & OpenCode
 - **[CLAUDE.md](CLAUDE.md)** — Philosophy and core commands
 - **[AGENTS.md](AGENTS.md)** — Agent coordination and specialized subagents
