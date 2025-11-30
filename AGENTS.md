@@ -58,6 +58,36 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 | git-worktree | skills/devops/ | Git worktree workflow |
 | incentive-prompting | skills/prompting/ | **NEW** Research-backed prompting techniques |
 
+## Directory Context Index
+
+| Directory | Purpose | Key Files |
+|-----------|---------|-----------|
+| `.opencode/` | OpenCode plugin integration | `plugin/ferg-engineering.ts` |
+| `.claude/` | Claude Code command definitions | `commands/*.md` |
+| `content/` | Agent & command documentation | `agents/`, `commands/` |
+| `skills/` | Modular skill definitions | `devops/`, `prompting/` |
+| `scripts/` | Build & installation utilities | `install.js` |
+
+## Build Commands
+
+```bash
+# Main build process
+bun run build
+
+# Development with watch mode  
+bun run build:watch
+
+# Clean build artifacts
+bun run clean
+
+# Validate build
+bun run validate
+
+# Installation
+bun run install:global  # Global OpenCode install
+bun run install:local    # Local OpenCode install
+```
+
 ## Research References
 
 - Bsharat et al. (2023) — "Principled Instructions Are All You Need" — MBZUAI

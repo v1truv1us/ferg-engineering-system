@@ -1,10 +1,11 @@
-import { definePlugin, file, agent, command } from "@opencode-ai/plugin"
+import type { Plugin } from "@opencode-ai/plugin"
 
-export default definePlugin({
-  name: "ferg-engineering",
-  version: "2.0.0",
+const plugin: Plugin = async (input) => {
+  console.log("🔧 Ferg Engineering System loaded")
+  
+  return {
+    // Add hooks here as needed
+  }
+}
 
-  async init(config) {
-    console.log("🔧 Ferg Engineering System loaded")
-  },
-})
+export default plugin
