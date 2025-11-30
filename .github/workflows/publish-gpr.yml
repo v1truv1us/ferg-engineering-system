@@ -12,8 +12,9 @@ on:
         type: string
 
 permissions:
-  contents: read
+  contents: write
   packages: write  # Required for publishing to GitHub Packages
+  id-token: write  # Required for provenance
 
 jobs:
   publish-gpr:
