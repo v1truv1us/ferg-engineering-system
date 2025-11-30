@@ -7,7 +7,7 @@ This guide covers all installation methods for the Ferg Engineering System acros
 | Platform | Recommended Method | Commands |
 |----------|-------------------|----------|
 | **Claude Code** | Marketplace | `/plugin marketplace add ferg-cod3s/ferg-marketplace`<br>`/plugin install ferg-engineering@ferg-cod3s` |
-| **OpenCode** | npm Package | `npm install -g @ferg-cod3s/engineering-system` |
+| **OpenCode** | GitHub Packages | `npm install -g @ferg-cod3s/engineering-system --registry https://npm.pkg.github.com` |
 
 ## 📋 Detailed Installation Methods
 
@@ -37,7 +37,18 @@ claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
 
 ### OpenCode
 
-#### Option 1: npm Package (Recommended)
+#### Option 1: GitHub Packages (Recommended)
+```bash
+npm install -g @ferg-cod3s/engineering-system --registry https://npm.pkg.github.com
+```
+
+**Benefits:**
+- ✅ No npmjs.com account needed
+- ✅ Integrated with GitHub authentication
+- ✅ Private packages free for public repos
+- ✅ Automatic provenance and security
+
+#### Option 2: npm Package (Alternative)
 ```bash
 npm install -g @ferg-cod3s/engineering-system
 ```
@@ -80,7 +91,7 @@ cd ferg-engineering-system
 |--------|----------|------------------|----------------|-------------------|---------------|
 | **Marketplace** | Claude Code | Medium (2 steps) | Automatic | ✅ | Global |
 | **Direct Repo** | Claude Code | Low (1 step) | Manual | ❌ | Global |
-| **npm Package** | OpenCode | Low (1 command) | `npm update` | ✅ | Global |
+| **GitHub Packages** | OpenCode | Low (1 command) | `npm update` | ✅ | Global |
 | **Shell Script** | OpenCode | Medium (clone+run) | Re-run script | ❌ | Global |
 | **Project-Local** | OpenCode | Medium (clone+run) | Re-run script | ❌ | Local |
 
@@ -170,7 +181,12 @@ After installation, verify everything works:
 /plugin update ferg-engineering@ferg-cod3s
 ```
 
-### OpenCode (npm)
+### OpenCode (GitHub Packages)
+```bash
+npm update -g @ferg-cod3s/engineering-system --registry https://npm.pkg.github.com
+```
+
+### OpenCode (npm Alternative)
 ```bash
 npm update -g @ferg-cod3s/engineering-system
 ```

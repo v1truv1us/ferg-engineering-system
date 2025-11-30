@@ -1,6 +1,6 @@
 {
   "name": "@ferg-cod3s/engineering-system",
-  "version": "2.0.0",
+  "version": "0.0.1",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, and skills.",
   "type": "module",
   "main": "dist/index.js",
@@ -25,7 +25,8 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": true,
+    "registry": "https://npm.pkg.github.com"
   },
   "keywords": [
     "engineering",
