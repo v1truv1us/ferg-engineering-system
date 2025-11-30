@@ -1,0 +1,21 @@
+{
+  "name": "ferg-engineering-system",
+  "version": "2.0.0",
+  "description": "Compounding engineering system for Claude Code and OpenCode",
+  "type": "module",
+  "scripts": {
+    "build": "bun run build.ts",
+    "build:watch": "bun run build.ts --watch",
+    "clean": "rm -rf dist",
+    "validate": "bun run build.ts --validate"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "author": "ferg-cod3s",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ferg-cod3s/ferg-engineering-system"
+  }
+}

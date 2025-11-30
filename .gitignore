@@ -2,6 +2,9 @@ node_modules/
 .env
 .env.*
 *.log
-dist/
 .build/
 .cache/
+bun.lockb
+
+# Note: dist/ is committed so users don't need bun to use the system
+# Run `bun run build` after editing content/ to regenerate

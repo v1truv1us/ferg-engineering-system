@@ -2,45 +2,146 @@
 
 A compounding engineering system for UnFergettable-Designs and ferg-cod3s. Provides shared agents, commands, and skills for **Claude Code** and **OpenCode** (SST/OpenCode agentic platform).
 
+## Architecture (v2.0)
+
+This system uses a **single source of truth** architecture with automated build:
+
+```
+content/                    # ✏️ EDIT HERE - canonical source
+├── commands/              # Command definitions (YAML frontmatter)
+└── agents/                # Agent definitions (YAML frontmatter)
+
+build.ts                   # Bun script: transforms content → platform formats
+
+dist/                      # 🚫 GENERATED - never edit directly
+├── .claude-plugin/        # Claude Code output (YAML frontmatter)
+└── .opencode/             # OpenCode output (table format)
+```
+
+**Key Benefits:**
+- ✅ Single edit point for all changes
+- ✅ Guaranteed consistency across platforms
+- ✅ Automated transformation via `bun run build`
+- ✅ Easy to add future platforms
+
 ## Quick Start
 
-Install as a plugin for your preferred platform:
+### Prerequisites
+
+- [Bun](https://bun.sh) - Fast JavaScript runtime
+  ```bash
+  curl -fsSL https://bun.sh/install | bash
+  ```
+
+### Installation
+
+**Build from source:**
+```bash
+git clone https://github.com/ferg-cod3s/ferg-engineering-system
+cd ferg-engineering-system
+bun run build
+```
 
 **Claude Code:**
 ```bash
 claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
 ```
 
-**OpenCode:**
+**OpenCode (global install):**
 ```bash
-# Projects using this scaffold have the plugin pre-configured
-opencode  # Plugin loads automatically
+./setup-global.sh  # Installs to ~/.config/opencode with ferg/ namespace
+```
+
+**OpenCode (project-local):**
+```bash
+./setup.sh  # Creates symlinks in current project
 ```
 
 ## Commands Available
 
-- `/plan` — Create detailed implementation plans
-- `/work` — Execute plans with worktrees and task tracking
-- `/review` — Multi-perspective code review (quality, performance, SEO, security, architecture)
-- `/seo` — SEO audits with Core Web Vitals and accessibility checks
-- `/compound` — Document solved problems for team knowledge
-- `/deploy` — Pre-deployment checklist and Coolify deployment
+| Command | Description |
+|---------|-------------|
+| `/plan` | Create detailed implementation plans |
+| `/work` | Execute plans with worktrees and task tracking |
+| `/review` | Multi-perspective code review (quality, performance, SEO, security, architecture) |
+| `/seo` | SEO audits with Core Web Vitals and accessibility checks |
+| `/compound` | Document solved problems for team knowledge |
+| `/deploy` | Pre-deployment checklist and Coolify deployment |
+| `/optimize` | Transform prompts using research-backed incentive techniques (+45% quality) |
+| `/recursive-init` | Recursively initialize AGENTS.md in all subdirectories |
+
+## Agents Available (OpenCode)
+
+| Agent | Description |
+|-------|-------------|
+| `ferg/architect-advisor` | System architecture decisions with trade-off analysis |
+| `ferg/frontend-reviewer` | Frontend code review specialist (React, TypeScript, a11y) |
+| `ferg/seo-specialist` | Technical & on-page SEO expert |
+| `ferg/prompt-optimizer` | Prompt enhancement using research-backed techniques |
+
+## Development
+
+### Making Changes
+
+1. Edit files in `content/commands/` or `content/agents/`
+2. Run `bun run build` to generate platform outputs
+3. Test with both platforms
+4. Commit changes (including `dist/`)
+
+### Build Commands
+
+```bash
+bun run build            # Build all platforms
+bun run build --watch    # Watch mode for development
+bun run build --validate # Validate content without building
+```
+
+### Content Format
+
+**Commands** (content/commands/*.md):
+```markdown
+---
+name: my-command
+description: What this command does
+agent: build           # Optional: which agent handles this
+subtask: true          # Optional: run as subtask
+---
+
+# My Command
+
+Command content here with $ARGUMENTS placeholder...
+```
+
+**Agents** (content/agents/*.md):
+```markdown
+---
+name: my-agent
+description: What this agent does
+mode: subagent
+---
+
+Agent system prompt here...
+```
 
 ## Philosophy: Compounding Engineering
 
 Each unit of work should make future work easier: **Plan → Build → Review → Codify**
+
+## Incentive-Based Prompting (Research-Backed)
+
+This system integrates research-backed prompting techniques:
+- **Bsharat et al. (2023, MBZUAI)**: +45% quality improvement with incentive framing
+- **Yang et al. (2023, Google DeepMind)**: "Take a deep breath" reasoning optimization
+- **Li et al. (2023, ICLR 2024)**: +115% improvement with challenge framing
+- **Kong et al. (2023)**: 24% → 84% accuracy with expert personas
+
+Use `/optimize` to apply these techniques to your own prompts.
 
 ## Documentation
 
 - **[PLUGIN.md](PLUGIN.md)** — Installation and usage for Claude Code & OpenCode
 - **[CLAUDE.md](CLAUDE.md)** — Philosophy and core commands
 - **[AGENTS.md](AGENTS.md)** — Agent coordination and specialized subagents
-
-## Architecture
-
-**Shared:** Workflow definitions in `commands/` and `skills/`
-**Claude Code:** Plugin metadata in `.claude-plugin/`, commands symlinked to `.claude/commands/`
-**OpenCode:** Commands in `.opencode/command/`, agents in `.opencode/agent/`, plugin in `.opencode/plugin/`
 
 ## License
 

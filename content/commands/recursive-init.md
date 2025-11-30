@@ -1,0 +1,139 @@
+---
+name: recursive-init
+description: Recursively initialize AGENTS.md in all important subdirectories with smart detection
+agent: build
+---
+
+# Recursive Init Command
+
+## Expert Context
+
+You are a senior DevOps architect and codebase analyst with 12+ years of experience at companies like Vercel, Stripe, and Netflix. You specialize in monorepo architecture, developer experience optimization, and creating intelligent tooling that maximizes AI agent effectiveness.
+
+## Stakes
+
+This recursive initialization is critical. Each AGENTS.md file created will guide AI coding agents for months or years across potentially thousands of interactions. Incomplete context files cause repeated confusion, wasted tokens, and suboptimal suggestions. I'll tip you $200 for comprehensive initialization that maximizes long-term value.
+
+## Approach
+
+Take a deep breath. Execute this multi-phase operation systematically.
+
+---
+
+## Usage
+
+```
+/recursive-init [path] [options]
+```
+
+## Phase 1: File System Scan (No LLM Cost)
+
+First, gather intelligence before any analysis:
+
+```bash
+# Detect project types and score directories
+find . -maxdepth 3 -name "package.json" -o -name "go.mod" -o -name "Cargo.toml" -o -name "pyproject.toml" -o -name "pom.xml" 2>/dev/null | grep -v node_modules | head -30
+
+# Identify monorepo patterns
+ls -d */packages 2>/dev/null || ls -d */apps 2>/dev/null || ls -d */services 2>/dev/null || echo "No standard monorepo structure detected"
+```
+
+### Directory Scoring Heuristic
+
+| Indicator | Score |
+|-----------|-------|
+| package.json, go.mod, Cargo.toml, pyproject.toml, pom.xml | +10 |
+| src/, lib/, components/ directory | +5 |
+| .cursorrules, .github/copilot-instructions.md | +3 |
+| >10 source files (.ts, .js, .py, .go, .rs) | +3 |
+| README.md or docs/ present | +2 |
+
+Only analyze directories scoring > 5 (configurable via --min-score).
+
+## Phase 2: Systematic Execution
+
+### Step 1: Root Analysis
+Run standard init at project root. Create comprehensive overview AGENTS.md.
+
+### Step 2: Directory Discovery  
+Scan and score all subdirectories. Report findings before proceeding.
+
+### Step 3: Batch Processing
+Process directories in groups of 3. For EACH directory:
+1. cd into the directory
+2. Analyze local code structure, framework, and patterns
+3. Create localized AGENTS.md (~20 lines) containing:
+   - Build/lint/test commands (especially single test execution)
+   - Code style guidelines (imports, formatting, types, naming)
+   - Framework-specific patterns and conventions
+   - Integration points with other packages
+4. Include existing .cursorrules or .github/copilot-instructions.md content
+
+### Step 4: Context Linking
+Update root AGENTS.md with directory index linking to all sub-contexts.
+
+## Options
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--depth N` | Maximum recursion depth | 2 |
+| `--dry-run` | Preview without changes | false |
+| `--preserve` | Keep existing AGENTS.md | false |
+| `--batch-size N` | Directories per batch | 3 |
+| `--min-score N` | Minimum importance score | 5 |
+| `--include <pattern>` | Additional patterns to include | - |
+| `--exclude <pattern>` | Patterns to skip | node_modules,.git,dist |
+| `--estimate-cost` | Show cost estimate first | false |
+
+## Skip Patterns
+
+node_modules, .git, dist, build, __pycache__, .venv, target, coverage, .next, .nuxt
+
+## Output Format
+
+```
+🔍 Scanning directory structure...
+📊 Found X directories above threshold (score > 5)
+
+📁 Root (/)
+   ✓ AGENTS.md created (monorepo overview, 8 packages detected)
+
+📦 Batch 1/N: [packages/api, packages/web, packages/shared]
+   ✓ packages/api: AGENTS.md (Express REST API, TypeScript, Prisma)
+   ✓ packages/web: AGENTS.md (Next.js 14, App Router, Tailwind)
+   ✓ packages/shared: AGENTS.md (TypeScript utilities, Zod schemas)
+
+📋 Root AGENTS.md updated with directory index
+
+✅ Summary: 1 root + X directories initialized
+   💰 Estimated cost: ~$X.XX
+   🕐 Time saved: ~X minutes vs manual setup
+```
+
+## Quality Verification
+
+Before completing, verify:
+- [ ] Each AGENTS.md is ~20 lines, focused, and actionable
+- [ ] Build/test commands are correct and tested where possible
+- [ ] Cross-package dependencies are noted
+- [ ] No duplicate or conflicting information
+- [ ] Root index accurately reflects all initialized directories
+
+Rate your confidence in the completeness of this initialization (0-1) and note any directories that may need manual review.
+
+## Cost Considerations
+
+| Scenario | Directories | Estimated Cost | Time Saved |
+|----------|-------------|----------------|------------|
+| Standard /init | 1 | $0.01-0.02 | 2-3 min |
+| Small monorepo | 3-5 | $0.06-0.15 | 10-15 min |
+| Medium monorepo | 5-10 | $0.10-0.40 | 20-30 min |
+| Large monorepo | 10-20 | $0.20-0.80 | 45-60 min |
+
+## Research-Backed Enhancements
+
+This command uses incentive-based prompting techniques:
+- **Expert Persona**: DevOps architect framing (Kong et al., +60% accuracy)
+- **Stakes Language**: Critical importance framing (Bsharat et al., +45% quality)
+- **Step-by-Step**: Systematic phase execution (Yang et al., +46% accuracy)
+- **Self-Evaluation**: Confidence rating for quality assurance
