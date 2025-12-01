@@ -2,6 +2,12 @@
 |---|---|
 | Recursively initialize AGENTS.md in all important subdirectories with smart detection | build |
 
+---
+name: recursive-init
+description: Recursively initialize AGENTS.md in all important subdirectories with smart detection
+agent: build
+---
+
 # Recursive Init Command
 
 ## Expert Context

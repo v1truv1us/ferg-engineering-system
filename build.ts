@@ -140,6 +140,25 @@ async function buildClaudeAgents(): Promise<void> {
 }
 
 /**
+ * Copy directory recursively
+ */
+const copyRecursive = async (src: string, dest: string) => {
+  const entries = await readdir(src, { withFileTypes: true })
+  await mkdir(dest, { recursive: true })
+  
+  for (const entry of entries) {
+    const srcPath = join(src, entry.name)
+    const destPath = join(dest, entry.name)
+    
+    if (entry.isDirectory()) {
+      await copyRecursive(srcPath, destPath)
+    } else {
+      await copyFile(srcPath, destPath)
+    }
+  }
+}
+
+/**
  * Build Claude Code skills
  */
 async function buildClaudeSkills(): Promise<void> {
@@ -149,6 +168,18 @@ async function buildClaudeSkills(): Promise<void> {
   // Copy skills to dist/.claude-plugin/skills/
   await copyRecursive(SKILLS_DIR, join(CLAUDE_DIR, "skills"))
 }
+
+/**
+ * Build Claude Code plugin.json and hooks
+ */
+async function buildClaudePlugin(): Promise<void> {
+  const pluginJson = {
+    name: "ferg-engineering",
+    version: "2.0.0",
+    description: "Compounding engineering system for Claude Code",
+    author: "ferg-cod3s",
+    license: "MIT"
+  }
 
   await writeFile(
     join(CLAUDE_DIR, "plugin.json"),
@@ -178,13 +209,16 @@ async function buildClaudeSkills(): Promise<void> {
   )
 
   // Copy commands (Claude uses YAML frontmatter format directly)
+  const commandsDir = join(CLAUDE_DIR, "commands")
+  await mkdir(commandsDir, { recursive: true })
+  
+  const commandFiles = await getMarkdownFiles(join(CONTENT_DIR, "commands"))
   for (const file of commandFiles) {
     const content = await readFile(file, "utf-8")
     const dest = join(commandsDir, basename(file))
     await writeFile(dest, content)
   }
 
-  }
   console.log(`   ✓ ${commandFiles.length} commands`)
   console.log(`   ✓ plugin.json`)
 }
@@ -207,8 +241,8 @@ async function buildOpenCode(): Promise<void> {
   const commandFiles = await getMarkdownFiles(join(CONTENT_DIR, "commands"))
   for (const file of commandFiles) {
     const content = await readFile(file, "utf-8")
-    const { meta, body } = parseFrontmatter(content)
-    const transformed = transformToOpenCodeCommand(meta as CommandMeta, body)
+    const { meta } = parseFrontmatter(content)
+    const transformed = transformToOpenCodeCommand(meta, content)
     const dest = join(commandsDir, basename(file))
     await writeFile(dest, transformed)
   }
@@ -251,26 +285,10 @@ async function copySkills(): Promise<void> {
   
   if (existsSync(SKILLS_DIR)) {
     await mkdir(destDir, { recursive: true })
-    
-    const copyRecursive = async (src: string, dest: string) => {
-      const entries = await readdir(src, { withFileTypes: true })
-      await mkdir(dest, { recursive: true })
-      
-      for (const entry of entries) {
-        const srcPath = join(src, entry.name)
-        const destPath = join(dest, entry.name)
-        
-        if (entry.isDirectory()) {
-          await copyRecursive(srcPath, destPath)
-        } else {
-          await copyFile(srcPath, destPath)
-        }
-      }
-    }
-    
     await copyRecursive(SKILLS_DIR, destDir)
-    console.log(`   ✓ skills copied`)
   }
+  
+  console.log(`   ✓ skills copied`)
 }
 
 /**
@@ -295,7 +313,9 @@ async function build(): Promise<void> {
   }
 
   // Build all platforms
-  await buildClaude()
+  await buildClaudeAgents()
+  await buildClaudeSkills()
+  await buildClaudePlugin()
   await buildOpenCode()
   await copySkills()
 

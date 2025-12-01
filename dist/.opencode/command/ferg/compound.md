@@ -2,6 +2,12 @@
 |---|---|
 | Document a solved problem to compound team knowledge | build |
 
+---
+name: compound
+description: Document a solved problem to compound team knowledge
+agent: build
+---
+
 # Compound Command
 
 Document a solved problem to build team knowledge over time.

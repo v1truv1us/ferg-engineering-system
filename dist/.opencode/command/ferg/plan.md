@@ -2,6 +2,12 @@
 |---|---|
 | Create a detailed implementation plan for a feature | plan |
 
+---
+name: plan
+description: Create a detailed implementation plan for a feature
+agent: plan
+---
+
 # Plan Command
 
 Create a structured implementation plan for: $ARGUMENTS
