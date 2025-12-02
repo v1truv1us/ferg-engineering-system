@@ -16,7 +16,7 @@
         "repo": "ferg-cod3s/ferg-engineering-system"
       },
       "description": "Compounding engineering system with shared agents, commands, and skills for Claude Code & OpenCode",
-      "version": "0.2.0",
+      "version": "0.1.1",
       "author": {
         "name": "ferg-cod3s",
         "email": "contact@ferg-cod3s.dev"
