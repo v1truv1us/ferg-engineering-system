@@ -56,7 +56,41 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 |-------|----------|---------|
 | coolify-deploy | skills/devops/ | Coolify deployment best practices |
 | git-worktree | skills/devops/ | Git worktree workflow |
-| incentive-prompting | skills/prompting/ | **NEW** Research-backed prompting techniques |
+| incentive-prompting | skills/prompting/ | Research-backed prompting techniques |
+| comprehensive-research | skills/research/ | **NEW** Multi-phase research orchestration |
+
+## Commands Available
+
+| Command | Description | Agent Mode |
+|---------|-------------|------------|
+| /plan | Create implementation plans | read-only |
+| /review | Code review with multi-agent coordination | read-only |
+| /deploy | Deployment workflow | build |
+| /seo | SEO audit and optimization | read-only |
+| /research | **NEW** Comprehensive multi-phase research | read-only |
+| /work | Implementation workflow | build |
+| /optimize | Performance optimization | build |
+| /recursive-init | Initialize AGENTS.md across directories | read-only |
+
+### Using /research
+
+The research command orchestrates multiple agents for thorough investigation:
+
+```bash
+# Basic research
+/research "How does authentication work in this codebase?"
+
+# Research with specific scope
+/research "Analyze payment processing" --scope=codebase --depth=deep
+
+# Research from ticket
+/research --ticket="docs/tickets/AUTH-123.md"
+```
+
+**Research Phases:**
+1. **Discovery** (Parallel): codebase-locator, research-locator, codebase-pattern-finder
+2. **Analysis** (Sequential): codebase-analyzer, research-analyzer
+3. **Synthesis**: Consolidated findings with evidence and recommendations
 
 ## Directory Context Index
 
@@ -65,7 +99,7 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 | `.opencode/` | OpenCode plugin integration | `plugin/ferg-engineering.ts` |
 | `.claude/` | Claude Code command definitions | `commands/*.md` |
 | `content/` | Agent & command documentation | `agents/`, `commands/` |
-| `skills/` | Modular skill definitions | `devops/`, `prompting/` |
+| `skills/` | Modular skill definitions | `devops/`, `prompting/`, `research/` |
 | `scripts/` | Build & installation utilities | `install.js` |
 
 ## Build Commands

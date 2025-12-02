@@ -1,6 +1,6 @@
 {
   "name": "@ferg-cod3s/engineering-system",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
   "type": "module",
   "main": "dist/index.js",
@@ -20,8 +20,8 @@
     "validate": "bun run build.ts --validate",
     "prepublishOnly": "bun run build",
     "test": "echo \"No tests specified\" && exit 0",
-    "install:global": "node scripts/install.js --global",
-    "install:local": "node scripts/install.js --local"
+    "install:global": "bun scripts/install.js --global",
+    "install:local": "bun scripts/install.js --local"
   },
   "publishConfig": {
     "access": "public",
@@ -63,6 +63,6 @@
   },
   "homepage": "https://github.com/ferg-cod3s/ferg-engineering-system#readme",
   "engines": {
-    "node": ">=16.0.0"
+    "bun": ">=1.0.0"
   }
 }
