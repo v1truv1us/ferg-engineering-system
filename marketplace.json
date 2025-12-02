@@ -13,7 +13,7 @@
     {
       "name": "ferg-engineering",
       "description": "Compounding engineering system with shared agents, commands, and skills for Claude Code & OpenCode",
-      "version": "2.0.0",
+      "version": "0.1.0",
       "author": "ferg-cod3s",
       "repository": "https://github.com/ferg-cod3s/ferg-engineering-system",
       "homepage": "https://github.com/ferg-cod3s/ferg-engineering-system#readme",
@@ -47,10 +47,11 @@
           "https://github.com/ferg-cod3s/ferg-engineering-system/blob/main/assets/overview.png"
         ]
       },
-      "changelog": {
-        "2.0.0": "Major refactor to single-source-of-truth architecture with build system",
-        "1.0.0": "Initial release with basic commands and agents"
-      },
+        "changelog": {
+          "0.1.0": "Add comprehensive research skill with multi-phase agent orchestration",
+          "0.0.2": "Major refactor to single-source-of-truth architecture with build system",
+          "0.0.1": "Initial release with basic commands and agents"
+        },
       "stats": {
         "downloads": 0,
         "stars": 0,
