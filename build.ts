@@ -173,9 +173,12 @@ async function buildClaudeSkills(): Promise<void> {
  * Build Claude Code plugin.json and hooks
  */
 async function buildClaudePlugin(): Promise<void> {
+  // Read version from package.json
+  const packageJson = JSON.parse(await readFile(join(ROOT, "package.json"), "utf-8"))
+  
   const pluginJson = {
     name: "ferg-engineering",
-    version: "2.0.0",
+    version: packageJson.version,
     description: "Compounding engineering system for Claude Code",
     author: "ferg-cod3s",
     license: "MIT"
