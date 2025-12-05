@@ -1,21 +1,24 @@
 # Test Report
 
-Generated: 2025-12-05T04:53:42.156Z
+Generated: 2025-12-05T18:25:00.533Z
 
 ## Summary
 
-- Total Test Suites: 1
+- Total Test Suites: 4
 - Passed: 1
-- Failed: 0
-- Success Rate: 100.0%
+- Failed: 3
+- Success Rate: 25.0%
 
 ## Results
 
 - unit: ✅ PASSED
+- integration: ❌ FAILED
+- performance: ❌ FAILED
+- build: ❌ FAILED
 
 ## Next Steps
 
-🎉 All tests passed! Ready for deployment.
+🔧 Fix failing tests before merging or releasing.
 
 ---
 

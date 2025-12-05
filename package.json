@@ -19,7 +19,17 @@
     "clean": "rm -rf dist",
     "validate": "bun run build.ts --validate",
     "prepublishOnly": "bun run build",
-    "test": "echo \"No tests specified\" && exit 0",
+    "test": "bun run test:runner",
+    "test:unit": "bun test tests/unit.test.ts",
+    "test:integration": "bun test tests/integration.test.ts",
+    "test:performance": "bun test tests/performance.test.ts",
+    "test:build": "bun test tests/build.test.ts",
+    "test:execution": "bun test tests/execution/*.test.ts",
+    "test:context": "bun test tests/context/*.test.ts",
+    "test:cli": "bun test tests/cli/*.test.ts",
+    "test:runner": "bun run test-runner.ts",
+    "test:watch": "bun test --watch",
+    "test:coverage": "bun test --coverage",
     "install:global": "bun scripts/install.js --global",
     "install:local": "bun scripts/install.js --local"
   },
@@ -46,7 +56,8 @@
     "cross-platform"
   ],
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "@types/node": "^20.0.0"
   },
   "author": {
     "name": "v1truv1us",
@@ -64,5 +75,10 @@
   "homepage": "https://github.com/v1truv1us/ferg-engineering-system#readme",
   "engines": {
     "bun": ">=1.0.0"
+  },
+  "dependencies": {
+    "commander": "^14.0.2",
+    "glob": "^13.0.0",
+    "yaml": "^2.8.2"
   }
 }

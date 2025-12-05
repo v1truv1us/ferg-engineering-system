@@ -1,12 +1,10 @@
 {
   "name": "ferg-engineering",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Compounding engineering system for Claude Code",
   "author": "ferg-cod3s",
   "license": "MIT",
   "commands": [
-    "./commands/plan.md",
-    "./commands/work.md",
     "./commands/review.md",
     "./commands/seo.md",
     "./commands/compound.md",
@@ -19,6 +17,8 @@
     "./commands/create-plugin.md",
     "./commands/research.md",
     "./commands/context.md",
-    "./commands/recursive-init.md"
+    "./commands/recursive-init.md",
+    "./commands/plan.md",
+    "./commands/work.md"
   ]
 }

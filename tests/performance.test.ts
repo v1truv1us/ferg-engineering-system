@@ -515,7 +515,8 @@ function transformToOpenCodeAgent(meta: any, body: string): string {
 }
 
 async function getMarkdownFiles(dir: string): Promise<string[]> {
-  const { readdir, existsSync } = await import('fs/promises')
+  const { readdir } = await import('fs/promises')
+  const { existsSync } = await import('fs')
   const { join } = await import('path')
   
   const files: string[] = []
