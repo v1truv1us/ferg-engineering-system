@@ -64,5 +64,9 @@
   "homepage": "https://github.com/v1truv1us/ferg-engineering-system#readme",
   "engines": {
     "bun": ">=1.0.0"
+  },
+  "dependencies": {
+    "commander": "^14.0.2",
+    "yaml": "^2.8.2"
   }
 }

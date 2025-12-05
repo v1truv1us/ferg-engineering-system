@@ -1,0 +1,100 @@
+metadata:
+  id: example-phase1
+  name: Phase 1 Example Plan
+  version: 1.0.0
+  description: Example plan demonstrating Phase 1 execution engine capabilities
+  author: Ferg Engineering System
+  tags:
+    - example
+    - phase1
+    - demonstration
+
+tasks:
+  - id: setup
+    name: Setup Environment
+    type: shell
+    description: Initialize development environment
+    command: echo "Setting up development environment..."
+    timeout: 30
+
+  - id: lint
+    name: Code Linting
+    type: lint
+    description: Run code linting and formatting checks
+    command: echo "Running lint checks... ✓ Passed"
+    dependsOn:
+      - setup
+    timeout: 60
+
+  - id: types
+    name: Type Checking
+    type: types
+    description: Run TypeScript type checking
+    command: echo "Running type checks... ✓ Passed"
+    dependsOn:
+      - lint
+    timeout: 120
+
+  - id: tests
+    name: Unit Tests
+    type: tests
+    description: Run unit test suite
+    command: echo "Running unit tests... ✓ All 53 tests passed"
+    dependsOn:
+      - types
+    timeout: 300
+
+  - id: build
+    name: Build Project
+    type: build
+    description: Build project
+    command: echo "Building project... ✓ Build completed in 88ms"
+    dependsOn:
+      - tests
+    timeout: 180
+
+  - id: integration
+    name: Integration Tests
+    type: integration
+    description: Run integration test suite
+    command: echo "Running integration tests... ✓ All 7 tests passed"
+    dependsOn:
+      - build
+    timeout: 600
+
+qualityGates:
+  - id: lint-gate
+    name: Code Quality Gate
+    type: lint
+    description: Ensure code meets quality standards
+    required: true
+
+  - id: types-gate
+    name: Type Safety Gate
+    type: types
+    description: Ensure TypeScript compilation succeeds
+    required: true
+
+  - id: tests-gate
+    name: Test Coverage Gate
+    type: tests
+    description: Ensure all tests pass with sufficient coverage
+    required: true
+
+  - id: build-gate
+    name: Build Validation Gate
+    type: build
+    description: Ensure project builds successfully
+    required: true
+
+  - id: integration-gate
+    name: Integration Gate
+    type: integration
+    description: Ensure integration tests pass
+    required: false
+
+  - id: deploy-gate
+    name: Deployment Readiness Gate
+    type: deploy
+    description: Validate deployment readiness
+    required: false
