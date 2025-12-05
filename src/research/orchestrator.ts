@@ -4,7 +4,8 @@
  */
 
 import { EventEmitter } from 'events';
-import { AgentCoordinator, AgentTask, AgentTaskStatus, AgentType } from '../agents/types.js';
+import { AgentCoordinator } from '../agents/coordinator.js';
+import { AgentTask, AgentTaskStatus, AgentType } from '../agents/types.js';
 import {
   ResearchQuery,
   ResearchPhase,
@@ -286,11 +287,13 @@ export class ResearchOrchestrator extends EventEmitter {
       throw new Error('Query must have a non-empty query string');
     }
     
-    if (!Object.values(ResearchScope).includes(query.scope)) {
+    const validScopes = Object.values(ResearchScope);
+    if (!validScopes.includes(query.scope)) {
       throw new Error(`Invalid scope: ${query.scope}`);
     }
     
-    if (!Object.values(ResearchDepth).includes(query.depth)) {
+    const validDepths = Object.values(ResearchDepth);
+    if (!validDepths.includes(query.depth)) {
       throw new Error(`Invalid depth: ${query.depth}`);
     }
   }
