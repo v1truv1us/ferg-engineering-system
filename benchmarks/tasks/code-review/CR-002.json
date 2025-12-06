@@ -1,0 +1,21 @@
+{
+  "id": "CR-002",
+  "category": "code-review",
+  "title": "Review Database Query Function for N+1 and SQL Injection",
+  "task": "Analyze this database query function for performance issues, N+1 query problems, and SQL injection vulnerabilities. Provide specific refactoring recommendations with code examples.",
+  "context": "This function is part of an e-commerce platform's order management system. It's used to fetch orders with their associated items and customer information. The database contains millions of orders.",
+  "code": "async function getOrderWithItems(orderId) {\n  const connection = await db.getConnection();\n  \n  // Get order details\n  const orderQuery = `SELECT * FROM orders WHERE id = ${orderId}`;\n  const [order] = await connection.query(orderQuery);\n  \n  // Get order items for each order\n  const itemsQuery = `SELECT * FROM order_items WHERE order_id = ${orderId}`;\n  const items = [];\n  \n  for (const item of items) {\n    const itemQuery = `SELECT * FROM products WHERE id = ${item.product_id}`;\n    const [product] = await connection.query(itemQuery);\n    items.push({\n      ...item,\n      product: product[0]\n    });\n  }\n  \n  // Get customer info\n  const customerQuery = `SELECT * FROM customers WHERE id = ${order[0].customer_id}`;\n  const [customer] = await connection.query(customerQuery);\n  \n  await connection.release();\n  \n  return {\n    order: order[0],\n    items,\n    customer: customer[0]\n  };\n}",
+  "language": "javascript",
+  "expected_elements": [
+    "SQL injection vulnerability in query construction",
+    "N+1 query problem with order items",
+    "Database connection management issues",
+    "Performance optimization opportunities",
+    "Error handling improvements",
+    "Code structure and maintainability issues"
+  ],
+  "difficulty": "medium",
+  "validates_techniques": ["expert-persona", "stakes-language"],
+  "estimated_time": 20,
+  "tags": ["database", "sql", "n-plus-one", "performance", "security"]
+}

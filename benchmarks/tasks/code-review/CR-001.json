@@ -1,0 +1,21 @@
+{
+  "id": "CR-001",
+  "category": "code-review",
+  "title": "Review Authentication Middleware for Security Issues",
+  "task": "Analyze this authentication middleware for security vulnerabilities, performance issues, and code quality problems. Provide specific recommendations for each issue found, including code examples where applicable.",
+  "context": "This middleware is used in a production Node.js application handling user authentication for a SaaS platform. It processes login requests, validates JWT tokens, and manages user sessions.",
+  "code": "const jwt = require('jsonwebtoken');\nconst rateLimit = require('express-rate-limit');\n\nconst authenticate = async (req, res, next) => {\n  try {\n    // Check rate limiting\n    const limiter = rateLimit({\n      windowMs: 15 * 60 * 1000, // 15 minutes\n      max: 100, // limit each IP to 100 requests per windowMs\n      message: 'Too many requests from this IP'\n    });\n    \n    // Get token from header\n    const token = req.headers.authorization?.split(' ')[1];\n    \n    if (!token) {\n      return res.status(401).json({ error: 'No token provided' });\n    }\n    \n    // Verify JWT\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    req.user = decoded;\n    \n    next();\n  } catch (error) {\n    return res.status(401).json({ error: 'Invalid token' });\n  }\n};\n\nmodule.exports = authenticate;",
+  "language": "javascript",
+  "expected_elements": [
+    "SQL injection vulnerabilities in token handling",
+    "Rate limiting implementation issues",
+    "JWT token validation security problems",
+    "Error handling and information disclosure",
+    "Code quality and best practices violations",
+    "Performance optimization opportunities"
+  ],
+  "difficulty": "medium",
+  "validates_techniques": ["expert-persona", "stakes-language"],
+  "estimated_time": 15,
+  "tags": ["security", "middleware", "authentication", "jwt", "nodejs"]
+}
