@@ -1,0 +1,23 @@
+{
+  "id": "CT-001",
+  "category": "creative",
+  "title": "Design REST API Schema for Booking System",
+  "task": "Design a comprehensive REST API schema for a multi-service booking system that handles appointments, resources, and scheduling. The API should support different resource types (meeting rooms, equipment, personnel), handle conflicts, support recurring bookings, and provide real-time availability. Include OpenAPI specification, data models, and error handling.",
+  "context": "This is for a new enterprise booking platform that will replace multiple legacy scheduling systems. The API needs to integrate with existing authentication, notification, and billing services. It must handle high concurrency and support mobile and web clients.",
+  "expected_elements": [
+    "Complete OpenAPI 3.0 specification",
+    "Resource models with relationships and constraints",
+    "Booking workflow with state management",
+    "Conflict detection and resolution strategies",
+    "Real-time availability calculation",
+    "Authentication and authorization integration",
+    "Error handling and status codes",
+    "Rate limiting and pagination",
+    "Webhook support for notifications",
+    "Data validation and sanitization rules"
+  ],
+  "difficulty": "medium",
+  "validates_techniques": ["expert-persona", "step-by-step", "stakes-language", "challenge-framing", "self-evaluation"],
+  "estimated_time": 30,
+  "tags": ["api-design", "openapi", "booking-system", "rest", "schema-design", "enterprise"]
+}

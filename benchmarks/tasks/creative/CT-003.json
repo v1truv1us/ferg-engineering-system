@@ -1,0 +1,23 @@
+{
+  "id": "CT-003",
+  "category": "creative",
+  "title": "Write Comprehensive Documentation for Complex System",
+  "task": "Write comprehensive documentation for a complex distributed system including API reference, user guides, deployment guides, and troubleshooting documentation. The documentation should be clear, accurate, and include examples. Consider different user personas (developers, operators, end users) and provide multiple learning paths.",
+  "context": "This is for a critical production system that has poor documentation causing high support burden. The system includes microservices, databases, message queues, and complex business logic. Good documentation is essential for reducing support tickets and enabling self-service.",
+  "expected_elements": [
+    "API reference with all endpoints and data models",
+    "User guides for different personas and use cases",
+    "Deployment and configuration guides",
+    "Troubleshooting guide with common issues",
+    "Architecture overview and system diagrams",
+    "Code examples and best practices",
+    "Integration examples and tutorials",
+    "Glossary of terms and concepts",
+    "Changelog and version information",
+    "Contributing guidelines for developers"
+  ],
+  "difficulty": "hard",
+  "validates_techniques": ["expert-persona", "step-by-step", "stakes-language", "challenge-framing", "self-evaluation"],
+  "estimated_time": 60,
+  "tags": ["documentation", "technical-writing", "api-docs", "user-guides", "distributed-systems", "knowledge-base"]
+}
