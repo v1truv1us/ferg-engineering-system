@@ -49,12 +49,12 @@ if [ -d "$GLOBAL_DIR/command/ferg" ]; then
   if [ "$cmd_count" -gt 0 ]; then
     echo "   ✅ Commands found: $cmd_count commands"
     echo "   ✅ Agents found: $agent_count agents"
-    echo "   ✅ Use with /ferg/ prefix (e.g., /ferg/plan)"
+    echo "   ✅ Use with /ai-eng/ prefix (e.g., /ai-eng/plan)"
   else
     echo "   ❌ No commands/agents found"
   fi
 else
-  echo "   ⚠️  Global ferg/ not found (run ./setup-global.sh)"
+  echo "   ⚠️  Global ai-eng/ not found (run ./setup-global.sh)"
 fi
 
 echo ""
@@ -63,6 +63,6 @@ echo "✅ Verification complete!"
 echo ""
 echo "Usage Examples:"
 echo "  Claude Code: /plan, /review, /optimize"
-echo "  OpenCode:    /ferg/plan, /ferg/review, /ferg/optimize"
-echo "  OpenCode Agents: 'Use ferg/architect-advisor to evaluate...'"
+echo "  OpenCode:    /ai-eng/plan, /ai-eng/review, /ai-eng/optimize"
+echo "  OpenCode Agents: 'Use ai-eng/architect-advisor to evaluate...'"
 echo ""
