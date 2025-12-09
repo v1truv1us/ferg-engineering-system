@@ -1,0 +1,20 @@
+{
+  "task_id": "HP-003",
+  "prompt_type": "baseline",
+  "variant_id": "v1",
+  "prompt": "# Hard Problems Baseline Prompt\n\n## Task\n\nRefactor a 2000-line legacy JavaScript file with circular dependencies, global state, and mixed concerns into a clean, modular architecture. The code is critical for business operations but is unmaintainable and has frequent bugs. Provide a complete refactoring plan with step-by-step implementation.\n\n{{#if context}}\n## Context\n\nThis is a 5-year-old Node.js application file that handles order processing, inventory management, and notifications all mixed together. It has no tests, uses global variables, and has circular dependencies that make it impossible to reason about. The business wants to add new features but is afraid to touch the code. Recent production bugs have caused customer order failures.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\n// LEGACY SPAGHETTI CODE - DO NOT MODIFY WITHOUT UNDERSTANDING FULL IMPACT\n\n// Global state (anti-pattern)\nvar currentOrder = null;\nvar inventoryCache = {};\nvar notificationQueue = [];\n\n// Circular dependencies\nfunction processOrder(orderId) {\n  currentOrder = findOrder(orderId);\n  updateInventory(currentOrder.items);\n  sendNotifications(currentOrder);\n}\n\nfunction updateInventory(items) {\n  // Circular: processOrder -> updateInventory -> checkInventory -> processOrder\n  items.forEach(item => {\n    inventoryCache[item.id] = item;\n    checkInventory(item.id); // Can trigger processOrder again!\n  });\n}\n\nfunction checkInventory(itemId) {\n  if (!inventoryCache[itemId]) {\n    processOrder(currentOrder.id); // CIRCULAR DEPENDENCY!\n  }\n}\n\n// Mixed concerns in one function\nfunction handleNewOrder(orderData) {\n  // Validation\n  if (!orderData.customerId) return false;\n  if (!orderData.items || orderData.items.length === 0) return false;\n  \n  // Processing\n  currentOrder = orderData;\n  processOrder(orderData.id);\n  \n  // Database operations\n  db.query('INSERT INTO orders ...', currentOrder);\n  \n  // Notifications\n  notificationQueue.push({\n    type: 'order_created',\n    orderId: currentOrder.id,\n    timestamp: Date.now()\n  });\n  \n  // Analytics tracking\n  analytics.track('order_processed', {\n    orderId: currentOrder.id,\n    revenue: calculateRevenue(currentOrder.items)\n  });\n  \n  // Error handling (or lack thereof)\n  try {\n    // Some processing here\n  } catch (error) {\n    console.log('Error processing order: ' + error.message);\n    // No proper error handling!\n  }\n  \n  return currentOrder;\n}\n\n// More functions with similar issues...\nfunction sendNotifications(order) { /* Mixed notification logic */ }\nfunction calculateRevenue(items) { /* Business logic mixed with utilities */ }\nfunction findOrder(id) { /* Database access mixed with business logic */ }\n```\n{{/if}}\n\n## Instructions\n\nPlease solve this complex problem. This is a challenging technical issue that may require deep analysis and creative problem-solving.\n\nProvide your solution with:\n- Clear explanation of the problem\n- Step-by-step approach\n- Final solution or recommendation\n- Any assumptions or limitations\n\nFocus on finding an effective solution to the core issue.",
+  "response": "[DRY RUN] Mock response for HP-003 - baseline variant",
+  "metadata": {
+    "task_id": "HP-003",
+    "prompt_type": "baseline",
+    "variant_id": "v1",
+    "timestamp": 1764999769.898129,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

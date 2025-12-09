@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Benchmark Task Schema",
+  "description": "Schema for validation framework benchmark tasks",
+  "required": [
+    "id",
+    "category", 
+    "title",
+    "task",
+    "expected_elements",
+    "difficulty",
+    "validates_techniques"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}-[0-9]{3}$",
+      "description": "Unique task identifier (e.g., CR-001, AR-002)"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["code-review", "architecture", "hard-problems", "creative"],
+      "description": "Task category for grouping"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 100,
+      "description": "Human-readable task title"
+    },
+    "task": {
+      "type": "string",
+      "minLength": 50,
+      "description": "Detailed task description for the AI"
+    },
+    "context": {
+      "type": "string",
+      "description": "Additional context or background information"
+    },
+    "code": {
+      "type": "string",
+      "description": "Code snippet to analyze (if applicable)"
+    },
+    "language": {
+      "type": "string",
+      "enum": ["javascript", "typescript", "python", "java", "go", "sql", "yaml", "json"],
+      "description": "Programming language for code field"
+    },
+    "expected_elements": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 5
+      },
+      "minItems": 3,
+      "maxItems": 10,
+      "description": "Specific elements that should be included in response"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["easy", "medium", "hard"],
+      "description": "Task difficulty level"
+    },
+    "validates_techniques": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "expert-persona",
+          "step-by-step", 
+          "stakes-language",
+          "challenge-framing",
+          "self-evaluation"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 5,
+      "description": "Which prompting techniques this task validates"
+    },
+    "estimated_time": {
+      "type": "integer",
+      "minimum": 5,
+      "maximum": 60,
+      "description": "Estimated time for human to complete (minutes)"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for categorization and filtering"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "id": "CR-001",
+      "category": "code-review",
+      "title": "Review Authentication Middleware for Security Issues",
+      "task": "Analyze this authentication middleware for security vulnerabilities, performance issues, and code quality problems. Provide specific recommendations for each issue found.",
+      "code": "function authenticate(req, res, next) { /* ... */ }",
+      "language": "javascript",
+      "expected_elements": [
+        "SQL injection vulnerabilities",
+        "Rate limiting implementation", 
+        "Token validation logic",
+        "Error handling improvements",
+        "Code quality suggestions"
+      ],
+      "difficulty": "medium",
+      "validates_techniques": ["expert-persona", "stakes-language"],
+      "estimated_time": 15,
+      "tags": ["security", "middleware", "authentication"]
+    }
+  ]
+}

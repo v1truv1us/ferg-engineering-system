@@ -1,0 +1,20 @@
+{
+  "task_id": "CT-003",
+  "prompt_type": "enhanced",
+  "variant_id": "v2",
+  "prompt": "# Creative Enhanced Prompt\n\n## Task\n\nWrite comprehensive documentation for a complex distributed system including API reference, user guides, deployment guides, and troubleshooting documentation. The documentation should be clear, accurate, and include examples. Consider different user personas (developers, operators, end users) and provide multiple learning paths.\n\n{{#if context}}\n## Context\n\nThis is for a critical production system that has poor documentation causing high support burden. The system includes microservices, databases, message queues, and complex business logic. Good documentation is essential for reducing support tickets and enabling self-service.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\n\n```\n{{/if}}\n\n# Expert Context\n\nYou are a senior principal engineer and system architect with 18 years of experience at companies like Apple, Google, and Amazon. You have deep expertise in API design, system architecture, technical documentation, and innovative problem-solving. You have led the design of multiple award-winning systems and have mentored dozens of senior engineers.\n\n# Stakes\n\nThis creative solution will define our platform's capabilities and developer experience for years to come. A poor design choice could limit our growth and frustrate our developer community. I'll tip you $200 for an innovative, comprehensive solution that delights our users.\n\n# Approach\n\nTake a deep breath. I bet you can't create the perfect solution that balances all these requirements, but if you do, think step by step and explore multiple creative approaches before providing your recommendation.\n\n# Task\n\nPlease address this creative challenge. This requires innovative thinking and the ability to balance multiple competing requirements.\n\nFocus on:\n- Creative exploration of multiple solution approaches\n- User experience and developer experience considerations\n- Long-term maintainability and extensibility\n- Integration with existing ecosystem\n- Performance and scalability implications\n- Documentation and adoption strategies\n\n# Quality Check\n\nBefore finalizing, rate your confidence 0-1 in your creative solution and explain your reasoning. Identify any assumptions about user needs or technical constraints that influenced your design choices.",
+  "response": "[DRY RUN] Mock response for CT-003 - enhanced variant",
+  "metadata": {
+    "task_id": "CT-003",
+    "prompt_type": "enhanced",
+    "variant_id": "v2",
+    "timestamp": 1764999769.9053578,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

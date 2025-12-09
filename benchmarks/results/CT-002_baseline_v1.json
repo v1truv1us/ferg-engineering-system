@@ -1,0 +1,20 @@
+{
+  "task_id": "CT-002",
+  "prompt_type": "baseline",
+  "variant_id": "v1",
+  "prompt": "# Creative Baseline Prompt\n\n## Task\n\nDesign a modular CLI tool architecture that supports plugins, commands, and extensions. The tool should handle command registration, plugin discovery, dependency management, configuration management, and provide a clean developer experience. Include plugin lifecycle management, sandboxing, and version compatibility.\n\n{{#if context}}\n## Context\n\nThis CLI tool will be used internally by the development team to automate common workflows, manage deployments, and provide standardized interfaces to various services. It needs to be extensible, maintainable, and secure.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\n\n```\n{{/if}}\n\n## Instructions\n\nPlease address this creative task. This may involve design, documentation, or innovative problem-solving.\n\nProvide your solution with:\n- Creative thinking and exploration\n- Practical implementation details\n- Consideration of multiple approaches\n- Clear, actionable recommendations\n\nFocus on delivering a comprehensive and thoughtful solution.",
+  "response": "[DRY RUN] Mock response for CT-002 - baseline variant",
+  "metadata": {
+    "task_id": "CT-002",
+    "prompt_type": "baseline",
+    "variant_id": "v1",
+    "timestamp": 1764999769.9019823,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

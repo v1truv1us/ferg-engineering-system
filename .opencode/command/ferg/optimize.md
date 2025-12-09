@@ -2,12 +2,6 @@
 |---|---|
 | Optimize a prompt or task description using research-backed techniques | build |
 
----
-name: optimize
-description: Optimize a prompt or task description using research-backed techniques
-agent: build
----
-
 # Optimize Command
 
 Transforms any prompt into a more effective version using research-backed incentive prompting techniques from Bsharat et al. (MBZUAI), Google DeepMind, and ICLR 2024 research.

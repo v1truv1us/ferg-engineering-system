@@ -1,0 +1,20 @@
+{
+  "task_id": "test",
+  "prompt_type": "baseline",
+  "variant_id": "v0",
+  "prompt": "What is machine learning?",
+  "response": "\ud83d\udd27 Ferg Engineering System loaded\n\ud83d\udd27 Ferg Engineering System loaded\n\nMachine learning is a subset of artificial intelligence that enables computer systems to learn and improve from experience without being explicitly programmed. Here's a comprehensive breakdown:\n\n## Core Concept\nMachine learning algorithms analyze data to identify patterns and make predictions or decisions. Instead of writing explicit rules, developers provide data and let the algorithm learn the underlying patterns automatically.\n\n## Key Components\n\n### 1. **Data**\n- **Training data**: Examples used to teach the model\n- **Testing data**: Separate data to evaluate performance\n- **Features**: Input variables the model uses for learning\n\n### 2. **Algorithms**\n- **Supervised learning**: Learns from labeled data (input-output pairs)\n- **Unsupervised learning**: Finds patterns in unlabeled data\n- **Reinforcement learning**: Learns through trial and error with rewards\n\n### 3. **Model**\n- The mathematical representation of learned patterns\n- Can make predictions on new, unseen data\n\n## Common Applications\n- **Image recognition**: Identifying objects in photos\n- **Natural language processing**: Chatbots, translation, sentiment analysis\n- **Recommendation systems**: Netflix, Amazon, Spotify suggestions\n- **Fraud detection**: Identifying suspicious transactions\n- **Medical diagnosis**: Analyzing medical images and patient data\n\n## Popular Machine Learning Frameworks\n- **TensorFlow** (Google)\n- **PyTorch** (Meta)\n- **Scikit-learn** (Python)\n- **Keras** (High-level neural network API)\n\nThe field continues to evolve rapidly, with deep learning (neural networks with many layers) driving many recent breakthroughs in AI capabilities.",
+  "metadata": {
+    "task_id": "test",
+    "prompt_type": "baseline",
+    "variant_id": "v0",
+    "timestamp": 1765018842.9007485,
+    "provider": "opencode",
+    "model": "opencode-cli",
+    "tokens_used": 234,
+    "cost_estimate": null,
+    "response_time_ms": 16190,
+    "cached": false
+  },
+  "cached": false
+}

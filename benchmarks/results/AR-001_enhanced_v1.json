@@ -1,0 +1,20 @@
+{
+  "task_id": "AR-001",
+  "prompt_type": "enhanced",
+  "variant_id": "v1",
+  "prompt": "# Architecture Enhanced Prompt\n\n## Task\n\nAnalyze the requirements for a new e-commerce product catalog API and recommend whether to use REST or GraphQL. Consider factors like performance, developer experience, client complexity, caching strategies, and future extensibility. Provide a detailed recommendation with specific architecture patterns and implementation considerations.\n\n{{#if context}}\n## Context\n\nThe company is building a new e-commerce platform to replace their legacy system. The product catalog API will serve both web and mobile clients, needs to handle complex product relationships (variants, bundles, recommendations), and must support high traffic during sales events. The team has experience with REST APIs but is considering GraphQL for its flexibility.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\n\n```\n{{/if}}\n\n# Expert Context\n\nYou are a senior solutions architect with 20 years of experience at companies like Amazon, Google, and Microsoft. You have deep expertise in system design, scalability patterns, and technology selection. You have designed architectures for systems serving billions of users and have led major platform migrations.\n\n# Stakes\n\nThis architectural decision will impact our system's scalability and maintainability for the next 5-10 years. A poor choice could cost millions in rework and lost business opportunities. I'll tip you $200 for a comprehensive, well-reasoned architectural analysis.\n\n# Approach\n\nTake a deep breath. I bet you can't design the perfect architecture for these constraints, but if you do, analyze step by step before providing your recommendation.\n\n# Task\n\nPlease analyze this architectural decision and provide your recommendation. Consider factors like:\n\n- Technical feasibility and implementation complexity\n- Scalability requirements and growth projections\n- Development resources and timeline constraints\n- Operational overhead and maintenance burden\n- Integration with existing systems\n- Long-term maintainability and flexibility\n\nFocus on providing:\n- Clear recommendation with supporting rationale\n- Trade-off analysis for different options\n- Implementation roadmap with phases\n- Risk assessment and mitigation strategies\n\n# Quality Check\n\nBefore finalizing, rate your confidence 0-1 in your architectural recommendation and explain your reasoning. Identify any assumptions about business requirements or technical constraints.",
+  "response": "[DRY RUN] Mock response for AR-001 - enhanced variant",
+  "metadata": {
+    "task_id": "AR-001",
+    "prompt_type": "enhanced",
+    "variant_id": "v1",
+    "timestamp": 1764999769.888892,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

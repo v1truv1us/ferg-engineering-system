@@ -201,7 +201,11 @@ export class ResearchOrchestrator extends EventEmitter {
     
     try {
       // Execute discovery
-      const results = await this.discoveryHandler.discover(query);
+      const results = await this.discoveryHandler.discover(
+        query.query, 
+        query.scope as string, 
+        query.constraints
+      );
       
       this.updateProgress('Discovery Phase', 'Discovery completed');
       this.emitEvent('phase_completed', { 

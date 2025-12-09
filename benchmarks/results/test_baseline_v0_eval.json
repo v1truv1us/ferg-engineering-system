@@ -1,0 +1,32 @@
+{
+  "task_id": "test",
+  "evaluation": {
+    "accuracy": {
+      "score": 4.2,
+      "reasoning": "Good accuracy in response"
+    },
+    "completeness": {
+      "score": 4.0,
+      "reasoning": "Mostly complete coverage"
+    },
+    "clarity": {
+      "score": 4.5,
+      "reasoning": "Very clear and well-structured"
+    },
+    "actionability": {
+      "score": 4.1,
+      "reasoning": "Actionable recommendations provided"
+    },
+    "relevance": {
+      "score": 4.3,
+      "reasoning": "Highly relevant to the task"
+    },
+    "overall": {
+      "baseline_score": 3.8,
+      "enhanced_score": 4.2,
+      "winner": "enhanced",
+      "confidence": 0.85
+    }
+  },
+  "timestamp": "2025-12-06T11:08:57.908630"
+}

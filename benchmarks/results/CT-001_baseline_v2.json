@@ -1,0 +1,20 @@
+{
+  "task_id": "CT-001",
+  "prompt_type": "baseline",
+  "variant_id": "v2",
+  "prompt": "# Creative Baseline Prompt\n\n## Task\n\nDesign a comprehensive REST API schema for a multi-service booking system that handles appointments, resources, and scheduling. The API should support different resource types (meeting rooms, equipment, personnel), handle conflicts, support recurring bookings, and provide real-time availability. Include OpenAPI specification, data models, and error handling.\n\n{{#if context}}\n## Context\n\nThis is for a new enterprise booking platform that will replace multiple legacy scheduling systems. The API needs to integrate with existing authentication, notification, and billing services. It must handle high concurrency and support mobile and web clients.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\n\n```\n{{/if}}\n\n## Instructions\n\nPlease address this creative task. This may involve design, documentation, or innovative problem-solving.\n\nProvide your solution with:\n- Creative thinking and exploration\n- Practical implementation details\n- Consideration of multiple approaches\n- Clear, actionable recommendations\n\nFocus on delivering a comprehensive and thoughtful solution.",
+  "response": "[DRY RUN] Mock response for CT-001 - baseline variant",
+  "metadata": {
+    "task_id": "CT-001",
+    "prompt_type": "baseline",
+    "variant_id": "v2",
+    "timestamp": 1764999769.9001174,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

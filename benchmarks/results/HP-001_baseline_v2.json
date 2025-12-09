@@ -1,0 +1,20 @@
+{
+  "task_id": "HP-001",
+  "prompt_type": "baseline",
+  "variant_id": "v2",
+  "prompt": "# Hard Problems Baseline Prompt\n\n## Task\n\nDebug and fix a race condition in a Node.js file upload handler that causes data corruption when multiple users upload simultaneously. The issue only occurs under high concurrency and is difficult to reproduce. Provide the root cause analysis and a complete fix with proper synchronization.\n\n{{#if context}}\n## Context\n\nThis file upload handler is part of a cloud storage service that handles thousands of concurrent uploads. It processes file chunks, validates integrity, and stores files in S3. The race condition causes occasional data corruption that's only discovered days later when customers report missing files.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\nconst fs = require('fs').promises;\nconst crypto = require('crypto');\nconst s3 = require('aws-sdk/clients/s3');\n\nconst uploadTracker = new Map();\n\nasync function handleUpload(req, res) {\n  const uploadId = req.body.uploadId;\n  const chunk = req.body.chunk;\n  const chunkIndex = req.body.chunkIndex;\n  const totalChunks = req.body.totalChunks;\n  \n  // Initialize upload tracking\n  if (!uploadTracker.has(uploadId)) {\n    uploadTracker.set(uploadId, {\n      chunks: new Map(),\n      complete: false,\n      fileHash: null\n    });\n  }\n  \n  const upload = uploadTracker.get(uploadId);\n  \n  // Store chunk\n  upload.chunks.set(chunkIndex, {\n    data: chunk,\n    hash: crypto.createHash('sha256').update(chunk).digest('hex')\n  });\n  \n  // Check if all chunks received\n  if (upload.chunks.size === totalChunks) {\n    // Combine chunks in order\n    const orderedChunks = Array.from(upload.chunks.entries())\n      .sort(([a], [b]) => parseInt(a) - parseInt(b))\n      .map(([, chunk]) => chunk.data);\n    \n    const fileBuffer = Buffer.concat(orderedChunks);\n    const fileHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');\n    \n    // Store to S3\n    const s3Client = new s3.S3Client();\n    await s3Client.putObject({\n      Bucket: process.env.S3_BUCKET,\n      Key: `uploads/${uploadId}`,\n      Body: fileBuffer,\n      ContentType: 'application/octet-stream'\n    });\n    \n    // Mark as complete\n    upload.complete = true;\n    upload.fileHash = fileHash;\n    \n    // Clean up tracking\n    setTimeout(() => {\n      uploadTracker.delete(uploadId);\n    }, 60000); // Clean up after 1 minute\n  }\n  \n  res.json({ received: true });\n}\n```\n{{/if}}\n\n## Instructions\n\nPlease solve this complex problem. This is a challenging technical issue that may require deep analysis and creative problem-solving.\n\nProvide your solution with:\n- Clear explanation of the problem\n- Step-by-step approach\n- Final solution or recommendation\n- Any assumptions or limitations\n\nFocus on finding an effective solution to the core issue.",
+  "response": "[DRY RUN] Mock response for HP-001 - baseline variant",
+  "metadata": {
+    "task_id": "HP-001",
+    "prompt_type": "baseline",
+    "variant_id": "v2",
+    "timestamp": 1764999769.8946142,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

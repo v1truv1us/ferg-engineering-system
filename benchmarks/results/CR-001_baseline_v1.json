@@ -1,0 +1,20 @@
+{
+  "task_id": "CR-001",
+  "prompt_type": "baseline",
+  "variant_id": "v1",
+  "prompt": "# Code Review Baseline Prompt\n\n## Task\n\nAnalyze this authentication middleware for security vulnerabilities, performance issues, and code quality problems. Provide specific recommendations for each issue found, including code examples where applicable.\n\n{{#if context}}\n## Context\n\nThis middleware is used in a production Node.js application handling user authentication for a SaaS platform. It processes login requests, validates JWT tokens, and manages user sessions.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\nconst jwt = require('jsonwebtoken');\nconst rateLimit = require('express-rate-limit');\n\nconst authenticate = async (req, res, next) => {\n  try {\n    // Check rate limiting\n    const limiter = rateLimit({\n      windowMs: 15 * 60 * 1000, // 15 minutes\n      max: 100, // limit each IP to 100 requests per windowMs\n      message: 'Too many requests from this IP'\n    });\n    \n    // Get token from header\n    const token = req.headers.authorization?.split(' ')[1];\n    \n    if (!token) {\n      return res.status(401).json({ error: 'No token provided' });\n    }\n    \n    // Verify JWT\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    req.user = decoded;\n    \n    next();\n  } catch (error) {\n    return res.status(401).json({ error: 'Invalid token' });\n  }\n};\n\nmodule.exports = authenticate;\n```\n{{/if}}\n\n## Instructions\n\nPlease review this code for security issues, performance problems, and code quality concerns. Provide specific recommendations for any issues you find.\n\nFocus on:\n- Security vulnerabilities\n- Performance bottlenecks  \n- Code maintainability\n- Best practices violations\n\nReturn your analysis in a clear, structured format.",
+  "response": "[DRY RUN] Mock response for CR-001 - baseline variant",
+  "metadata": {
+    "task_id": "CR-001",
+    "prompt_type": "baseline",
+    "variant_id": "v1",
+    "timestamp": 1765017585.6513247,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

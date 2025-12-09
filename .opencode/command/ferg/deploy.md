@@ -2,13 +2,6 @@
 |---|---|---|
 | Pre-deployment verification and Coolify deployment | build | true |
 
----
-name: deploy
-description: Pre-deployment verification and Coolify deployment
-agent: build
-subtask: true
----
-
 # Deploy Command
 
 Run pre-deployment verification and prepare for Coolify deployment.

@@ -1,0 +1,20 @@
+{
+  "task_id": "HP-002",
+  "prompt_type": "enhanced",
+  "variant_id": "v2",
+  "prompt": "# Hard Problems Enhanced Prompt\n\n## Task\n\nOptimize a database query that takes 45+ seconds to execute on a table with 10M+ rows. The query is used for generating monthly reports and times out during peak business hours. Provide query optimization, indexing strategy, and alternative approaches.\n\n{{#if context}}\n## Context\n\nThis is a PostgreSQL database for a SaaS analytics platform. The 'events' table contains 15M rows of user activity data with timestamps, user_id, event_type, and metadata (JSONB). The monthly report needs to aggregate events by type and user for the last 30 days. Performance is critical as this blocks the monthly business report.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```sql\n-- SLOW QUERY (45+ seconds)\nSELECT \n    u.id,\n    u.email,\n    u.plan_type,\n    COUNT(e.id) as event_count,\n    SUM(CASE WHEN e.event_type = 'login' THEN 1 ELSE 0 END) as login_count,\n    SUM(CASE WHEN e.event_type = 'purchase' THEN e.metadata->>'amount' ELSE 0 END) as total_spent\nFROM users u\nLEFT JOIN events e ON u.id = e.user_id \nWHERE e.created_at >= NOW() - INTERVAL '30 days'\n    AND e.created_at < NOW()\nGROUP BY u.id, u.email, u.plan_type\nHAVING COUNT(e.id) > 10\nORDER BY total_spent DESC NULLS LAST;\n\n-- TABLE STRUCTURES\n-- users: id (PK), email, plan_type, created_at, updated_at\n-- events: id (PK), user_id (FK), event_type, created_at, metadata (JSONB)\n-- Indexes: events_user_id_idx, events_created_at_idx, events_event_type_idx\n```\n{{/if}}\n\n# Expert Context\n\nYou are a senior debugging specialist and performance engineer with 25 years of experience at companies like Google, Microsoft, and Netflix. You have deep expertise in complex system debugging, race conditions, performance optimization, and legacy code refactoring. You have solved some of the most challenging technical issues in production systems affecting millions of users.\n\n# Stakes\n\nThis is a critical production issue that's causing significant customer impact. The system is losing revenue and customer trust with every passing minute. I'll tip you $200 for solving this complex problem that others have failed to fix.\n\n# Approach\n\nTake a deep breath. I bet you can't solve this challenging technical problem, but if you do, analyze step by step before providing your solution.\n\n# Task\n\nPlease solve this complex technical problem. This requires deep analysis and creative problem-solving beyond standard approaches.\n\nFocus on:\n- Root cause analysis and systematic debugging\n- Step-by-step problem decomposition\n- Multiple solution approaches and trade-offs\n- Performance optimization opportunities\n- Edge case handling and error scenarios\n- Long-term stability and prevention measures\n\n# Quality Check\n\nBefore finalizing, rate your confidence 0-1 in your solution and explain your reasoning. Identify any assumptions about the system environment or constraints that might affect your approach.",
+  "response": "[DRY RUN] Mock response for HP-002 - enhanced variant",
+  "metadata": {
+    "task_id": "HP-002",
+    "prompt_type": "enhanced",
+    "variant_id": "v2",
+    "timestamp": 1764999769.897705,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

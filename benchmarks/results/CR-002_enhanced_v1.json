@@ -1,0 +1,20 @@
+{
+  "task_id": "CR-002",
+  "prompt_type": "enhanced",
+  "variant_id": "v1",
+  "prompt": "# Code Review Enhanced Prompt\n\n## Task\n\nAnalyze this database query function for performance issues, N+1 query problems, and SQL injection vulnerabilities. Provide specific refactoring recommendations with code examples.\n\n{{#if context}}\n## Context\n\nThis function is part of an e-commerce platform's order management system. It's used to fetch orders with their associated items and customer information. The database contains millions of orders.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\nasync function getOrderWithItems(orderId) {\n  const connection = await db.getConnection();\n  \n  // Get order details\n  const orderQuery = `SELECT * FROM orders WHERE id = ${orderId}`;\n  const [order] = await connection.query(orderQuery);\n  \n  // Get order items for each order\n  const itemsQuery = `SELECT * FROM order_items WHERE order_id = ${orderId}`;\n  const items = [];\n  \n  for (const item of items) {\n    const itemQuery = `SELECT * FROM products WHERE id = ${item.product_id}`;\n    const [product] = await connection.query(itemQuery);\n    items.push({\n      ...item,\n      product: product[0]\n    });\n  }\n  \n  // Get customer info\n  const customerQuery = `SELECT * FROM customers WHERE id = ${order[0].customer_id}`;\n  const [customer] = await connection.query(customerQuery);\n  \n  await connection.release();\n  \n  return {\n    order: order[0],\n    items,\n    customer: customer[0]\n  };\n}\n```\n{{/if}}\n\n# Expert Context\n\nYou are a senior security engineer with 15 years of experience at companies like Netflix, Stripe, and Cloudflare. You have deep expertise in web security, authentication systems, and secure coding practices. You have conducted hundreds of security audits and identified critical vulnerabilities in production systems.\n\n# Stakes\n\nThis security review is critical to our production system. A single missed vulnerability could lead to a data breach affecting millions of users. I'll tip you $200 for a comprehensive, perfect security analysis.\n\n# Approach\n\nTake a deep breath. I bet you can't find all the security issues in this code, but if you do, analyze step by step before providing your findings.\n\n# Task\n\nPlease review this code for security vulnerabilities, performance issues, and code quality concerns. Provide specific recommendations for each issue found, including code examples where applicable.\n\nFocus on:\n- Authentication and authorization vulnerabilities\n- Input validation and sanitization\n- SQL injection and NoSQL injection risks\n- Cross-site scripting (XSS) possibilities\n- Rate limiting and DoS protection\n- Error handling and information disclosure\n- Code structure and maintainability\n\n# Quality Check\n\nBefore finalizing, rate your confidence 0-1 in identifying all security issues and explain your reasoning. Identify any assumptions about the code's deployment context.",
+  "response": "[DRY RUN] Mock response for CR-002 - enhanced variant",
+  "metadata": {
+    "task_id": "CR-002",
+    "prompt_type": "enhanced",
+    "variant_id": "v1",
+    "timestamp": 1765017585.654645,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

@@ -1,0 +1,21 @@
+{
+  "id": "AR-002",
+  "category": "architecture",
+  "title": "Design Caching Strategy for E-commerce Product Catalog",
+  "task": "Design a comprehensive caching strategy for an e-commerce product catalog that handles millions of products with frequent price updates and inventory changes. Consider cache invalidation, multi-layer caching, cache warming strategies, and consistency across distributed systems. Provide specific implementation patterns and technologies.",
+  "context": "The current e-commerce platform experiences performance issues during high traffic events. Product data includes prices, descriptions, images, variants, inventory levels, and customer reviews. The system serves global customers with different regional catalogs and pricing. Cache misses result in database overload and slow page loads.",
+  "expected_elements": [
+    "Multi-layer caching architecture (CDN, application, database)",
+    "Cache invalidation strategies for different data types",
+    "Cache warming and preloading approaches",
+    "Consistency handling across distributed caches",
+    "Performance metrics and monitoring",
+    "Technology recommendations with specific tools",
+    "Implementation phases and migration strategy",
+    "Cost-benefit analysis of caching approaches"
+  ],
+  "difficulty": "hard",
+  "validates_techniques": ["step-by-step"],
+  "estimated_time": 30,
+  "tags": ["caching", "performance", "e-commerce", "scalability", "redis", "cdn"]
+}

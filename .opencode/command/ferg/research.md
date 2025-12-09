@@ -2,37 +2,6 @@
 |---|---|
 | Comprehensive research findings saved to docs/research/ | plan |
 
----
-name: research
-description: Conduct comprehensive multi-phase research across codebase, documentation, and external sources
-agent: plan
-version: 1.0.0
-inputs:
-  - name: query
-    type: string
-    required: false
-    description: Direct research question or topic
-  - name: ticket
-    type: string
-    required: false
-    description: Path to ticket file (optional if query provided)
-  - name: scope
-    type: string
-    required: false
-    description: Research scope (codebase|documentation|external|all)
-    default: all
-  - name: depth
-    type: string
-    required: false
-    description: Research depth (shallow|medium|deep)
-    default: medium
-outputs:
-  - name: research_document
-    type: structured
-    format: Markdown document with YAML frontmatter
-    description: Comprehensive research findings saved to docs/research/
----
-
 # Research Command
 
 Conduct comprehensive research for: $ARGUMENTS

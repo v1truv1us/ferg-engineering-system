@@ -1,0 +1,31 @@
+{
+  "api": {
+    "provider": "anthropic",
+    "api_key": "anthropic-api-key-here",
+    "base_url": "https://api.anthropic.com",
+    "model": "claude-3-sonnet-20240229",
+    "max_tokens": 4096,
+    "temperature": 0.1,
+    "timeout": 60
+  },
+  "rate_limit": {
+    "requests_per_minute": 50,
+    "requests_per_hour": 1000,
+    "burst_limit": 10
+  },
+  "cache": {
+    "enabled": true,
+    "cache_dir": ".cache"
+  },
+  "output": {
+    "results_dir": "benchmarks/results",
+    "reports_dir": "benchmarks/results/reports"
+  },
+  "validation": {
+    "alpha": 0.05,
+    "power": 0.80,
+    "bootstrap_resamples": 9999,
+    "min_sample_size": 3,
+    "max_sample_size": 100
+  }
+}

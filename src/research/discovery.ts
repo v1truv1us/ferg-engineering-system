@@ -29,21 +29,21 @@ export class CodebaseLocator implements DiscoveryAgent {
     this.config = config;
   }
 
-  async discover(query: string, scope: ResearchScope, constraints?: ResearchConstraints): Promise<DiscoveryResult> {
+  async discover(query: ResearchQuery): Promise<DiscoveryResult> {
     const startTime = Date.now();
     
     try {
       // 1. Parse query into search patterns
-      const patterns = this.parseQueryToPatterns(query);
+      const patterns = this.parseQueryToPatterns(query.query);
       
       // 2. Execute file discovery
-      const files = await this.findFiles(patterns, constraints);
+      const files = await this.findFiles(patterns, query.constraints);
       
       // 3. Score relevance
       const scoredFiles = await this.scoreRelevance(files, query);
       
       // 4. Extract snippets for top matches
-      const filesWithSnippets = await this.extractSnippets(scoredFiles);
+      const filesWithSnippets = await this.extractSnippets(scoredFiles, query);
       
       const executionTime = Date.now() - startTime;
       
@@ -64,9 +64,9 @@ export class CodebaseLocator implements DiscoveryAgent {
     }
   }
 
-  private parseQueryToPatterns(query: string): string[] {
+  private parseQueryToPatterns(query: ResearchQuery): string[] {
     // Extract keywords and create file patterns
-    const keywords = query.toLowerCase()
+    const keywords = query.query.toLowerCase()
       .split(/\s+/)
       .filter(word => word.length > 2)
       .slice(0, 5); // Limit to top 5 keywords
@@ -234,7 +234,7 @@ export class CodebaseLocator implements DiscoveryAgent {
     return true;
   }
 
-  private calculateConfidence(files: FileReference[], query: string): ConfidenceLevel {
+  private calculateConfidence(files: FileReference[], query: ResearchQuery): ConfidenceLevel {
     if (files.length === 0) return ConfidenceLevel.LOW;
     
     const avgRelevance = files.reduce((sum, file) => sum + file.relevance, 0) / files.length;
@@ -256,12 +256,12 @@ export class ResearchLocator implements DiscoveryAgent {
     this.config = config;
   }
 
-  async discover(query: string, scope: ResearchScope, constraints?: ResearchConstraints): Promise<DiscoveryResult> {
+  async discover(query: ResearchQuery): Promise<DiscoveryResult> {
     const startTime = Date.now();
     
     try {
       // 1. Find documentation files
-      const docs = await this.findDocumentation(constraints);
+      const docs = await this.findDocumentation(query.constraints);
       
       // 2. Parse and index content
       const indexedDocs = await this.indexDocuments(docs);
@@ -277,7 +277,7 @@ export class ResearchLocator implements DiscoveryAgent {
         patterns: [],
         documentation: matches,
         executionTime,
-        confidence: this.calculateConfidence(matches, query),
+        confidence: this.calculateConfidence(matches, query.query),
         metadata: {
           docsFound: matches.length
         }
@@ -426,7 +426,7 @@ export class ResearchLocator implements DiscoveryAgent {
     return true;
   }
 
-  private calculateConfidence(docs: DocReference[], query: string): ConfidenceLevel {
+  private calculateConfidence(docs: DocReference[], query: ResearchQuery): ConfidenceLevel {
     if (docs.length === 0) return ConfidenceLevel.LOW;
     
     const avgRelevance = docs.reduce((sum, doc) => sum + doc.relevance, 0) / docs.length;
@@ -448,15 +448,15 @@ export class PatternFinder implements DiscoveryAgent {
     this.config = config;
   }
 
-  async discover(query: string, scope: ResearchScope, constraints?: ResearchConstraints): Promise<DiscoveryResult> {
+  async discover(query: ResearchQuery): Promise<DiscoveryResult> {
     const startTime = Date.now();
     
     try {
       // 1. Identify target patterns from query
-      const targetPatterns = this.identifyPatterns(query);
+      const targetPatterns = this.identifyPatterns(query.query);
       
       // 2. Search for similar implementations
-      const matches = await this.findSimilarCode(targetPatterns, constraints);
+      const matches = await this.findSimilarCode(targetPatterns, query.constraints);
       
       // 3. Analyze usage patterns
       const usagePatterns = this.analyzeUsage(matches);
@@ -469,7 +469,7 @@ export class PatternFinder implements DiscoveryAgent {
         patterns: usagePatterns,
         documentation: [],
         executionTime,
-        confidence: this.calculateConfidence(usagePatterns, query),
+        confidence: this.calculateConfidence(usagePatterns, query.query),
         metadata: {
           patternsMatched: usagePatterns.length
         }
@@ -479,7 +479,7 @@ export class PatternFinder implements DiscoveryAgent {
     }
   }
 
-  private identifyPatterns(query: string): string[] {
+  private identifyPatterns(query: ResearchQuery): string[] {
     // Extract potential patterns from query
     const patterns: string[] = [];
     
@@ -492,7 +492,7 @@ export class PatternFinder implements DiscoveryAgent {
       'config', 'settings', 'options', 'parameters'
     ];
     
-    const queryLower = query.toLowerCase();
+    const queryLower = query.query.toLowerCase();
     for (const pattern of commonPatterns) {
       if (queryLower.includes(pattern)) {
         patterns.push(pattern);
@@ -609,7 +609,7 @@ export class PatternFinder implements DiscoveryAgent {
     return languageMap[ext] || 'unknown';
   }
 
-  private calculateConfidence(patterns: PatternMatch[], query: string): ConfidenceLevel {
+  private calculateConfidence(patterns: PatternMatch[], query: ResearchQuery): ConfidenceLevel {
     if (patterns.length === 0) return ConfidenceLevel.LOW;
     
     const totalMatches = patterns.reduce((sum, p) => sum + p.frequency, 0);

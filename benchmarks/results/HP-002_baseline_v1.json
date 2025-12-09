@@ -1,0 +1,20 @@
+{
+  "task_id": "HP-002",
+  "prompt_type": "baseline",
+  "variant_id": "v1",
+  "prompt": "# Hard Problems Baseline Prompt\n\n## Task\n\nOptimize a database query that takes 45+ seconds to execute on a table with 10M+ rows. The query is used for generating monthly reports and times out during peak business hours. Provide query optimization, indexing strategy, and alternative approaches.\n\n{{#if context}}\n## Context\n\nThis is a PostgreSQL database for a SaaS analytics platform. The 'events' table contains 15M rows of user activity data with timestamps, user_id, event_type, and metadata (JSONB). The monthly report needs to aggregate events by type and user for the last 30 days. Performance is critical as this blocks the monthly business report.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```sql\n-- SLOW QUERY (45+ seconds)\nSELECT \n    u.id,\n    u.email,\n    u.plan_type,\n    COUNT(e.id) as event_count,\n    SUM(CASE WHEN e.event_type = 'login' THEN 1 ELSE 0 END) as login_count,\n    SUM(CASE WHEN e.event_type = 'purchase' THEN e.metadata->>'amount' ELSE 0 END) as total_spent\nFROM users u\nLEFT JOIN events e ON u.id = e.user_id \nWHERE e.created_at >= NOW() - INTERVAL '30 days'\n    AND e.created_at < NOW()\nGROUP BY u.id, u.email, u.plan_type\nHAVING COUNT(e.id) > 10\nORDER BY total_spent DESC NULLS LAST;\n\n-- TABLE STRUCTURES\n-- users: id (PK), email, plan_type, created_at, updated_at\n-- events: id (PK), user_id (FK), event_type, created_at, metadata (JSONB)\n-- Indexes: events_user_id_idx, events_created_at_idx, events_event_type_idx\n```\n{{/if}}\n\n## Instructions\n\nPlease solve this complex problem. This is a challenging technical issue that may require deep analysis and creative problem-solving.\n\nProvide your solution with:\n- Clear explanation of the problem\n- Step-by-step approach\n- Final solution or recommendation\n- Any assumptions or limitations\n\nFocus on finding an effective solution to the core issue.",
+  "response": "[DRY RUN] Mock response for HP-002 - baseline variant",
+  "metadata": {
+    "task_id": "HP-002",
+    "prompt_type": "baseline",
+    "variant_id": "v1",
+    "timestamp": 1764999769.895989,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

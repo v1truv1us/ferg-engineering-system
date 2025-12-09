@@ -12,7 +12,8 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'bun:test'
-import { readFile, writeFile, mkdir, rm, existsSync, copyFile } from 'fs/promises'
+import { readFile, writeFile, mkdir, rm, copyFile } from 'fs/promises'
+import { existsSync } from 'fs'
 import { join, basename } from 'path'
 import { tmpdir } from 'os'
 import { execSync } from 'child_process'

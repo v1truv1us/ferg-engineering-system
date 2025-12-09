@@ -1,0 +1,23 @@
+{
+  "id": "CT-002",
+  "category": "creative",
+  "title": "Create CLI Tool Architecture with Plugin System",
+  "task": "Design a modular CLI tool architecture that supports plugins, commands, and extensions. The tool should handle command registration, plugin discovery, dependency management, configuration management, and provide a clean developer experience. Include plugin lifecycle management, sandboxing, and version compatibility.",
+  "context": "This CLI tool will be used internally by the development team to automate common workflows, manage deployments, and provide standardized interfaces to various services. It needs to be extensible, maintainable, and secure.",
+  "expected_elements": [
+    "Plugin system architecture with interfaces",
+    "Command registration and discovery mechanism",
+    "Configuration management and validation",
+    "Dependency resolution and version compatibility",
+    "Plugin lifecycle and sandboxing design",
+    "Error handling and logging framework",
+    "Developer experience and documentation standards",
+    "Security and permission model",
+    "Performance optimization strategies",
+    "Testing and validation framework"
+  ],
+  "difficulty": "hard",
+  "validates_techniques": ["expert-persona", "step-by-step", "stakes-language", "challenge-framing", "self-evaluation"],
+  "estimated_time": 45,
+  "tags": ["cli", "plugin-system", "architecture", "developer-tools", "extensibility", "modular-design"]
+}

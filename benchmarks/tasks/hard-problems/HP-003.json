@@ -1,0 +1,24 @@
+{
+  "id": "HP-003",
+  "category": "hard-problems",
+  "title": "Refactor Spaghetti Legacy Code to Clean Architecture",
+  "task": "Refactor a 2000-line legacy JavaScript file with circular dependencies, global state, and mixed concerns into a clean, modular architecture. The code is critical for business operations but is unmaintainable and has frequent bugs. Provide a complete refactoring plan with step-by-step implementation.",
+  "context": "This is a 5-year-old Node.js application file that handles order processing, inventory management, and notifications all mixed together. It has no tests, uses global variables, and has circular dependencies that make it impossible to reason about. The business wants to add new features but is afraid to touch the code. Recent production bugs have caused customer order failures.",
+  "code": "// LEGACY SPAGHETTI CODE - DO NOT MODIFY WITHOUT UNDERSTANDING FULL IMPACT\n\n// Global state (anti-pattern)\nvar currentOrder = null;\nvar inventoryCache = {};\nvar notificationQueue = [];\n\n// Circular dependencies\nfunction processOrder(orderId) {\n  currentOrder = findOrder(orderId);\n  updateInventory(currentOrder.items);\n  sendNotifications(currentOrder);\n}\n\nfunction updateInventory(items) {\n  // Circular: processOrder -> updateInventory -> checkInventory -> processOrder\n  items.forEach(item => {\n    inventoryCache[item.id] = item;\n    checkInventory(item.id); // Can trigger processOrder again!\n  });\n}\n\nfunction checkInventory(itemId) {\n  if (!inventoryCache[itemId]) {\n    processOrder(currentOrder.id); // CIRCULAR DEPENDENCY!\n  }\n}\n\n// Mixed concerns in one function\nfunction handleNewOrder(orderData) {\n  // Validation\n  if (!orderData.customerId) return false;\n  if (!orderData.items || orderData.items.length === 0) return false;\n  \n  // Processing\n  currentOrder = orderData;\n  processOrder(orderData.id);\n  \n  // Database operations\n  db.query('INSERT INTO orders ...', currentOrder);\n  \n  // Notifications\n  notificationQueue.push({\n    type: 'order_created',\n    orderId: currentOrder.id,\n    timestamp: Date.now()\n  });\n  \n  // Analytics tracking\n  analytics.track('order_processed', {\n    orderId: currentOrder.id,\n    revenue: calculateRevenue(currentOrder.items)\n  });\n  \n  // Error handling (or lack thereof)\n  try {\n    // Some processing here\n  } catch (error) {\n    console.log('Error processing order: ' + error.message);\n    // No proper error handling!\n  }\n  \n  return currentOrder;\n}\n\n// More functions with similar issues...\nfunction sendNotifications(order) { /* Mixed notification logic */ }\nfunction calculateRevenue(items) { /* Business logic mixed with utilities */ }\nfunction findOrder(id) { /* Database access mixed with business logic */ }",
+  "language": "javascript",
+  "expected_elements": [
+    "Circular dependency identification and resolution",
+    "Global state elimination and proper dependency injection",
+    "Separation of concerns (business logic, data access, notifications)",
+    "Modular architecture design with clear interfaces",
+    "Test strategy implementation for legacy code",
+    "Step-by-step migration plan with rollback strategy",
+    "Error handling and logging improvements",
+    "Performance optimization opportunities",
+    "Documentation and code organization improvements"
+  ],
+  "difficulty": "hard",
+  "validates_techniques": ["challenge-framing"],
+  "estimated_time": 60,
+  "tags": ["refactoring", "legacy-code", "architecture", "circular-dependencies", "global-state", "modularization"]
+}

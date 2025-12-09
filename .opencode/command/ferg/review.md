@@ -2,12 +2,6 @@
 |---|---|
 | Run comprehensive code review with multiple perspectives | review |
 
----
-name: review
-description: Run comprehensive code review with multiple perspectives
-agent: review
----
-
 # Review Command
 
 Review current changes or a PR with multiple expert perspectives.

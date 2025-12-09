@@ -1,0 +1,20 @@
+{
+  "task_id": "CT-003",
+  "prompt_type": "baseline",
+  "variant_id": "v0",
+  "prompt": "# Creative Baseline Prompt\n\n## Task\n\nWrite comprehensive documentation for a complex distributed system including API reference, user guides, deployment guides, and troubleshooting documentation. The documentation should be clear, accurate, and include examples. Consider different user personas (developers, operators, end users) and provide multiple learning paths.\n\n{{#if context}}\n## Context\n\nThis is for a critical production system that has poor documentation causing high support burden. The system includes microservices, databases, message queues, and complex business logic. Good documentation is essential for reducing support tickets and enabling self-service.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\n\n```\n{{/if}}\n\n## Instructions\n\nPlease address this creative task. This may involve design, documentation, or innovative problem-solving.\n\nProvide your solution with:\n- Creative thinking and exploration\n- Practical implementation details\n- Consideration of multiple approaches\n- Clear, actionable recommendations\n\nFocus on delivering a comprehensive and thoughtful solution.",
+  "response": "This is a mock response for testing the validation framework. In a real scenario, this would be a detailed analysis from Claude AI.",
+  "metadata": {
+    "task_id": "CT-003",
+    "prompt_type": "baseline",
+    "variant_id": "v0",
+    "timestamp": 1765017667.4095275,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": 163,
+    "cost_estimate": null,
+    "response_time_ms": 100,
+    "cached": false
+  },
+  "cached": false
+}

@@ -2,12 +2,6 @@
 |---|---|
 | Run SEO audit on a page or site | review |
 
----
-name: seo
-description: Run SEO audit on a page or site
-agent: review
----
-
 # SEO Command
 
 Run an SEO audit on: $ARGUMENTS

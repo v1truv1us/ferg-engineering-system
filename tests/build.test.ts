@@ -15,7 +15,8 @@
 
 import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from 'bun:test'
 import { build, validate } from '../build.ts'
-import { readFile, writeFile, mkdir, rm, existsSync } from 'fs/promises'
+import { readFile, writeFile, mkdir, rm, copyFile } from 'fs/promises'
+import { existsSync } from 'fs'
 import { join, basename, dirname } from 'path'
 import { tmpdir } from 'os'
 
@@ -24,6 +25,20 @@ const TEST_ROOT = join(tmpdir(), `ferg-test-${Date.now()}`)
 const CONTENT_DIR = join(TEST_ROOT, 'content')
 const DIST_DIR = join(TEST_ROOT, 'dist')
 const SKILLS_DIR = join(TEST_ROOT, 'skills')
+
+// Helper to run build in temp directory
+async function buildInTemp(): Promise<void> {
+  const { execSync } = await import('child_process')
+  const originalDir = process.cwd()
+  process.chdir(TEST_ROOT)
+  try {
+    // Run build script directly in temp directory
+    execSync('bun run ../build.ts', { stdio: 'inherit' })
+  } finally {
+    process.chdir(originalDir)
+  }
+}
+}
 
 // Mock package.json for testing
 const MOCK_PACKAGE_JSON = {
@@ -231,9 +246,32 @@ Missing description field.
   })
 
   describe('Build Process', () => {
+    beforeAll(async () => {
+      // Change to temp directory and copy content there
+      const originalDir = process.cwd()
+      process.chdir(TEST_ROOT)
+
+      try {
+        // Copy content and skills from original directory
+        const actualContentDir = join(originalDir, 'content')
+        const actualSkillsDir = join(originalDir, 'skills')
+
+        if (existsSync(actualContentDir)) {
+          const { execSync } = await import('child_process')
+          execSync(`cp -r "${actualContentDir}" .`, { stdio: 'inherit' })
+        }
+
+        if (existsSync(actualSkillsDir)) {
+          const { execSync } = await import('child_process')
+          execSync(`cp -r "${actualSkillsDir}" .`, { stdio: 'inherit' })
+        }
+      } finally {
+        process.chdir(originalDir)
+      }
+    })
     it('should build Claude Code plugin structure', async () => {
-      // Run build process
-      await build()
+      // Run build process in temp directory
+      await buildInTemp()
       
       // Check Claude Code output
       const claudeDir = join(DIST_DIR, '.claude-plugin')
@@ -267,7 +305,7 @@ Missing description field.
     })
 
     it('should build OpenCode plugin structure', async () => {
-      await build()
+      await buildInTemp()
       
       // Check OpenCode output
       const opencodeDir = join(DIST_DIR, '.opencode')
@@ -289,7 +327,7 @@ Missing description field.
     })
 
     it('should copy skills to dist', async () => {
-      await build()
+      await buildInTemp()
       
       const skillsDistDir = join(DIST_DIR, 'skills')
       expect(existsSync(skillsDistDir)).toBe(true)
@@ -301,7 +339,7 @@ Missing description field.
 
   describe('Content Transformation', () => {
     it('should transform commands to OpenCode table format', async () => {
-      await build()
+      await buildInTemp()
       
       const opencodeCommandPath = join(DIST_DIR, '.opencode', 'command', 'ferg', 'test-command.md')
       const content = await readFile(opencodeCommandPath, 'utf-8')
@@ -313,7 +351,7 @@ Missing description field.
     })
 
     it('should transform agents to OpenCode table format', async () => {
-      await build()
+      await buildInTemp()
       
       const opencodeAgentPath = join(DIST_DIR, '.opencode', 'agent', 'ferg', 'test-agent.md')
       const content = await readFile(opencodeAgentPath, 'utf-8')
@@ -325,7 +363,7 @@ Missing description field.
     })
 
     it('should preserve Claude Code YAML format', async () => {
-      await build()
+      await buildInTemp()
       
       const claudeCommandPath = join(DIST_DIR, '.claude-plugin', 'commands', 'test-command.md')
       const content = await readFile(claudeCommandPath, 'utf-8')
@@ -346,7 +384,7 @@ Missing description field.
       
       // Build should fail gracefully
       expect(async () => {
-        await build()
+        await buildInTemp()
       }).toThrow()
     })
 
@@ -374,7 +412,7 @@ description: invalid yaml: unclosed "quote"
   describe('Performance', () => {
     it('should complete build within reasonable time', async () => {
       const startTime = Date.now()
-      await build()
+      await buildInTemp()
       const endTime = Date.now()
       
       // Should complete within 5 seconds for small test dataset
@@ -389,7 +427,7 @@ description: invalid yaml: unclosed "quote"
       }
       
       const startTime = Date.now()
-      await build()
+      await buildInTemp()
       const endTime = Date.now()
       
       // Should still complete within reasonable time

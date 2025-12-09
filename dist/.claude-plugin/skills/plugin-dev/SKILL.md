@@ -30,9 +30,9 @@ Create content in `content/` directory, let build.ts transform to platform forma
 ```
 content/
 ├── commands/my-command.md  → dist/.claude-plugin/commands/
-│                           → dist/.opencode/command/ferg/
+│                           → dist/.opencode/command/ai-eng/
 └── agents/my-agent.md      → dist/.claude-plugin/agents/
-                            → dist/.opencode/agent/ferg/
+                            → dist/.opencode/agent/ai-eng/
 ```
 
 ### 2. Platform-Specific Development
@@ -76,6 +76,40 @@ tools:                 # Optional: tool restrictions
 |---|---|
 | Description here | build |
 ```
+
+### MCP Configuration Management
+
+**OpenCode Configuration (`opencode.json`):**
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "server-name": {
+      "type": "local|remote",
+      "command": ["command", "args"],
+      "url": "https://server-url",
+      "enabled": true
+    }
+  },
+  "tools": {
+    "server-name*": false  // Global disable
+  },
+  "agent": {
+    "agent-name": {
+      "tools": {
+        "server-name*": true  // Per-agent enable
+      }
+    }
+  }
+}
+```
+
+**Best Practices:**
+- ✅ **Global disable + per-agent enable** (recommended)
+- ✅ **Environment variables** for tokens (never hardcode)
+- ✅ **Glob patterns** for tool control
+- ✅ **Agent frontmatter** for explicit permissions (optional but recommended)
+- ✅ **Plugin hooks** for dynamic enforcement (advanced)
 
 ### Agent Frontmatter
 
@@ -208,10 +242,10 @@ export default (async ({ client, project, directory, worktree, $ }) => {
 ### 1. Create Component
 
 Use plugin-dev commands:
-- `/ferg/create-agent` - Create new agent
-- `/ferg/create-command` - Create new command
-- `/ferg/create-skill` - Create new skill
-- `/ferg/create-tool` - Create new custom tool
+- `/ai-eng/create-agent` - Create new agent
+- `/ai-eng/create-command` - Create new command
+- `/ai-eng/create-skill` - Create new skill
+- `/ai-eng/create-tool` - Create new custom tool
 
 ### 2. Build
 
@@ -303,20 +337,20 @@ Study existing components in ferg-engineering-system:
 The plugin-dev system integrates seamlessly with existing ferg-engineering components:
 
 ### Existing Commands
-- `/ferg/plan` - Implementation planning
-- `/ferg/review` - Code review
-- `/ferg/work` - Task execution
+- `/ai-eng/plan` - Implementation planning
+- `/ai-eng/review` - Code review
+- `/ai-eng/work` - Task execution
 
 ### Existing Agents
-- `ferg/architect-advisor` - Architecture guidance
-- `ferg/frontend-reviewer` - Frontend review
-- `ferg/seo-specialist` - SEO optimization
+- `ai-eng/architect-advisor` - Architecture guidance
+- `ai-eng/frontend-reviewer` - Frontend review
+- `ai-eng/seo-specialist` - SEO optimization
 
 ### Plugin-Dev Commands
-- `/ferg/create-plugin` - Full plugin development workflow
-- `/ferg/create-agent` - Quick agent creation
-- `/ferg/create-command` - Quick command creation
-- `/ferg/create-skill` - Quick skill creation
-- `/ferg/create-tool` - Quick tool creation
+- `/ai-eng/create-plugin` - Full plugin development workflow
+- `/ai-eng/create-agent` - Quick agent creation
+- `/ai-eng/create-command` - Quick command creation
+- `/ai-eng/create-skill` - Quick skill creation
+- `/ai-eng/create-tool` - Quick tool creation
 
 All use the same quality standards and research-backed prompting techniques.

@@ -1,0 +1,20 @@
+{
+  "task_id": "AR-003",
+  "prompt_type": "baseline",
+  "variant_id": "v1",
+  "prompt": "# Architecture Baseline Prompt\n\n## Task\n\nEvaluate whether a startup should build their MVP as a monolith or microservices architecture. Consider team size, time to market, scalability requirements, development complexity, operational overhead, and future growth plans. Provide a specific recommendation with migration strategy.\n\n{{#if context}}\n## Context\n\nA seed-stage startup with 5 engineers needs to launch their MVP in 4 months. They have limited DevOps experience and need to balance speed of development against future scalability. The product will handle user management, payments, notifications, and basic analytics. They expect rapid user growth if successful.\n{{/if}}\n\n## Instructions\n\nPlease analyze this architecture decision and provide your recommendation. Consider the requirements, constraints, and trade-offs involved.\n\nFocus on:\n- Technical feasibility\n- Scalability implications\n- Development complexity\n- Long-term maintainability\n- Cost considerations\n\nProvide a clear recommendation with supporting rationale.",
+  "response": "[DRY RUN] Mock response for AR-003 - baseline variant",
+  "metadata": {
+    "task_id": "AR-003",
+    "prompt_type": "baseline",
+    "variant_id": "v1",
+    "timestamp": 1764999769.8921268,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

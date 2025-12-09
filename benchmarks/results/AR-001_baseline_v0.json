@@ -1,0 +1,20 @@
+{
+  "task_id": "AR-001",
+  "prompt_type": "baseline",
+  "variant_id": "v0",
+  "prompt": "# Architecture Baseline Prompt\n\n## Task\n\nAnalyze the requirements for a new e-commerce product catalog API and recommend whether to use REST or GraphQL. Consider factors like performance, developer experience, client complexity, caching strategies, and future extensibility. Provide a detailed recommendation with specific architecture patterns and implementation considerations.\n\n{{#if context}}\n## Context\n\nThe company is building a new e-commerce platform to replace their legacy system. The product catalog API will serve both web and mobile clients, needs to handle complex product relationships (variants, bundles, recommendations), and must support high traffic during sales events. The team has experience with REST APIs but is considering GraphQL for its flexibility.\n{{/if}}\n\n## Instructions\n\nPlease analyze this architecture decision and provide your recommendation. Consider the requirements, constraints, and trade-offs involved.\n\nFocus on:\n- Technical feasibility\n- Scalability implications\n- Development complexity\n- Long-term maintainability\n- Cost considerations\n\nProvide a clear recommendation with supporting rationale.",
+  "response": "This is a mock response for testing the validation framework. In a real scenario, this would be a detailed analysis from Claude AI.",
+  "metadata": {
+    "task_id": "AR-001",
+    "prompt_type": "baseline",
+    "variant_id": "v0",
+    "timestamp": 1765017667.3952775,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": 173,
+    "cost_estimate": null,
+    "response_time_ms": 100,
+    "cached": false
+  },
+  "cached": false
+}

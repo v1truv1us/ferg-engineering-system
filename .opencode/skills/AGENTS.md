@@ -1,10 +1,10 @@
 # Skills Repository Context
 
-**Hierarchy Level:** OpenCode skill definitions
-**Parent:** Root [AGENTS.md](../../AGENTS.md) — Agent coordination
-**Philosophy:** [CLAUDE.md](../../CLAUDE.md) — Compounding Engineering philosophy
+**Hierarchy Level:** Reusable skill definitions
+**Parent:** [../AGENTS.md](../AGENTS.md) — Agent coordination and skill registry
+**Philosophy:** [../CLAUDE.md](../CLAUDE.md) — Compounding Engineering philosophy
 
-OpenCode-specific skills supporting the agent coordination system.
+Modular, reusable skill definitions that support the agents defined in the parent AGENTS.md.
 
 ## Project Overview
 Modular skill definitions for DevOps and prompting capabilities.

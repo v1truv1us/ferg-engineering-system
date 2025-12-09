@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Build script for ferg-engineering-system
+ * Build script for ai-eng-system
  * 
  * Transforms canonical content from content/ into platform-specific formats:
  * - dist/.claude-plugin/ for Claude Code
@@ -25,6 +25,9 @@ const SKILLS_DIR = join(ROOT, "skills")
 // Platform output directories
 const CLAUDE_DIR = join(DIST_DIR, ".claude-plugin")
 const OPENCODE_DIR = join(DIST_DIR, ".opencode")
+
+// Namespace configuration for OpenCode installations
+const NAMESPACE_PREFIX = "ai-eng"
 
 interface CommandMeta {
   name: string
@@ -181,10 +184,9 @@ async function buildClaudePlugin(): Promise<void> {
   const commands = commandFiles.map(file => `./commands/${basename(file)}`)
 
   const pluginJson = {
-    name: "ferg-engineering",
-    version: packageJson.version,
-    description: "Compounding engineering system for Claude Code",
-    author: "ferg-cod3s",
+    name: "ai-eng-system",
+    description: "AI Engineering System for Claude Code",
+    author: "v1truv1us",
     license: "MIT",
     commands: commands
   }
@@ -199,7 +201,7 @@ async function buildClaudePlugin(): Promise<void> {
     hooks: {
       SessionStart: [
         {
-          description: "Initialize ferg-engineering-system on session start",
+          description: "Initialize ai-eng-system on session start",
           hooks: [
             {
               type: "notification",
@@ -243,8 +245,8 @@ async function buildClaudePlugin(): Promise<void> {
 async function buildOpenCode(): Promise<void> {
   console.log("📦 Building OpenCode plugin...")
 
-  const commandsDir = join(OPENCODE_DIR, "command", "ferg")
-  const agentsDir = join(OPENCODE_DIR, "agent", "ferg")
+  const commandsDir = join(OPENCODE_DIR, "command", NAMESPACE_PREFIX)
+  const agentsDir = join(OPENCODE_DIR, "agent", NAMESPACE_PREFIX)
 
   await mkdir(commandsDir, { recursive: true })
   await mkdir(agentsDir, { recursive: true })
@@ -270,6 +272,16 @@ async function buildOpenCode(): Promise<void> {
     await writeFile(dest, transformed)
   }
   console.log(`   ✓ ${agentFiles.length} agents`)
+
+  // Copy OpenCode configuration
+  const opencodeConfigSrc = join(ROOT, ".opencode", "opencode.jsonc")
+  const opencodeConfigDest = join(OPENCODE_DIR, "opencode.jsonc")
+  if (existsSync(opencodeConfigSrc)) {
+    await copyFile(opencodeConfigSrc, opencodeConfigDest)
+    console.log(`   ✓ configuration copied`)
+  } else {
+    console.log(`   ⚠️  configuration not found`)
+  }
 }
 
 /**
@@ -293,8 +305,8 @@ async function copySkills(): Promise<void> {
  */
 async function build(): Promise<void> {
   const startTime = Date.now()
-  
-  console.log("\n🚀 Building ferg-engineering-system...\n")
+
+  console.log("\n🚀 Building ai-eng-system...\n")
 
   // Clean dist
   if (existsSync(DIST_DIR)) {
@@ -307,6 +319,19 @@ async function build(): Promise<void> {
     console.error("❌ Error: content/ directory not found")
     console.error("   Run migration first or create content/ manually")
     process.exit(1)
+  }
+
+  // Copy package files
+  await copyFile(join(ROOT, 'package.json'), join(DIST_DIR, 'package.json'))
+  await copyFile(join(ROOT, 'README.md'), join(DIST_DIR, 'README.md'))
+  await copyFile(join(ROOT, 'LICENSE'), join(DIST_DIR, 'LICENSE'))
+
+  // Copy scripts directory
+  const scriptsSrc = join(ROOT, 'scripts')
+  const scriptsDest = join(DIST_DIR, 'scripts')
+  if (existsSync(scriptsSrc)) {
+    await mkdir(scriptsDest, { recursive: true })
+    await copyRecursive(scriptsSrc, scriptsDest)
   }
 
   // Build all platforms
@@ -391,3 +416,6 @@ if (args.includes("--validate")) {
 } else {
   await build()
 }
+
+// Export functions for testing
+export { build, validate }

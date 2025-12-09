@@ -2,13 +2,6 @@
 |---|---|---|
 | Create a new OpenCode custom tool with AI assistance. Uses tool-creator for intelligent TypeScript tool generation. | tool-creator | true |
 
----
-name: create-tool
-description: Create a new OpenCode custom tool with AI assistance. Uses tool-creator for intelligent TypeScript tool generation.
-agent: tool-creator
-subtask: true
----
-
 # Create Tool Command
 
 Create a new OpenCode custom tool using AI assistance.

@@ -2,13 +2,6 @@
 |---|---|---|
 | Create a new OpenCode command with AI assistance. Uses command-creator for intelligent command generation. | command-creator | true |
 
----
-name: create-command
-description: Create a new OpenCode command with AI assistance. Uses command-creator for intelligent command generation.
-agent: command-creator
-subtask: true
----
-
 # Create Command Command
 
 Create a new OpenCode command using AI assistance.

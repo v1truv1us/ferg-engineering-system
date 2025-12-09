@@ -103,8 +103,8 @@ cd ferg-engineering-system
 - **Format:** Markdown files with YAML frontmatter
 
 ### OpenCode
-- **Commands:** 8 namespaced commands (`/ferg/plan`, `/ferg/review`, etc.)
-- **Agents:** 4 specialized agents (`ferg/architect-advisor`, etc.)
+- **Commands:** 8 namespaced commands (`/ai-eng/plan`, `/ai-eng/review`, etc.)
+- **Agents:** 4 specialized agents (`ai-eng/architect-advisor`, etc.)
 - **Skills:** 2 skill packages (prompting, devops)
 - **Location:** `~/.config/opencode/` (global) or `.opencode/` (local)
 
@@ -125,8 +125,8 @@ cd ferg-engineering-system
 **"Command not found" in OpenCode**
 ```bash
 # Verify installation
-ls ~/.config/opencode/command/ferg/
-ls ~/.config/opencode/agent/ferg/
+ls ~/.config/opencode/command/ai-eng/
+ls ~/.config/opencode/agent/ai-eng/
 
 # Reinstall if needed
 npm run install:global
@@ -168,7 +168,7 @@ After installation, verify everything works:
 **OpenCode:**
 ```bash
 # Test a command
-/ferg/plan "test installation"
+/ai-eng/plan "test installation"
 
 # Use verification script
 ./verify-install.sh

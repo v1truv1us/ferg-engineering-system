@@ -2,13 +2,6 @@
 |---|---|---|
 | Guided end-to-end plugin creation workflow for OpenCode extensions. Creates plugins, commands, agents, skills, and custom tools with AI assistance. Follows systematic 8-phase process from discovery to documentation. | plan | false |
 
----
-name: create-plugin
-description: Guided end-to-end plugin creation workflow for OpenCode extensions. Creates plugins, commands, agents, skills, and custom tools with AI assistance. Follows systematic 8-phase process from discovery to documentation.
-agent: plan
-subtask: false
----
-
 # Plugin Creation Workflow
 
 Create a complete, high-quality OpenCode extension from initial concept to tested implementation. Follow a systematic approach: understand requirements, design components, clarify details, implement following best practices, validate, and test.

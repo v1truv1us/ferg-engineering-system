@@ -1,0 +1,21 @@
+{
+  "id": "AR-001",
+  "category": "architecture",
+  "title": "Choose Between REST and GraphQL for New API",
+  "task": "Analyze the requirements for a new e-commerce product catalog API and recommend whether to use REST or GraphQL. Consider factors like performance, developer experience, client complexity, caching strategies, and future extensibility. Provide a detailed recommendation with specific architecture patterns and implementation considerations.",
+  "context": "The company is building a new e-commerce platform to replace their legacy system. The product catalog API will serve both web and mobile clients, needs to handle complex product relationships (variants, bundles, recommendations), and must support high traffic during sales events. The team has experience with REST APIs but is considering GraphQL for its flexibility.",
+  "expected_elements": [
+    "Analysis of REST vs GraphQL trade-offs",
+    "Performance considerations for both approaches",
+    "Developer experience comparison",
+    "Client complexity assessment",
+    "Caching strategy recommendations",
+    "Scalability and extensibility analysis",
+    "Specific architecture pattern recommendation",
+    "Implementation roadmap with phases"
+  ],
+  "difficulty": "medium",
+  "validates_techniques": ["step-by-step"],
+  "estimated_time": 20,
+  "tags": ["api-design", "rest", "graphql", "architecture", "e-commerce"]
+}

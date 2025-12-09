@@ -1,0 +1,38 @@
+{
+  "apis": [
+    {
+      "provider": "opencode",
+      "model": "opencode-cli",
+      "max_tokens": 163000,
+      "temperature": 0.1,
+      "timeout": 300
+    },
+    {
+      "provider": "cursor",
+      "model": "cursor-cli",
+      "max_tokens": 100000,
+      "temperature": 0.1,
+      "timeout": 300
+    }
+  ],
+  "rate_limit": {
+    "requests_per_minute": 50,
+    "requests_per_hour": 1000,
+    "burst_limit": 10
+  },
+  "cache": {
+    "enabled": true,
+    "cache_dir": ".cache"
+  },
+  "output": {
+    "results_dir": "benchmarks/results",
+    "reports_dir": "benchmarks/results/reports"
+  },
+  "validation": {
+    "alpha": 0.05,
+    "power": 0.80,
+    "bootstrap_resamples": 9999,
+    "min_sample_size": 3,
+    "max_sample_size": 100
+  }
+}

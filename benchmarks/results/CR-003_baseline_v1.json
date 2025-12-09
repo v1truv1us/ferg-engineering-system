@@ -1,0 +1,20 @@
+{
+  "task_id": "CR-003",
+  "prompt_type": "baseline",
+  "variant_id": "v1",
+  "prompt": "# Code Review Baseline Prompt\n\n## Task\n\nAnalyze this payment processing module for security vulnerabilities, race conditions, error handling, and compliance issues. Provide comprehensive security recommendations and refactoring suggestions.\n\n{{#if context}}\n## Context\n\nThis payment processing module handles credit card transactions for a fintech application. It processes payments, updates inventory, sends notifications, and handles refunds. The module must be PCI-DSS compliant and handle high concurrency.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\nconst stripe = require('stripe')(process.env.STRIPE_SECRET);\nconst { sendEmail } = require('./notifications');\nconst { updateInventory } = require('./inventory');\n\nclass PaymentProcessor {\n  constructor() {\n    this.processing = new Set();\n  }\n  \n  async processPayment(paymentData) {\n    // Check if already processing\n    if (this.processing.has(paymentData.orderId)) {\n      throw new Error('Payment already being processed');\n    }\n    \n    this.processing.add(paymentData.orderId);\n    \n    try {\n      // Create charge\n      const charge = await stripe.charges.create({\n        amount: paymentData.amount,\n        currency: 'usd',\n        source: paymentData.token,\n        description: `Payment for order ${paymentData.orderId}`\n      });\n      \n      // Update order status\n      await this.updateOrderStatus(paymentData.orderId, 'paid');\n      \n      // Update inventory\n      await updateInventory(paymentData.items);\n      \n      // Send confirmation\n      await sendEmail(paymentData.customerEmail, 'Payment Confirmation', {\n        orderId: paymentData.orderId,\n        amount: paymentData.amount,\n        chargeId: charge.id\n      });\n      \n      return { success: true, chargeId: charge.id };\n      \n    } catch (error) {\n      // Log error but don't expose details\n      console.error('Payment failed:', error.message);\n      \n      // Update order status\n      await this.updateOrderStatus(paymentData.orderId, 'failed');\n      \n      return { success: false, error: 'Payment failed' };\n      \n    } finally {\n      this.processing.delete(paymentData.orderId);\n    }\n  }\n  \n  async updateOrderStatus(orderId, status) {\n    const query = `UPDATE orders SET status = '${status}' WHERE id = ${orderId}`;\n    await db.query(query);\n  }\n  \n  async refundPayment(chargeId, amount) {\n    try {\n      const refund = await stripe.refunds.create({\n        charge: chargeId,\n        amount: amount\n      });\n      \n      // Restore inventory\n      // Note: This should restore the specific items from the original order\n      await restoreInventory(chargeId);\n      \n      return { success: true, refundId: refund.id };\n      \n    } catch (error) {\n      console.error('Refund failed:', error.message);\n      return { success: false, error: 'Refund failed' };\n    }\n  }\n}\n\nmodule.exports = PaymentProcessor;\n```\n{{/if}}\n\n## Instructions\n\nPlease review this code for security issues, performance problems, and code quality concerns. Provide specific recommendations for any issues you find.\n\nFocus on:\n- Security vulnerabilities\n- Performance bottlenecks  \n- Code maintainability\n- Best practices violations\n\nReturn your analysis in a clear, structured format.",
+  "response": "[DRY RUN] Mock response for CR-003 - baseline variant",
+  "metadata": {
+    "task_id": "CR-003",
+    "prompt_type": "baseline",
+    "variant_id": "v1",
+    "timestamp": 1765017585.6557941,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

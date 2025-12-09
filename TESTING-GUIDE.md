@@ -12,8 +12,8 @@
 ### Installation Location
 ```
 ~/.config/opencode/
-├── command/ferg/          # All ferg commands
-├── agent/ferg/            # All ferg agents
+├── command/ai-eng/          # All ferg commands
+├── agent/ai-eng/            # All ferg agents
 ├── skills/                # Ferg skills
 └── opencode.jsonc         # Configuration
 ```
@@ -21,47 +21,47 @@
 ### Installed Components
 
 **Commands** (15 total):
-- ✅ `/ferg/plan` - Create implementation plans
-- ✅ `/ferg/work` - Execute plans with quality gates
-- ✅ `/ferg/review` - Code review
-- ✅ `/ferg/research` - Multi-phase research
-- ✅ `/ferg/context` - Context management
-- ✅ `/ferg/optimize` - Performance optimization
-- ✅ `/ferg/deploy` - Deployment workflow
-- ✅ `/ferg/seo` - SEO optimization
-- ✅ `/ferg/compound` - Compound operations
-- ✅ `/ferg/recursive-init` - Initialize across directories
-- ✅ `/ferg/create-agent` - Create new agents
-- ✅ `/ferg/create-command` - Create new commands
-- ✅ `/ferg/create-skill` - Create new skills
-- ✅ `/ferg/create-tool` - Create new tools
-- ✅ `/ferg/create-plugin` - Create new plugins
+- ✅ `/ai-eng/plan` - Create implementation plans
+- ✅ `/ai-eng/work` - Execute plans with quality gates
+- ✅ `/ai-eng/review` - Code review
+- ✅ `/ai-eng/research` - Multi-phase research
+- ✅ `/ai-eng/context` - Context management
+- ✅ `/ai-eng/optimize` - Performance optimization
+- ✅ `/ai-eng/deploy` - Deployment workflow
+- ✅ `/ai-eng/seo` - SEO optimization
+- ✅ `/ai-eng/compound` - Compound operations
+- ✅ `/ai-eng/recursive-init` - Initialize across directories
+- ✅ `/ai-eng/create-agent` - Create new agents
+- ✅ `/ai-eng/create-command` - Create new commands
+- ✅ `/ai-eng/create-skill` - Create new skills
+- ✅ `/ai-eng/create-tool` - Create new tools
+- ✅ `/ai-eng/create-plugin` - Create new plugins
 
 **Agents** (24 total):
-- ✅ ferg/architect-advisor
-- ✅ ferg/frontend-reviewer
-- ✅ ferg/prompt-optimizer
-- ✅ ferg/seo-specialist
-- ✅ ferg/java-pro
-- ✅ ferg/database_optimizer
-- ✅ ferg/code_reviewer
-- ✅ ferg/infrastructure_builder
-- ✅ ferg/backend_architect
-- ✅ ferg/api_builder_enhanced
-- ✅ ferg/full_stack_developer
-- ✅ ferg/deployment_engineer
-- ✅ ferg/monitoring_expert
-- ✅ ferg/cost_optimizer
-- ✅ ferg/test_generator
-- ✅ ferg/performance_engineer
-- ✅ ferg/ml_engineer
-- ✅ ferg/security_scanner
-- ✅ ferg/ai_engineer
-- ✅ ferg/agent-creator
-- ✅ ferg/command-creator
-- ✅ ferg/skill-creator
-- ✅ ferg/tool-creator
-- ✅ ferg/plugin-validator
+- ✅ ai-eng/architect-advisor
+- ✅ ai-eng/frontend-reviewer
+- ✅ ai-eng/prompt-optimizer
+- ✅ ai-eng/seo-specialist
+- ✅ ai-eng/java-pro
+- ✅ ai-eng/database_optimizer
+- ✅ ai-eng/code_reviewer
+- ✅ ai-eng/infrastructure_builder
+- ✅ ai-eng/backend_architect
+- ✅ ai-eng/api_builder_enhanced
+- ✅ ai-eng/full_stack_developer
+- ✅ ai-eng/deployment_engineer
+- ✅ ai-eng/monitoring_expert
+- ✅ ai-eng/cost_optimizer
+- ✅ ai-eng/test_generator
+- ✅ ai-eng/performance_engineer
+- ✅ ai-eng/ml_engineer
+- ✅ ai-eng/security_scanner
+- ✅ ai-eng/ai_engineer
+- ✅ ai-eng/agent-creator
+- ✅ ai-eng/command-creator
+- ✅ ai-eng/skill-creator
+- ✅ ai-eng/tool-creator
+- ✅ ai-eng/plugin-validator
 
 **Skills**:
 - ✅ devops/coolify-deploy
@@ -81,13 +81,13 @@ Test that all commands are accessible and respond correctly.
 #### Test 1.1: List Available Commands
 ```bash
 # In OpenCode, try typing:
-/ferg/
+/ai-eng/
 ```
 **Expected**: Auto-complete shows all ferg commands
 
-#### Test 1.2: Test /ferg/plan Command
+#### Test 1.2: Test /ai-eng/plan Command
 ```bash
-/ferg/plan "Add dark mode toggle to settings"
+/ai-eng/plan "Add dark mode toggle to settings"
 ```
 **Expected Output**:
 - Creates a plan file in `plans/` directory
@@ -106,9 +106,9 @@ Test that all commands are accessible and respond correctly.
 - [ ] Dependencies are explicit
 - [ ] File paths are specific
 
-#### Test 1.3: Test /ferg/work Command
+#### Test 1.3: Test /ai-eng/work Command
 ```bash
-/ferg/work --dry-run plans/[latest-plan].md
+/ai-eng/work --dry-run plans/[latest-plan].md
 ```
 **Expected Output**:
 - Shows execution plan without making changes
@@ -122,9 +122,9 @@ Test that all commands are accessible and respond correctly.
 - [ ] Time estimates are shown
 - [ ] No actual changes made
 
-#### Test 1.4: Test /ferg/research Command
+#### Test 1.4: Test /ai-eng/research Command
 ```bash
-/ferg/research "How does the context system work?"
+/ai-eng/research "How does the context system work?"
 ```
 **Expected Output**:
 - Multi-phase research with:
@@ -138,9 +138,9 @@ Test that all commands are accessible and respond correctly.
 - [ ] Multiple sources referenced
 - [ ] Findings are actionable
 
-#### Test 1.5: Test /ferg/review Command
+#### Test 1.5: Test /ai-eng/review Command
 ```bash
-/ferg/review "https://github.com/v1truv1us/ferg-engineering-system/pull/2"
+/ai-eng/review "https://github.com/v1truv1us/ferg-engineering-system/pull/2"
 ```
 **Expected Output**:
 - Code review with:
@@ -164,7 +164,7 @@ Test that commands work together in a workflow.
 
 **Step 1: Create a Plan**
 ```bash
-/ferg/plan "Implement user authentication system"
+/ai-eng/plan "Implement user authentication system"
 ```
 - Creates: `plans/2025-12-05-user-authentication.md`
 
@@ -175,14 +175,14 @@ Test that commands work together in a workflow.
 
 **Step 3: Dry-Run the Work**
 ```bash
-/ferg/work plans/2025-12-05-user-authentication.md --dry-run
+/ai-eng/work plans/2025-12-05-user-authentication.md --dry-run
 ```
 - Shows execution plan
 - Confirms all tasks are clear
 
 **Step 4: Validate Plan**
 ```bash
-/ferg/work plans/2025-12-05-user-authentication.md --validate-only
+/ai-eng/work plans/2025-12-05-user-authentication.md --validate-only
 ```
 - Checks file paths exist
 - Verifies dependencies are resolvable
@@ -199,12 +199,12 @@ Test that commands work together in a workflow.
 
 **Step 1: Research a Topic**
 ```bash
-/ferg/research "Best practices for API design"
+/ai-eng/research "Best practices for API design"
 ```
 
 **Step 2: Use Research in Planning**
 ```bash
-/ferg/plan "Design REST API based on research findings"
+/ai-eng/plan "Design REST API based on research findings"
 ```
 
 **Verification Checklist**:
@@ -222,7 +222,7 @@ Test that specialized agents work correctly.
 #### Test 3.1: Architect Advisor
 ```bash
 # In OpenCode, use the agent:
-ferg/architect-advisor
+ai-eng/architect-advisor
 ```
 **Task**: "Should we use microservices or monolith for our API?"
 
@@ -239,7 +239,7 @@ ferg/architect-advisor
 
 #### Test 3.2: Code Reviewer
 ```bash
-ferg/code_reviewer
+ai-eng/code_reviewer
 ```
 **Task**: "Review this TypeScript code for quality"
 
@@ -257,7 +257,7 @@ ferg/code_reviewer
 
 #### Test 3.3: Prompt Optimizer
 ```bash
-ferg/prompt-optimizer
+ai-eng/prompt-optimizer
 ```
 **Task**: "Enhance this prompt: 'Help me fix this slow database query'"
 
@@ -321,7 +321,7 @@ Test new features in v0.2.0.
 **Test**: Create a plan and verify atomic tasks
 
 ```bash
-/ferg/plan "Build a real-time notification system"
+/ai-eng/plan "Build a real-time notification system"
 ```
 
 **Verify Each Task**:
@@ -338,7 +338,7 @@ Test new features in v0.2.0.
 **Test**: Execute a plan and verify gates
 
 ```bash
-/ferg/work plans/[plan].md
+/ai-eng/work plans/[plan].md
 ```
 
 **Verify Gates Execute in Order**:
@@ -359,19 +359,19 @@ Test new features in v0.2.0.
 
 **Test 1: Continue Mode**
 ```bash
-/ferg/work --continue
+/ai-eng/work --continue
 ```
 **Expected**: Resumes from last incomplete task
 
 **Test 2: Validate-Only Mode**
 ```bash
-/ferg/work plans/[plan].md --validate-only
+/ai-eng/work plans/[plan].md --validate-only
 ```
 **Expected**: Validates without implementing
 
 **Test 3: Dry-Run Mode**
 ```bash
-/ferg/work plans/[plan].md --dry-run
+/ai-eng/work plans/[plan].md --dry-run
 ```
 **Expected**: Shows what would be done
 
@@ -390,14 +390,14 @@ Verify documentation is complete and accurate.
 #### Test 6.1: Command Documentation
 ```bash
 # Check that each command has documentation
-ls -la ~/.config/opencode/command/ferg/
+ls -la ~/.config/opencode/command/ai-eng/
 ```
 **Expected**: All 15 commands have .md files
 
 #### Test 6.2: Agent Documentation
 ```bash
 # Check that agents are documented
-ls -la ~/.config/opencode/agent/ferg/
+ls -la ~/.config/opencode/agent/ai-eng/
 ```
 **Expected**: All 24 agents have .md files
 
@@ -420,9 +420,9 @@ ls -la ~/.config/opencode/skills/
 ## 🎯 Testing Checklist
 
 ### Quick Test (5 minutes)
-- [ ] `/ferg/plan` creates a plan
-- [ ] `/ferg/work --dry-run` shows tasks
-- [ ] `/ferg/research` returns findings
+- [ ] `/ai-eng/plan` creates a plan
+- [ ] `/ai-eng/work --dry-run` shows tasks
+- [ ] `/ai-eng/research` returns findings
 - [ ] Commands are accessible
 
 ### Standard Test (30 minutes)
@@ -449,10 +449,10 @@ Use this template to document your test results:
 # Test Results - [Date]
 
 ## Phase 1: Basic Commands
-- [ ] /ferg/plan - PASS/FAIL
-- [ ] /ferg/work - PASS/FAIL
-- [ ] /ferg/research - PASS/FAIL
-- [ ] /ferg/review - PASS/FAIL
+- [ ] /ai-eng/plan - PASS/FAIL
+- [ ] /ai-eng/work - PASS/FAIL
+- [ ] /ai-eng/research - PASS/FAIL
+- [ ] /ai-eng/review - PASS/FAIL
 
 ## Phase 2: Integration
 - [ ] Plan → Work workflow - PASS/FAIL

@@ -322,7 +322,7 @@ export interface ResearchEvent {
  * Discovery agent interface
  */
 export interface DiscoveryAgent {
-  discover(query: string, scope: ResearchScope, constraints?: ResearchConstraints): Promise<DiscoveryResult>;
+  discover(query: ResearchQuery): Promise<DiscoveryResult>;
 }
 
 /**

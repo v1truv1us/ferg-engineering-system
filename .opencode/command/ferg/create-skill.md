@@ -2,13 +2,6 @@
 |---|---|---|
 | Create a new OpenCode skill with AI assistance. Uses skill-creator for intelligent skill generation. | skill-creator | true |
 
----
-name: create-skill
-description: Create a new OpenCode skill with AI assistance. Uses skill-creator for intelligent skill generation.
-agent: skill-creator
-subtask: true
----
-
 # Create Skill Command
 
 Create a new OpenCode skill using AI assistance.

@@ -1,0 +1,20 @@
+{
+  "task_id": "CR-002",
+  "prompt_type": "baseline",
+  "variant_id": "v2",
+  "prompt": "# Code Review Baseline Prompt\n\n## Task\n\nAnalyze this database query function for performance issues, N+1 query problems, and SQL injection vulnerabilities. Provide specific refactoring recommendations with code examples.\n\n{{#if context}}\n## Context\n\nThis function is part of an e-commerce platform's order management system. It's used to fetch orders with their associated items and customer information. The database contains millions of orders.\n{{/if}}\n\n{{#if code}}\n## Code\n\n```javascript\nasync function getOrderWithItems(orderId) {\n  const connection = await db.getConnection();\n  \n  // Get order details\n  const orderQuery = `SELECT * FROM orders WHERE id = ${orderId}`;\n  const [order] = await connection.query(orderQuery);\n  \n  // Get order items for each order\n  const itemsQuery = `SELECT * FROM order_items WHERE order_id = ${orderId}`;\n  const items = [];\n  \n  for (const item of items) {\n    const itemQuery = `SELECT * FROM products WHERE id = ${item.product_id}`;\n    const [product] = await connection.query(itemQuery);\n    items.push({\n      ...item,\n      product: product[0]\n    });\n  }\n  \n  // Get customer info\n  const customerQuery = `SELECT * FROM customers WHERE id = ${order[0].customer_id}`;\n  const [customer] = await connection.query(customerQuery);\n  \n  await connection.release();\n  \n  return {\n    order: order[0],\n    items,\n    customer: customer[0]\n  };\n}\n```\n{{/if}}\n\n## Instructions\n\nPlease review this code for security issues, performance problems, and code quality concerns. Provide specific recommendations for any issues you find.\n\nFocus on:\n- Security vulnerabilities\n- Performance bottlenecks  \n- Code maintainability\n- Best practices violations\n\nReturn your analysis in a clear, structured format.",
+  "response": "[DRY RUN] Mock response for CR-002 - baseline variant",
+  "metadata": {
+    "task_id": "CR-002",
+    "prompt_type": "baseline",
+    "variant_id": "v2",
+    "timestamp": 1765017585.654192,
+    "provider": "mock",
+    "model": "mock-model",
+    "tokens_used": null,
+    "cost_estimate": null,
+    "response_time_ms": null,
+    "cached": false
+  },
+  "cached": false
+}

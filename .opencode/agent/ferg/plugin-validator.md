@@ -79,7 +79,7 @@ export default (async ({ project, client, $, directory, worktree }) => {
 
 **Claude Code Commands (.md with YAML frontmatter):**
 ```yaml
-# Example: 
+# Example:
 #   name: command-name
 #   description: Command description
 #   agent: build

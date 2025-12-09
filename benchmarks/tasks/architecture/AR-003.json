@@ -1,0 +1,22 @@
+{
+  "id": "AR-003",
+  "category": "architecture",
+  "title": "Evaluate Microservices vs Monolith for Startup MVP",
+  "task": "Evaluate whether a startup should build their MVP as a monolith or microservices architecture. Consider team size, time to market, scalability requirements, development complexity, operational overhead, and future growth plans. Provide a specific recommendation with migration strategy.",
+  "context": "A seed-stage startup with 5 engineers needs to launch their MVP in 4 months. They have limited DevOps experience and need to balance speed of development against future scalability. The product will handle user management, payments, notifications, and basic analytics. They expect rapid user growth if successful.",
+  "expected_elements": [
+    "Analysis of team capabilities and constraints",
+    "Monolith vs microservices trade-off analysis",
+    "Time-to-market impact assessment",
+    "Development complexity comparison",
+    "Operational overhead and monitoring requirements",
+    "Scalability projections for both approaches",
+    "Cost analysis (development, infrastructure, operational)",
+    "Specific architectural recommendation with rationale",
+    "Migration strategy and phased implementation plan"
+  ],
+  "difficulty": "hard",
+  "validates_techniques": ["step-by-step"],
+  "estimated_time": 25,
+  "tags": ["startup", "mvp", "microservices", "monolith", "architecture-decision", "scalability"]
+}

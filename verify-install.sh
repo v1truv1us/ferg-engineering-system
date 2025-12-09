@@ -25,7 +25,7 @@ echo ""
 
 # Check OpenCode setup (project-local)
 echo "📋 OpenCode Setup (Project-Local):"
-if [ -d ".opencode/command/ferg" ]; then
+if [ -d ".opencode/command/ai-eng" ]; then
   cmd_count=$(ls .opencode/command/ferg/*.md 2>/dev/null | wc -l)
   agent_count=$(ls .opencode/agent/ferg/*.md 2>/dev/null | wc -l)
   if [ "$cmd_count" -gt 0 ]; then
@@ -35,7 +35,7 @@ if [ -d ".opencode/command/ferg" ]; then
     echo "   ❌ No commands/agents found"
   fi
 else
-  echo "   ⚠️  .opencode/command/ferg not found (run ./setup.sh)"
+  echo "   ⚠️  .opencode/command/ai-eng not found (run ./setup.sh)"
 fi
 
 echo ""
@@ -43,18 +43,18 @@ echo ""
 # Check OpenCode setup (global)
 echo "📋 OpenCode Setup (Global):"
 GLOBAL_DIR="$HOME/.config/opencode"
-if [ -d "$GLOBAL_DIR/command/ferg" ]; then
+if [ -d "$GLOBAL_DIR/command/ai-eng" ]; then
   cmd_count=$(ls "$GLOBAL_DIR/command/ferg"/*.md 2>/dev/null | wc -l)
   agent_count=$(ls "$GLOBAL_DIR/agent/ferg"/*.md 2>/dev/null | wc -l)
   if [ "$cmd_count" -gt 0 ]; then
     echo "   ✅ Commands found: $cmd_count commands"
     echo "   ✅ Agents found: $agent_count agents"
-    echo "   ✅ Use with /ferg/ prefix (e.g., /ferg/plan)"
+     echo "   ✅ Use with /ai-eng/ prefix (e.g., /ai-eng/plan)"
   else
     echo "   ❌ No commands/agents found"
   fi
 else
-  echo "   ⚠️  Global ferg/ not found (run ./setup-global.sh)"
+  echo "   ⚠️  Global ai-eng/ not found (run ./setup-global.sh)"
 fi
 
 echo ""
@@ -63,6 +63,6 @@ echo "✅ Verification complete!"
 echo ""
 echo "Usage Examples:"
 echo "  Claude Code: /plan, /review, /optimize"
-echo "  OpenCode:    /ferg/plan, /ferg/review, /ferg/optimize"
-echo "  OpenCode Agents: 'Use ferg/architect-advisor to evaluate...'"
+echo "  OpenCode:    /ai-eng/plan, /ai-eng/review, /ai-eng/optimize"
+echo "  OpenCode Agents: 'Use ai-eng/architect-advisor to evaluate...'"
 echo ""
