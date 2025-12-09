@@ -42,8 +42,8 @@ function installOpenCode(targetDir, description) {
   }
   
   // Create target directories
-  const commandDir = path.join(targetDir, 'command', 'ferg');
-  const agentDir = path.join(targetDir, 'agent', 'ferg');
+  const commandDir = path.join(targetDir, 'command', NAMESPACE_PREFIX);
+  const agentDir = path.join(targetDir, 'agent', NAMESPACE_PREFIX);
   const pluginDir = path.join(targetDir, 'plugin');
   const skillsDir = path.join(targetDir, 'skills');
   
@@ -53,26 +53,26 @@ function installOpenCode(targetDir, description) {
   fs.mkdirSync(skillsDir, { recursive: true });
   
   // Copy commands
-  const commandsSource = path.join(sourceDir, 'command', 'ferg');
+  const commandsSource = path.join(sourceDir, 'command', NAMESPACE_PREFIX);
   if (fs.existsSync(commandsSource)) {
     const commands = fs.readdirSync(commandsSource);
     commands.forEach(cmd => {
       const src = path.join(commandsSource, cmd);
       const dest = path.join(commandDir, cmd);
       fs.copyFileSync(src, dest);
-      console.log(`   ✅ Command: /ferg/${cmd.replace('.md', '')}`);
+      console.log(`   ✅ Command: /${NAMESPACE_PREFIX}/${cmd.replace('.md', '')}`);
     });
   }
   
   // Copy agents
-  const agentsSource = path.join(sourceDir, 'agent', 'ferg');
+  const agentsSource = path.join(sourceDir, 'agent', NAMESPACE_PREFIX);
   if (fs.existsSync(agentsSource)) {
     const agents = fs.readdirSync(agentsSource);
     agents.forEach(agent => {
       const src = path.join(agentsSource, agent);
       const dest = path.join(agentDir, agent);
       fs.copyFileSync(src, dest);
-      console.log(`   ✅ Agent: ferg/${agent.replace('.md', '')}`);
+      console.log(`   ✅ Agent: ${NAMESPACE_PREFIX}/${agent.replace('.md', '')}`);
     });
   }
   
@@ -103,10 +103,10 @@ function installOpenCode(targetDir, description) {
   }
   
   console.log(`\n✅ Installation complete!`);
-  console.log(`\nAvailable commands (use with /ferg/ prefix):`);
-  console.log(`  /ferg/plan, /ferg/review, /ferg/optimize, /ferg/seo, /ferg/deploy, /ferg/compound, /ferg/recursive-init, /ferg/work`);
-  console.log(`\nAvailable agents (use with ferg/ prefix):`);
-  console.log(`  ferg/architect-advisor, ferg/frontend-reviewer, ferg/seo-specialist, ferg/prompt-optimizer`);
+  console.log(`\nAvailable commands (use with /${NAMESPACE_PREFIX}/ prefix):`);
+  console.log(`  /${NAMESPACE_PREFIX}/plan, /${NAMESPACE_PREFIX}/review, /${NAMESPACE_PREFIX}/optimize, /${NAMESPACE_PREFIX}/seo, /${NAMESPACE_PREFIX}/deploy, /${NAMESPACE_PREFIX}/compound, /${NAMESPACE_PREFIX}/recursive-init, /${NAMESPACE_PREFIX}/work`);
+  console.log(`\nAvailable agents (use with ${NAMESPACE_PREFIX}/ prefix):`);
+  console.log(`  ${NAMESPACE_PREFIX}/architect-advisor, ${NAMESPACE_PREFIX}/frontend-reviewer, ${NAMESPACE_PREFIX}/seo-specialist, ${NAMESPACE_PREFIX}/prompt-optimizer`);
 }
 
 // Execute installation
