@@ -39,7 +39,7 @@ Analysis of AI provider integrations in the Ferg Engineering System reveals that
 
 **Primary Sources** (`README.md`, `PLUGIN.md`, `CLAUDE.md`):
 - **Claude Code**: Primary platform with marketplace and direct installation
-- **OpenCode**: Secondary platform with namespaced (`ferg/`) integration
+- **OpenCode**: Secondary platform with namespaced (`ai-eng/`) integration
 - **Plugin System**: Unified content system with automated platform transformation
 
 **Integration Methods**:

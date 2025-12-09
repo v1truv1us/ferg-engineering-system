@@ -28,21 +28,21 @@ else
 fi
 
 # Create namespaced directories
-mkdir -p "$GLOBAL_DIR/agent/ferg"
-mkdir -p "$GLOBAL_DIR/command/ferg"
+mkdir -p "$GLOBAL_DIR/agent/ai-eng"
+mkdir -p "$GLOBAL_DIR/command/ai-eng"
 mkdir -p "$GLOBAL_DIR/skills/prompting/incentive-prompting"
 mkdir -p "$GLOBAL_DIR/skills/devops"
 
 # Install NEW agents only (won't overwrite existing)
-echo "📦 Installing new ferg/ agents..."
+echo "📦 Installing new ai-eng/ agents..."
 
-for agent in "$DIST_DIR/.opencode/agent/ferg/"*.md; do
+for agent in "$DIST_DIR/.opencode/agent/ai-eng/"*.md; do
   if [ -f "$agent" ]; then
     name="$(basename "$agent")"
-    if [ -f "$GLOBAL_DIR/agent/ferg/$name" ]; then
-      echo "   ⏭️  Skipping ferg/$name (already exists)"
+    if [ -f "$GLOBAL_DIR/agent/ai-eng/$name" ]; then
+      echo "   ⏭️  Skipping ai-eng/$name (already exists)"
     else
-      cp "$agent" "$GLOBAL_DIR/agent/ferg/"
+      cp "$agent" "$GLOBAL_DIR/agent/ai-eng/"
       echo "   ✅ Installed ferg/$name"
     fi
   fi
@@ -50,16 +50,16 @@ done
 
 # Install NEW commands only
 echo ""
-echo "📦 Installing new ferg/ commands..."
+echo "📦 Installing new ai-eng/ commands..."
 
-for cmd in "$DIST_DIR/.opencode/command/ferg/"*.md; do
+for cmd in "$DIST_DIR/.opencode/command/ai-eng/"*.md; do
   if [ -f "$cmd" ]; then
     name="$(basename "$cmd")"
-    if [ -f "$GLOBAL_DIR/command/ferg/$name" ]; then
-      echo "   ⏭️  Skipping /ferg/$name (already exists)"
+    if [ -f "$GLOBAL_DIR/command/ai-eng/$name" ]; then
+      echo "   ⏭️  Skipping /ai-eng/$name (already exists)"
     else
-      cp "$cmd" "$GLOBAL_DIR/command/ferg/"
-      echo "   ✅ Installed /ferg/$name"
+      cp "$cmd" "$GLOBAL_DIR/command/ai-eng/"
+      echo "   ✅ Installed /ai-eng/$name"
     fi
   fi
 done
@@ -78,14 +78,14 @@ echo ""
 echo "======================================================="
 echo "✅ Selective install complete!"
 echo ""
-echo "New components available (ferg/ namespace):"
-echo "  Agents:   ferg/architect-advisor, ferg/frontend-reviewer, ferg/seo-specialist, ferg/prompt-optimizer"
-echo "  Commands: /ferg/plan, /ferg/review, /ferg/optimize, /ferg/seo, etc."
+echo "New components available (ai-eng/ namespace):"
+echo "  Agents:   ai-eng/architect-advisor, ai-eng/frontend-reviewer, ai-eng/seo-specialist, ai-eng/prompt-optimizer"
+echo "  Commands: /ai-eng/plan, /ai-eng/review, /ai-eng/optimize, /ai-eng/seo, etc."
 echo "  Skills:   incentive-prompting, devops"
 echo ""
-echo "Your existing non-ferg commands were NOT modified."
+echo "Your existing non-ai-eng commands were NOT modified."
 echo ""
 echo "To use the prompt optimizer:"
 echo "  opencode"
-echo "  > /ferg/optimize 'your prompt here'"
+echo "  > /ai-eng/optimize 'your prompt here'"
 echo ""

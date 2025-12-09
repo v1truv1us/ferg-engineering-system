@@ -1,8 +1,7 @@
 {
-  "name": "ferg-engineering",
-  "version": "0.2.0",
-  "description": "Compounding engineering system for Claude Code",
-  "author": "ferg-cod3s",
+  "name": "ai-eng-system",
+  "description": "AI Engineering System for Claude Code",
+  "author": "v1truv1us",
   "license": "MIT",
   "commands": [
     "./commands/review.md",

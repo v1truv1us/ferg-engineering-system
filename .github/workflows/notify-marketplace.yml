@@ -16,6 +16,6 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ferg-cod3s/ferg-marketplace
+          repository: v1truv1us/ai-eng-marketplace
           event-type: release
           client-payload: '{"version": "${{ github.event.release.tag_name }}", "repository": "${{ github.repository }}", "release_url": "${{ github.event.release.html_url }}"}'
