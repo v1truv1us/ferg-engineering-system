@@ -1,7 +1,7 @@
 #!/bin/bash
 # Selective install script for ferg-engineering-system
 # Only installs NEW components, preserves existing ones
-# Uses ferg/ namespace for all components
+# Uses ai-eng/ namespace for all components
 
 set -euo pipefail
 
@@ -43,7 +43,7 @@ for agent in "$DIST_DIR/.opencode/agent/ai-eng/"*.md; do
       echo "   ⏭️  Skipping ai-eng/$name (already exists)"
     else
       cp "$agent" "$GLOBAL_DIR/agent/ai-eng/"
-      echo "   ✅ Installed ferg/$name"
+      echo "   ✅ Installed ai-eng/$name"
     fi
   fi
 done
