@@ -1,5 +1,5 @@
 ---
-name: create-agent
+name: ai-eng/create-agent
 description: Create a new OpenCode agent with AI assistance. Uses agent-creator for intelligent agent generation.
 agent: agent-creator
 subtask: true

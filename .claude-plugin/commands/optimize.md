@@ -1,5 +1,5 @@
 ---
-name: optimize
+name: ai-eng/optimize
 description: Optimize a prompt or task description using research-backed techniques
 agent: build
 ---

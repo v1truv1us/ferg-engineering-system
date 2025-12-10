@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "notification",
-            "message": "Ferg Engineering System loaded. Commands: /plan, /review, /seo, /work, /compound, /deploy, /optimize, /recursive-init"
+            "message": "AI Engineering System loaded. Try /ai-eng/plan, /ai-eng/work, /ai-eng/review, or /ai-eng/deploy to get started."
           }
         ]
       }

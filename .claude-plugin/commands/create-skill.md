@@ -1,5 +1,5 @@
 ---
-name: create-skill
+name: ai-eng/create-skill
 description: Create a new OpenCode skill with AI assistance. Uses skill-creator for intelligent skill generation.
 agent: skill-creator
 subtask: true

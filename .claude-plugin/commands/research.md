@@ -1,5 +1,5 @@
 ---
-name: research
+name: ai-eng/research
 description: Conduct comprehensive multi-phase research across codebase, documentation, and external sources
 agent: plan
 version: 1.0.0

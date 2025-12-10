@@ -1,5 +1,5 @@
 ---
-name: create-plugin
+name: ai-eng/create-plugin
 description: Guided end-to-end plugin creation workflow for OpenCode extensions. Creates plugins, commands, agents, skills, and custom tools with AI assistance. Follows systematic 8-phase process from discovery to documentation.
 agent: plan
 subtask: false

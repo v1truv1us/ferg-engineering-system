@@ -1,13 +1,13 @@
 {
   "name": "ferg-engineering",
-  "version": "0.1.1",
+  "version": "0.2.3",
   "description": "Compounding engineering system for Claude Code & OpenCode. Shared agents, commands, and skills.",
   "author": {
-    "name": "ferg-cod3s",
-    "email": "contact@ferg-cod3s.dev"
+    "name": "v1truv1us",
+    "email": "contact@v1truv1us.dev"
   },
-  "homepage": "https://github.com/ferg-cod3s/ferg-engineering-system#readme",
-  "repository": "https://github.com/ferg-cod3s/ferg-engineering-system",
+  "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+  "repository": "https://github.com/v1truv1us/ai-eng-system",
   "license": "MIT",
   "keywords": [
     "engineering",

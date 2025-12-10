@@ -1,5 +1,5 @@
 ---
-name: work
+name: ai-eng/work
 description: Execute a plan or task with systematic tracking
 agent: build
 ---

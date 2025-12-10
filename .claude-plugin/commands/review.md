@@ -1,5 +1,5 @@
 ---
-name: review
+name: ai-eng/review
 description: Run comprehensive code review with multiple perspectives
 agent: review
 ---

@@ -1,5 +1,5 @@
 ---
-name: plan
+name: ai-eng/plan
 description: Create a detailed implementation plan for a feature
 agent: plan
 ---

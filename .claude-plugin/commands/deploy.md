@@ -1,5 +1,5 @@
 ---
-name: deploy
+name: ai-eng/deploy
 description: Pre-deployment verification and Coolify deployment
 agent: build
 subtask: true

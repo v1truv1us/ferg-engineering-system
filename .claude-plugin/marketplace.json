@@ -1,11 +1,11 @@
 {
   "name": "ferg-engineering-marketplace",
   "owner": {
-    "name": "ferg-cod3s",
-    "email": "contact@ferg-cod3s.dev"
+    "name": "v1truv1us",
+    "email": "contact@v1truv1us.dev"
   },
   "metadata": {
-    "description": "Curated collection of engineering tools, agents, and workflows by ferg-cod3s",
+    "description": "Curated collection of engineering tools, agents, and workflows by v1truv1us",
     "version": "1.0.0"
   },
   "plugins": [
@@ -13,16 +13,16 @@
       "name": "ferg-engineering",
       "source": {
         "source": "github",
-        "repo": "ferg-cod3s/ferg-engineering-system"
+        "repo": "v1truv1us/ai-eng-system"
       },
       "description": "Compounding engineering system with shared agents, commands, and skills for Claude Code & OpenCode",
-      "version": "0.1.1",
+      "version": "0.2.3",
       "author": {
-        "name": "ferg-cod3s",
-        "email": "contact@ferg-cod3s.dev"
+        "name": "v1truv1us",
+        "email": "contact@v1truv1us.dev"
       },
-      "homepage": "https://github.com/ferg-cod3s/ferg-engineering-system#readme",
-      "repository": "https://github.com/ferg-cod3s/ferg-engineering-system",
+      "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+      "repository": "https://github.com/v1truv1us/ai-eng-system",
       "license": "MIT",
       "keywords": [
         "engineering",

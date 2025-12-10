@@ -1,5 +1,5 @@
 ---
-name: compound
+name: ai-eng/compound
 description: Document a solved problem to compound team knowledge
 agent: build
 ---

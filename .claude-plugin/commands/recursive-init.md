@@ -1,5 +1,5 @@
 ---
-name: recursive-init
+name: ai-eng/recursive-init
 description: Recursively initialize AGENTS.md in all important subdirectories with smart detection
 agent: build
 ---
