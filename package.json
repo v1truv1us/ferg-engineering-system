@@ -5,7 +5,7 @@
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "ferg-install": "scripts/install.js"
+    "ai-eng-install": "scripts/install.js"
   },
   "files": [
     "dist/",
@@ -35,7 +35,6 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true,
     "registry": "https://npm.pkg.github.com"
   },
   "keywords": [

@@ -223,7 +223,7 @@ Ensure your `package.json` includes proper publishing configuration:
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "ferg-install": "scripts/install.js"
+    "ai-eng-install": "scripts/install.js"
   },
   "files": [
     "dist/",

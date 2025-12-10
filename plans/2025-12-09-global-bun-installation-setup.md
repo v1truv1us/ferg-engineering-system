@@ -122,7 +122,7 @@ The main issues to resolve:
 - **Acceptance Criteria**:
   - [ ] `bun install -g @v1truv1us/ai-eng-system` succeeds
   - [ ] Package installs to bun global location
-  - [ ] ferg-install command available globally
+  - [ ] ai-eng-install command available globally
 - **Time**: 15 min
 - **Complexity**: Low
 
@@ -130,9 +130,9 @@ The main issues to resolve:
 - **ID**: TEST-GLOBAL-INSTALL-SCRIPT
 - **Depends On**: TEST-BUN-INSTALL
 - **Files**:
-  - `~/.bun/bin/ferg-install` (verify)
+  - `~/.bun/bin/ai-eng-install` (verify)
 - **Acceptance Criteria**:
-  - [ ] `ferg-install --global` works
+  - [ ] `ai-eng-install --global` works
   - [ ] OpenCode plugins install correctly
   - [ ] Commands and agents accessible
 - **Time**: 15 min
