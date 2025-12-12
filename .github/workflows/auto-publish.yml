@@ -67,7 +67,12 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git tag -a "v${{ steps.version-check.outputs.version }}" -m "Release v${{ steps.version-check.outputs.version }}"
-          git push origin "v${{ steps.version-check.outputs.version }}"
+          # Check if tag already exists
+          if git rev-parse "v${{ steps.version-check.outputs.version }}" >/dev/null 2>&1; then
+            echo "Tag v${{ steps.version-check.outputs.version }} already exists, skipping tag creation"
+          else
+            git tag -a "v${{ steps.version-check.outputs.version }}" -m "Release v${{ steps.version-check.outputs.version }}"
+            git push origin "v${{ steps.version-check.outputs.version }}"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
