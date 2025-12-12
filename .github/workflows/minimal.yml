@@ -1,0 +1,22 @@
+name: Minimal Test
+
+on:
+  push:
+    branches:
+      - 'publish-*'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create test file
+        run: |
+          echo "Workflow ran at $(date)" > minimal-test.txt
+          echo "Branch: $GITHUB_REF" >> minimal-test.txt
+          git add minimal-test.txt
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "test: workflow execution test" || echo "No changes to commit"
