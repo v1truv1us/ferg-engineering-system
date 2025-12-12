@@ -3,7 +3,7 @@ name: Auto-publish from Main
 on:
   push:
     branches:
-      - claude/ferg-engineering-scaffold-01S8XxGkhKtLp4hzpbjJsfcw  # Auto-publish on default branch pushes
+      - 'claude/**'  # Auto-publish on claude branches
 
 permissions:
   id-token: write
