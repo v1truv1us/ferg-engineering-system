@@ -40,10 +40,13 @@ jobs:
         id: version-check
         run: |
           CURRENT_VERSION=$(node -p "require('./package.json').version")
-          # Try to get published version, but don't fail if authentication fails
-          PUBLISHED_VERSION=$(npm view @v1truv1us/ai-eng-system version --registry=https://registry.npmjs.org 2>/dev/null || echo "0.0.0")
           echo "Current version: $CURRENT_VERSION"
+
+          # Try to get published version from NPM registry
+          # Use curl to avoid npm configuration issues
+          PUBLISHED_VERSION=$(curl -s "https://registry.npmjs.org/@v1truv1us/ai-eng-system" | jq -r '.["dist-tags"].latest' 2>/dev/null || echo "0.0.0")
           echo "Published version: $PUBLISHED_VERSION"
+
           if [ "$CURRENT_VERSION" != "$PUBLISHED_VERSION" ]; then
             echo "should_publish=true" >> $GITHUB_OUTPUT
             echo "version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
