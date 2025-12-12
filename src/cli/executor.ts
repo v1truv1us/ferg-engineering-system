@@ -29,6 +29,8 @@ import {
   ResearchDepth,
   ResearchConfig
 } from '../research/types.js';
+import { CommandSwarmsIntegration, getCommandSwarmsIntegration, CommandResult } from '../command-swarms-integration.js';
+import { createSwarmsClient, checkLocalSwarmsAvailable } from '../local-swarms-executor.js';
 
 export class ExecutorCLI {
   private program: Command;
@@ -36,6 +38,8 @@ export class ExecutorCLI {
   private planGenerator: PlanGenerator;
   private codeReviewExecutor: CodeReviewExecutor;
   private researchOrchestrator: ResearchOrchestrator;
+  private commandSwarmsIntegration: CommandSwarmsIntegration | null = null;
+  private swarmsAvailable: boolean = false;
 
   constructor() {
     // Initialize agent components
@@ -66,6 +70,9 @@ export class ExecutorCLI {
     };
     this.researchOrchestrator = new ResearchOrchestrator(researchConfig);
     
+    // Initialize Swarms integration (lazy - check availability on demand)
+    this.initializeSwarmsIntegration();
+    
     this.program = new Command();
     this.setupCommands();
   }
@@ -77,10 +84,50 @@ export class ExecutorCLI {
     return this.program;
   }
 
+  /**
+   * Initialize Swarms integration (async, non-blocking)
+   */
+  private async initializeSwarmsIntegration(): Promise<void> {
+    try {
+      this.swarmsAvailable = await checkLocalSwarmsAvailable();
+      if (this.swarmsAvailable) {
+        const swarmsClient = createSwarmsClient({ mode: 'local' });
+        this.commandSwarmsIntegration = getCommandSwarmsIntegration(swarmsClient as any);
+        console.log('🐝 Swarms integration available (local mode)');
+      }
+    } catch (error) {
+      // Swarms not available, fall back to legacy coordinator
+      this.swarmsAvailable = false;
+    }
+  }
+
+  /**
+   * Execute command via Swarms if available and requested
+   */
+  private async executeViaSwarms(
+    command: string,
+    args: string[],
+    options: { timeout?: number } = {}
+  ): Promise<CommandResult | null> {
+    if (!this.commandSwarmsIntegration) {
+      return null;
+    }
+
+    try {
+      return await this.commandSwarmsIntegration.executeCommand(command, args, {
+        fallbackToDirect: true,
+        timeout: options.timeout || 300000
+      });
+    } catch (error) {
+      console.warn(`Swarms execution failed, falling back to legacy: ${error}`);
+      return null;
+    }
+  }
+
   private setupCommands(): void {
     this.program
-      .name('ferg-exec')
-      .description('Ferg Engineering System Execution Engine')
+      .name('ai-exec')
+      .description('AI Engineering System Execution Engine')
       .version('0.3.0-alpha');
 
     // Plan execution command
@@ -130,6 +177,7 @@ export class ExecutorCLI {
       .option('-r, --requirements <reqs...>', 'List of requirements')
       .option('-c, --constraints <constraints...>', 'List of constraints')
       .option('-o, --output <file>', 'Output plan file', 'generated-plan.yaml')
+      .option('--swarm', 'Use Swarms orchestration instead of legacy coordinator')
       .option('-v, --verbose', 'Enable verbose output')
       .action(this.generatePlanCommand.bind(this));
 
@@ -141,6 +189,7 @@ export class ExecutorCLI {
       .option('-s, --severity <severity>', 'Minimum severity level (low|medium|high|critical)', 'medium')
       .option('-f, --focus <focus>', 'Focused review (security|performance|frontend|general)')
       .option('-o, --output <file>', 'Output report file', 'code-review-report.json')
+      .option('--swarm', 'Use Swarms orchestration instead of legacy coordinator')
       .option('-v, --verbose', 'Enable verbose output')
       .action(this.codeReviewCommand.bind(this));
     
@@ -154,6 +203,7 @@ export class ExecutorCLI {
       .option('-o, --output <file>', 'Output file path', '')
       .option('-f, --format <format>', 'Export format (markdown|json|html)', 'markdown')
       .option('--no-cache', 'Disable research caching', false)
+      .option('--swarm', 'Use Swarms orchestration instead of legacy coordinator')
       .option('-v, --verbose', 'Enable verbose output', false)
       .action(this.executeResearchCommand.bind(this));
     
@@ -162,6 +212,13 @@ export class ExecutorCLI {
       .description('Show agent execution status and metrics')
       .option('--json', 'Output in JSON format')
       .action(this.agentStatusCommand.bind(this));
+
+    // Swarms status command
+    this.program
+      .command('swarm-status')
+      .description('Show Swarms integration status and available agents')
+      .option('--json', 'Output in JSON format')
+      .action(this.swarmStatusCommand.bind(this));
   }
 
   private async executePlanCommand(
@@ -408,6 +465,36 @@ export class ExecutorCLI {
     try {
       console.log(`🤖 Generating plan from: ${description}`);
       
+      // Try Swarms execution if requested
+      if (options.swarm && this.commandSwarmsIntegration) {
+        console.log('🐝 Using Swarms orchestration...');
+        const swarmResult = await this.executeViaSwarms('plan', [description], {
+          timeout: 300000
+        });
+        
+        if (swarmResult && swarmResult.success) {
+          console.log('✅ Swarm execution completed');
+          console.log(swarmResult.output);
+          
+          if (swarmResult.agentUsed) {
+            console.log(`\n🤖 Agent used: ${swarmResult.agentUsed}`);
+          }
+          if (swarmResult.executionTime) {
+            console.log(`⏱️  Execution time: ${swarmResult.executionTime}ms`);
+          }
+          
+          // Save output if requested
+          if (options.output && swarmResult.output) {
+            require('fs').writeFileSync(options.output, swarmResult.output);
+            console.log(`\n📄 Plan saved to: ${options.output}`);
+          }
+          return;
+        }
+        
+        console.log('⚠️  Swarm execution returned no result, falling back to legacy...');
+      }
+      
+      // Legacy execution path
       const input: PlanGenerationInput = {
         description,
         scope: options.scope,
@@ -452,6 +539,36 @@ export class ExecutorCLI {
     try {
       console.log(`🔍 Starting code review for: ${files.join(', ')}`);
       
+      // Try Swarms execution if requested
+      if (options.swarm && this.commandSwarmsIntegration) {
+        console.log('🐝 Using Swarms orchestration...');
+        const swarmResult = await this.executeViaSwarms('review', files, {
+          timeout: 300000
+        });
+        
+        if (swarmResult && swarmResult.success) {
+          console.log('✅ Swarm code review completed');
+          console.log(swarmResult.output);
+          
+          if (swarmResult.agentUsed) {
+            console.log(`\n🤖 Agent used: ${swarmResult.agentUsed}`);
+          }
+          if (swarmResult.executionTime) {
+            console.log(`⏱️  Execution time: ${swarmResult.executionTime}ms`);
+          }
+          
+          // Save output if requested
+          if (options.output && swarmResult.output) {
+            require('fs').writeFileSync(options.output, swarmResult.output);
+            console.log(`\n📄 Report saved to: ${options.output}`);
+          }
+          return;
+        }
+        
+        console.log('⚠️  Swarm execution returned no result, falling back to legacy...');
+      }
+      
+      // Legacy execution path
       const input: CodeReviewInput = {
         files,
         reviewType: options.type || 'full',
@@ -554,6 +671,36 @@ export class ExecutorCLI {
     try {
       console.log(`🔍 Starting research: ${query || '(interactive mode)'}`);
       
+      // Try Swarms execution if requested
+      if (options.swarm && this.commandSwarmsIntegration) {
+        console.log('🐝 Using Swarms orchestration...');
+        const swarmResult = await this.executeViaSwarms('research', [query], {
+          timeout: 600000 // 10 minutes for research
+        });
+        
+        if (swarmResult && swarmResult.success) {
+          console.log('✅ Swarm research completed');
+          console.log(swarmResult.output);
+          
+          if (swarmResult.agentUsed) {
+            console.log(`\n🤖 Agent used: ${swarmResult.agentUsed}`);
+          }
+          if (swarmResult.executionTime) {
+            console.log(`⏱️  Execution time: ${swarmResult.executionTime}ms`);
+          }
+          
+          // Save output if requested
+          if (options.output && swarmResult.output) {
+            require('fs').writeFileSync(options.output, swarmResult.output);
+            console.log(`\n📄 Results saved to: ${options.output}`);
+          }
+          return;
+        }
+        
+        console.log('⚠️  Swarm execution returned no result, falling back to legacy...');
+      }
+      
+      // Legacy execution path
       // Parse scope and depth from options
       const scope = options.scope === 'codebase' ? ResearchScope.CODEBASE :
                    options.scope === 'documentation' ? ResearchScope.DOCUMENTATION :
@@ -649,6 +796,87 @@ export class ExecutorCLI {
 
     } catch (error) {
       console.error(`❌ Research failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      process.exit(1);
+    }
+  }
+
+  private async swarmStatusCommand(options: any): Promise<void> {
+    try {
+      // Check Swarms availability
+      const isAvailable = await checkLocalSwarmsAvailable();
+      
+      if (options.json) {
+        const status = {
+          available: isAvailable,
+          mode: isAvailable ? 'local' : 'unavailable',
+          agents: isAvailable && this.commandSwarmsIntegration 
+            ? await (createSwarmsClient({ mode: 'local' }) as any).getAvailableAgents()
+            : [],
+          commands: isAvailable && this.commandSwarmsIntegration
+            ? this.commandSwarmsIntegration.getAvailableCommands().map(c => c.command)
+            : []
+        };
+        console.log(JSON.stringify(status, null, 2));
+      } else {
+        console.log('🐝 Swarms Integration Status');
+        console.log('============================');
+        
+        if (isAvailable) {
+          console.log('✅ Status: Available (local mode)');
+          
+          // Get available agents
+          const executor = createSwarmsClient({ mode: 'local' }) as any;
+          const agents = await executor.getAvailableAgents();
+          
+          console.log(`\n🤖 Available Agents (${agents.length}):`);
+          
+          // Group agents by category
+          const categories: Record<string, string[]> = {
+            'Architecture & Planning': ['architect-advisor', 'backend-architect', 'infrastructure-builder'],
+            'Development & Coding': ['frontend-reviewer', 'full-stack-developer', 'api-builder-enhanced', 'database-optimizer', 'java-pro'],
+            'Quality & Testing': ['code-reviewer', 'test-generator', 'security-scanner', 'performance-engineer'],
+            'DevOps & Deployment': ['deployment-engineer', 'monitoring-expert', 'cost-optimizer'],
+            'AI & Machine Learning': ['ai-engineer', 'ml-engineer'],
+            'Content & SEO': ['seo-specialist', 'prompt-optimizer'],
+            'Plugin Development': ['agent-creator', 'command-creator', 'skill-creator', 'tool-creator', 'plugin-validator']
+          };
+          
+          for (const [category, categoryAgents] of Object.entries(categories)) {
+            const available = categoryAgents.filter(a => agents.includes(a));
+            if (available.length > 0) {
+              console.log(`\n  ${category}:`);
+              available.forEach(a => console.log(`    • ${a}`));
+            }
+          }
+          
+          // Show available commands
+          if (this.commandSwarmsIntegration) {
+            const commands = this.commandSwarmsIntegration.getAvailableCommands();
+            console.log(`\n📋 Swarm-Enabled Commands (${commands.length}):`);
+            commands.forEach(cmd => {
+              console.log(`  • ${cmd.command}: ${cmd.description}`);
+              console.log(`    Swarm Type: ${cmd.swarmType}`);
+              console.log(`    Capabilities: ${cmd.capabilities.join(', ')}`);
+            });
+          }
+          
+          console.log('\n💡 Usage:');
+          console.log('  Add --swarm flag to commands to use Swarms orchestration:');
+          console.log('  ai-exec generate-plan "Build a todo app" --swarm');
+          console.log('  ai-exec code-review src/*.ts --swarm');
+          console.log('  ai-exec research "How does auth work?" --swarm');
+          
+        } else {
+          console.log('❌ Status: Unavailable');
+          console.log('\n⚠️  Swarms Python library not detected.');
+          console.log('   To enable Swarms integration:');
+          console.log('   pip install swarms');
+          console.log('\n   Once installed, Swarms will be auto-detected on next run.');
+        }
+      }
+
+    } catch (error) {
+      console.error(`❌ Failed to get swarm status: ${error instanceof Error ? error.message : 'Unknown error'}`);
       process.exit(1);
     }
   }

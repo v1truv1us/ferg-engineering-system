@@ -31,7 +31,7 @@ claude plugin link .
 
 After installation, verify in Claude Code:
 - **15 Commands available**: `/plan`, `/review`, `/seo`, `/work`, `/compound`, `/deploy`, `/optimize`, `/recursive-init`, `/research`, `/context`, `/create-plugin`, `/create-agent`, `/create-command`, `/create-skill`, `/create-tool`
-- **24 Agents available**: All specialized agents for development, testing, deployment, and architecture
+- **26 Agents available**: All specialized agents for development, testing, deployment, and architecture
 - **Skills**: DevOps, prompting, and research skills
 
 ## OpenCode Installation

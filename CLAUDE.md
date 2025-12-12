@@ -17,7 +17,7 @@ This CLAUDE.md defines the **philosophy** that guides all agents. AGENTS.md docu
 ## Core Commands
 - /plan — Create detailed implementation plans
 - /work — Execute plans with quality gates and tracking
-- /review — Multi-perspective code review (24 agents)
+- /review — Multi-perspective code review (26 agents)
 - /research — Multi-phase research orchestration
 - /seo — SEO audit with Core Web Vitals
 - /deploy — Pre-deployment checklist for Coolify

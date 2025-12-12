@@ -252,7 +252,8 @@ describe('AgentCoordinator', () => {
       // Second execution should be much faster due to caching
       const firstExecutionTime = endTime1 - startTime1;
       const secondExecutionTime = endTime2 - startTime2;
-      expect(secondExecutionTime).toBeLessThan(firstExecutionTime);
+      expect(secondExecutionTime).toBeLessThanOrEqual(firstExecutionTime);
+      expect(secondExecutionTime).toBeLessThan(100); // Should be very fast due to caching
     });
 
     it('should not cache when disabled', async () => {

@@ -222,7 +222,7 @@ export class CodeReviewExecutor {
     for (const result of results) {
       if (result.status === AgentTaskStatus.COMPLETED && result.output?.success) {
         const agentFindings = result.output?.result?.findings || [];
-        
+
         for (const finding of agentFindings) {
           // Create a unique key to deduplicate findings
           const key = `${finding.file}:${finding.line}:${finding.message}`;

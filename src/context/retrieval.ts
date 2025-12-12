@@ -200,8 +200,8 @@ export class ContextRetriever {
 // Semantic search for command-related memories
           const semanticMemories = await this.vectorManager.semanticSearch(command, {
             limit: 3,
-            minScore: 0.4
-memoryType: "procedural"
+            minScore: 0.4,
+            memoryType: "procedural"
           })
           
           // Traditional search

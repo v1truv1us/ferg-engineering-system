@@ -7,14 +7,43 @@
  * Represents different types of agents available in the system
  */
 export enum AgentType {
+  // Architecture & Planning
   ARCHITECT_ADVISOR = 'architect-advisor',
-  FRONTEND_REVIEWER = 'frontend-reviewer', 
+  BACKEND_ARCHITECT = 'backend-architect',
+  INFRASTRUCTURE_BUILDER = 'infrastructure-builder',
+
+  // Development & Coding
+  FRONTEND_REVIEWER = 'frontend-reviewer',
+  FULL_STACK_DEVELOPER = 'full-stack-developer',
+  API_BUILDER_ENHANCED = 'api-builder-enhanced',
+  DATABASE_OPTIMIZER = 'database-optimizer',
+  JAVA_PRO = 'java-pro',
+
+  // Quality & Testing
+  CODE_REVIEWER = 'code-reviewer',
+  TEST_GENERATOR = 'test-generator',
+  SECURITY_SCANNER = 'security-scanner',
+  PERFORMANCE_ENGINEER = 'performance-engineer',
+
+  // DevOps & Deployment
+  DEPLOYMENT_ENGINEER = 'deployment-engineer',
+  MONITORING_EXPERT = 'monitoring-expert',
+  COST_OPTIMIZER = 'cost-optimizer',
+
+  // AI & Machine Learning
+  AI_ENGINEER = 'ai-engineer',
+  ML_ENGINEER = 'ml-engineer',
+
+  // Content & SEO
   SEO_SPECIALIST = 'seo-specialist',
   PROMPT_OPTIMIZER = 'prompt-optimizer',
-  CODE_REVIEWER = 'code-reviewer',
-  BACKEND_ARCHITECT = 'backend-architect',
-  SECURITY_SCANNER = 'security-scanner',
-  PERFORMANCE_ENGINEER = 'performance-engineer'
+
+  // Plugin Development
+  AGENT_CREATOR = 'agent-creator',
+  COMMAND_CREATOR = 'command-creator',
+  SKILL_CREATOR = 'skill-creator',
+  TOOL_CREATOR = 'tool-creator',
+  PLUGIN_VALIDATOR = 'plugin-validator'
 }
 
 /**
@@ -237,4 +266,130 @@ export interface AgentMetrics {
   successRate: number;
   averageConfidence: number;
   lastExecutionTime: Date;
+}
+
+/**
+ * Agent definition loaded from .claude-plugin/agents/
+ */
+export interface AgentDefinition {
+  type: AgentType;
+  name: string;
+  description: string;
+  mode: 'subagent' | 'tool';
+  temperature: number;
+  capabilities: string[];
+  handoffs: AgentType[];
+  tags: string[];
+  category: string;
+  tools: {
+    read: boolean;
+    grep: boolean;
+    glob: boolean;
+    list: boolean;
+    bash: boolean;
+    edit: boolean;
+    write: boolean;
+    patch: boolean;
+  };
+  promptPath: string;
+  prompt: string;
+}
+
+/**
+ * Agent execution record for persistence
+ */
+export interface AgentExecution {
+  taskId: string;
+  agentType: AgentType;
+  input?: Record<string, any>;
+  output?: Record<string, any>;
+  success: boolean;
+  confidence?: ConfidenceLevel;
+  executionTime: number;
+  timestamp: Date;
+  error?: string;
+}
+
+/**
+ * Improvement record for self-improvement system
+ */
+export interface ImprovementRecord {
+  id: string;
+  type: 'agent_prompt' | 'capability' | 'handoff' | 'workflow';
+  target: AgentType | string;
+  description: string;
+  evidence: string[];
+  suggestedAt: Date;
+  implementedAt?: Date;
+  effectivenessScore?: number;
+}
+
+/**
+ * Handoff record for inter-agent communication
+ */
+export interface HandoffRecord {
+  id: string;
+  fromAgent: AgentType;
+  toAgent: AgentType;
+  reason: string;
+  context?: Record<string, any>;
+  success: boolean;
+  timestamp: Date;
+}
+
+/**
+ * Execution mode for hybrid Task tool + local execution
+ */
+export type ExecutionMode = 'task-tool' | 'local' | 'hybrid';
+
+/**
+ * Routing decision for capability-based agent selection
+ */
+export interface RoutingDecision {
+  primaryAgent: AgentType;
+  supportingAgents: AgentType[];
+  executionStrategy: 'parallel' | 'sequential' | 'conditional';
+  executionMode: ExecutionMode;
+  handoffPlan: HandoffPlan[];
+}
+
+/**
+ * Handoff plan for inter-agent delegation
+ */
+export interface HandoffPlan {
+  fromAgent: AgentType;
+  toAgent: AgentType;
+  condition: string;
+  contextTransfer: string[];
+}
+
+/**
+ * Review result from quality feedback loop
+ */
+export interface ReviewResult {
+  approved: boolean;
+  feedback: string;
+  suggestedImprovements: string[];
+  confidence: ConfidenceLevel;
+}
+
+/**
+ * Local operation for file-based tasks
+ */
+export interface LocalOperation {
+  operation: 'glob' | 'grep' | 'read' | 'stat';
+  pattern?: string;
+  include?: string;
+  cwd?: string;
+  options?: Record<string, any>;
+}
+
+/**
+ * Result of local operation execution
+ */
+export interface LocalResult {
+  success: boolean;
+  data?: any;
+  error?: string;
+  executionTime: number;
 }

@@ -1,6 +1,6 @@
 {
   "name": "@v1truv1us/ai-eng-system",
-  "version": "0.2.3",
+  "version": "0.3.1",
   "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
   "type": "module",
   "main": "dist/index.js",

@@ -40,10 +40,10 @@ export class CodebaseLocator implements DiscoveryAgent {
       const files = await this.findFiles(patterns, query.constraints);
       
       // 3. Score relevance
-      const scoredFiles = await this.scoreRelevance(files, query);
-      
+      const scoredFiles = await this.scoreRelevance(files, query.query);
+
       // 4. Extract snippets for top matches
-      const filesWithSnippets = await this.extractSnippets(scoredFiles, query);
+      const filesWithSnippets = await this.extractSnippets(scoredFiles);
       
       const executionTime = Date.now() - startTime;
       
@@ -643,8 +643,8 @@ export class DiscoveryHandler {
     try {
       // Execute all locators in parallel
       const results = await Promise.allSettled(
-        this.locators.map(locator => 
-          this.executeWithTimeout(locator.discover(query.query, query.scope, query.constraints))
+        this.locators.map(locator =>
+          this.executeWithTimeout(locator.discover(query))
         )
       );
       

@@ -12,7 +12,8 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'bun:test'
-import { readFile, writeFile, mkdir, rm, existsSync, copyFile } from 'fs/promises'
+import { readFile, writeFile, mkdir, rm, copyFile } from 'fs/promises'
+import { existsSync } from 'fs'
 import { join, basename } from 'path'
 import { tmpdir } from 'os'
 import { execSync } from 'child_process'
@@ -429,8 +430,7 @@ async function copyProjectStructure(): Promise<void> {
 
 async function copyDirectory(src: string, dest: string): Promise<void> {
   const { readdir } = await import('fs/promises')
-  const { existsSync } = await import('fs')
-  
+
   await mkdir(dest, { recursive: true })
   const entries = await readdir(src, { withFileTypes: true })
   

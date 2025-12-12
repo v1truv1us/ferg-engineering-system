@@ -135,7 +135,7 @@ dist/                      # 🚫 GENERATED - never edit directly
 **Available Agents:**
 - `ai-eng/architect-advisor`, `ai-eng/frontend-reviewer`, `ai-eng/seo-specialist`, `ai-eng/prompt-optimizer`
 - `ai-eng/code-reviewer`, `ai-eng/database-optimizer`, `ai-eng/api-builder-enhanced`, `ai-eng/full-stack-developer`
-- And 16 more specialized agents...
+- And 18 more specialized agents...
 
 ## Quick Start
 
@@ -179,8 +179,9 @@ bun run install:global  # Installs to ~/.config/opencode with ai-eng/ namespace
 
 | Command | Description |
 |---------|-------------|
-| `/plan` | Create detailed implementation plans |
-| `/work` | Execute plans with worktrees and task tracking |
+| `/plan` | Create detailed implementation plans with atomic task decomposition |
+| `/work` | Execute plans with automated task tracking and quality gates |
+| `/research` | Perform multi-phase research with parallel discovery and synthesis |
 | `/review` | Multi-perspective code review (quality, performance, SEO, security, architecture) |
 | `/seo` | SEO audits with Core Web Vitals and accessibility checks |
 | `/compound` | Document solved problems for team knowledge |

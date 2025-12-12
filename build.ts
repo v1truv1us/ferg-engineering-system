@@ -17,7 +17,7 @@ import { existsSync } from "fs"
 import { join, basename, dirname } from "path"
 import { watch } from "fs"
 
-const ROOT = import.meta.dir
+const ROOT = process.env.TEST_ROOT || import.meta.dir
 const CONTENT_DIR = join(ROOT, "content")
 const DIST_DIR = join(ROOT, "dist")
 const SKILLS_DIR = join(ROOT, "skills")

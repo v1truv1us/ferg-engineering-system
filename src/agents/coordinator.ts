@@ -4,12 +4,12 @@
  */
 
 import { EventEmitter } from 'events';
-import { 
-  AgentType, 
-  AgentTask, 
-  AgentTaskResult, 
-  AgentTaskStatus, 
-  AgentCoordinatorConfig, 
+import {
+  AgentType,
+  AgentTask,
+  AgentTaskResult,
+  AgentTaskStatus,
+  AgentCoordinatorConfig,
   AggregationStrategy,
   AgentEvent,
   AgentProgress,
@@ -20,6 +20,8 @@ import {
   ConfidenceLevel,
   ExecutionStrategy
 } from './types.js';
+import { AgentRegistry } from './registry.js';
+import { ExecutorBridge } from './executor-bridge.js';
 
 export class AgentCoordinator extends EventEmitter {
   private config: AgentCoordinatorConfig;
@@ -27,10 +29,14 @@ export class AgentCoordinator extends EventEmitter {
   private completedTasks: Map<string, AgentTaskResult> = new Map();
   private metrics: Map<AgentType, AgentMetrics> = new Map();
   private cache: Map<string, AgentOutput> = new Map();
+  private registry: AgentRegistry;
+  private executorBridge: ExecutorBridge;
 
-  constructor(config: AgentCoordinatorConfig) {
+  constructor(config: AgentCoordinatorConfig, registry?: AgentRegistry) {
     super();
     this.config = config;
+    this.registry = registry || new AgentRegistry();
+    this.executorBridge = new ExecutorBridge(this.registry);
     this.initializeMetrics();
   }
 
@@ -272,57 +278,149 @@ export class AgentCoordinator extends EventEmitter {
   }
 
   private async executeAgent(task: AgentTask): Promise<AgentOutput> {
-    const startTime = Date.now();
-    
-    // This is where the actual agent execution would happen
-    // For now, we'll simulate agent execution with a timeout
-    const timeout = task.timeout || this.config.defaultTimeout;
-    
-    return new Promise((resolve, reject) => {
-      const timeoutId = setTimeout(() => {
-        reject(new Error(`Agent ${task.type} timed out after ${timeout}ms`));
-      }, timeout);
-
-      // Simulate agent execution
-      this.simulateAgentExecution(task)
-        .then(result => {
-          clearTimeout(timeoutId);
-          resolve({
-            ...result,
-            executionTime: Date.now() - startTime
-          });
-        })
-        .catch(error => {
-          clearTimeout(timeoutId);
-          reject(error);
-        });
-    });
+    // Use the executor bridge for actual agent execution
+    return this.executorBridge.execute(task);
   }
 
-  private async simulateAgentExecution(task: AgentTask): Promise<Omit<AgentOutput, 'executionTime'>> {
-    // Simulate different agent behaviors
-    await this.sleep(Math.random() * 1000 + 500); // 500-1500ms
-    
-    const successRate = this.getAgentSuccessRate(task.type);
-    const success = Math.random() < successRate;
-    
-    if (!success) {
-      throw new Error(`Agent ${task.type} failed to process the request`);
+
+
+  private aggregateResults(results: AgentTaskResult[], strategy: AggregationStrategy): AgentTaskResult[] {
+    if (results.length === 0) return results;
+    if (results.length === 1) return results;
+
+    switch (strategy.type) {
+      case 'merge':
+        return [this.mergeResults(results)];
+      case 'vote':
+        return [this.voteResults(results)];
+      case 'weighted':
+        return [this.weightedResults(results, strategy.weights)];
+      case 'priority':
+        return this.priorityResults(results, strategy.priority);
+      default:
+        return results;
+    }
+  }
+
+  private mergeResults(results: AgentTaskResult[]): AgentTaskResult {
+    // Combine all successful results into a single merged result
+    const successfulResults = results.filter(r => r.status === AgentTaskStatus.COMPLETED && r.output?.success);
+
+    if (successfulResults.length === 0) {
+      // Return the first failed result
+      return results[0];
     }
 
+    // Merge outputs
+    const mergedOutput: any = {};
+    const allFindings: any[] = [];
+    const allRecommendations: string[] = [];
+    let totalConfidence = 0;
+
+    for (const result of successfulResults) {
+      if (result.output?.result) {
+        Object.assign(mergedOutput, result.output.result);
+      }
+
+      // Collect findings if they exist
+      if (result.output?.result?.findings) {
+        allFindings.push(...result.output.result.findings);
+      }
+
+      // Collect recommendations if they exist
+      if (result.output?.result?.recommendations) {
+        allRecommendations.push(...result.output.result.recommendations);
+      }
+
+      totalConfidence += this.getConfidenceValue(result.output?.confidence || 'low');
+    }
+
+    const avgConfidence = totalConfidence / successfulResults.length;
+
     return {
-      type: task.type,
-      success: true,
-      result: this.generateMockResult(task),
-      confidence: this.getRandomConfidence(),
-      reasoning: `Agent ${task.type} processed the request successfully`
+      id: `merged-${results[0].id}`,
+      type: results[0].type, // Use the first agent's type
+      status: AgentTaskStatus.COMPLETED,
+      output: {
+        type: results[0].type,
+        success: true,
+        result: {
+          ...mergedOutput,
+          findings: allFindings,
+          recommendations: [...new Set(allRecommendations)], // Remove duplicates
+          mergedFrom: successfulResults.length,
+          sources: successfulResults.map(r => r.type)
+        },
+        confidence: this.getConfidenceFromValue(avgConfidence),
+        reasoning: `Merged results from ${successfulResults.length} agents`,
+        executionTime: results.reduce((sum, r) => sum + r.executionTime, 0)
+      },
+      executionTime: results.reduce((sum, r) => sum + r.executionTime, 0),
+      startTime: results[0].startTime,
+      endTime: results[results.length - 1].endTime
     };
   }
 
-  private aggregateResults(results: AgentTaskResult[], strategy: AggregationStrategy): AgentTaskResult[] {
-    // For now, return results as-is
-    // In a real implementation, this would intelligently aggregate based on strategy
-    return results;
+  private voteResults(results: AgentTaskResult[]): AgentTaskResult {
+    // Simple voting - return the result with highest confidence
+    const completedResults = results.filter(r => r.status === AgentTaskStatus.COMPLETED);
+
+    if (completedResults.length === 0) {
+      return results[0];
+    }
+
+    // Sort by confidence (highest first)
+    completedResults.sort((a, b) => {
+      const confA = this.getConfidenceValue(a.output?.confidence || 'low');
+      const confB = this.getConfidenceValue(b.output?.confidence || 'low');
+      return confB - confA;
+    });
+
+    return completedResults[0];
+  }
+
+  private weightedResults(results: AgentTaskResult[], weights?: Record<AgentType, number>): AgentTaskResult {
+    // Weighted aggregation based on agent type weights
+    const completedResults = results.filter(r => r.status === AgentTaskStatus.COMPLETED);
+
+    if (completedResults.length === 0) {
+      return results[0];
+    }
+
+    // Calculate weighted scores
+    let bestResult = completedResults[0];
+    let bestScore = 0;
+
+    for (const result of completedResults) {
+      const weight = weights?.[result.type] || 1.0;
+      const confidence = this.getConfidenceValue(result.output?.confidence || 'low');
+      const score = weight * confidence;
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestResult = result;
+      }
+    }
+
+    return bestResult;
+  }
+
+  private priorityResults(results: AgentTaskResult[], priority?: AgentType[]): AgentTaskResult[] {
+    if (!priority || priority.length === 0) {
+      return results;
+    }
+
+    // Sort results by priority order
+    return results.sort((a, b) => {
+      const aIndex = priority.indexOf(a.type);
+      const bIndex = priority.indexOf(b.type);
+
+      // Items not in priority list go to the end
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+
+      return aIndex - bIndex;
+    });
   }
 
   private resolveDependencies(tasks: AgentTask[]): AgentTask[] {
@@ -444,193 +542,9 @@ export class AgentCoordinator extends EventEmitter {
     return rates[type] || 0.9;
   }
 
-  private generateMockResult(task: AgentTask): Record<string, any> {
-    // Generate different results based on agent type and context
-    const baseResult = {
-      taskId: task.id,
-      timestamp: new Date().toISOString(),
-      data: `Mock result from ${task.type} agent`,
-      recommendations: [`Recommendation 1 from ${task.type}`, `Recommendation 2 from ${task.type}`]
-    };
 
-    // Add specific results for plan generation
-    if (task.input.context?.focus === 'architecture' || task.type === AgentType.ARCHITECT_ADVISOR) {
-      return {
-        ...baseResult,
-        tasks: [
-          {
-            id: 'arch-design',
-            name: 'Design system architecture',
-            description: 'Create high-level system architecture',
-            command: 'create-architecture-diagram'
-          },
-          {
-            id: 'arch-review',
-            name: 'Review architecture decisions',
-            description: 'Review and validate architectural choices',
-            command: 'review-architecture'
-          }
-        ],
-        dependencies: [['arch-review', 'arch-design']],
-        suggestions: ['Consider scalability requirements', 'Review security implications']
-      };
-    }
 
-    if (task.input.context?.focus === 'backend' || task.type === AgentType.BACKEND_ARCHITECT) {
-      return {
-        ...baseResult,
-        tasks: [
-          {
-            id: 'backend-api',
-            name: 'Design API endpoints',
-            description: 'Create RESTful API design',
-            command: 'design-api'
-          },
-          {
-            id: 'backend-db',
-            name: 'Design database schema',
-            description: 'Create database schema design',
-            command: 'design-database'
-          }
-        ],
-        dependencies: [['backend-db', 'backend-api']],
-        suggestions: ['Consider data migration strategy', 'Plan for database indexing']
-      };
-    }
 
-    if (task.input.context?.focus === 'frontend' || task.type === AgentType.FRONTEND_REVIEWER) {
-      return {
-        ...baseResult,
-        tasks: [
-          {
-            id: 'frontend-ui',
-            name: 'Design UI components',
-            description: 'Create reusable UI components',
-            command: 'design-components'
-          },
-          {
-            id: 'frontend-state',
-            name: 'Implement state management',
-            description: 'Setup application state management',
-            command: 'setup-state-management'
-          }
-        ],
-        dependencies: [['frontend-state', 'frontend-ui']],
-        suggestions: ['Consider accessibility requirements', 'Plan responsive design']
-      };
-    }
-
-    if (task.input.context?.focus === 'seo' || task.type === AgentType.SEO_SPECIALIST) {
-      return {
-        ...baseResult,
-        tasks: [
-          {
-            id: 'seo-meta',
-            name: 'Implement meta tags',
-            description: 'Add SEO meta tags to pages',
-            command: 'add-meta-tags'
-          },
-          {
-            id: 'seo-sitemap',
-            name: 'Generate sitemap',
-            description: 'Create XML sitemap for search engines',
-            command: 'generate-sitemap'
-          }
-        ],
-        dependencies: [],
-        suggestions: ['Optimize page load speed', 'Add structured data markup']
-      };
-    }
-
-    // Code review specific results
-    if (task.type === AgentType.CODE_REVIEWER || task.type === AgentType.SECURITY_SCANNER || 
-        task.type === AgentType.PERFORMANCE_ENGINEER || task.type === AgentType.FRONTEND_REVIEWER) {
-      return {
-        ...baseResult,
-        findings: this.generateMockFindings(task),
-        recommendations: [`Recommendation 1 from ${task.type}`, `Recommendation 2 from ${task.type}`]
-      };
-    }
-
-    // Default result for validation or other tasks
-    if (task.input.context?.validationType) {
-      return {
-        ...baseResult,
-        issues: task.input.context.validationType === 'architecture' ? [] : ['Minor issue found'],
-        enhancements: ['Consider adding more tests', 'Improve documentation'],
-        suggestions: ['Review security best practices']
-      };
-    }
-
-    return baseResult;
-  }
-
-  private getRandomConfidence(): ConfidenceLevel {
-    const confidences = [ConfidenceLevel.LOW, ConfidenceLevel.MEDIUM, ConfidenceLevel.HIGH, ConfidenceLevel.VERY_HIGH];
-    return confidences[Math.floor(Math.random() * confidences.length)];
-  }
-
-  private generateMockFindings(task: AgentTask): any[] {
-    const findings: any[] = [];
-    const files = task.input.context?.files || [];
-    const severity = task.input.context?.severity || 'medium';
-
-    // Return empty findings if no files
-    if (files.length === 0) {
-      return [];
-    }
-    
-    // Generate different findings based on agent type
-    if (task.type === AgentType.CODE_REVIEWER) {
-      findings.push({
-        file: files[0] || 'test.js',
-        line: 10,
-        severity: severity === 'critical' ? 'high' : 'medium',
-        category: 'style',
-        message: 'Code style issue found',
-        suggestion: 'Fix code formatting',
-        confidence: ConfidenceLevel.HIGH
-      });
-    }
-
-    if (task.type === AgentType.SECURITY_SCANNER) {
-      findings.push({
-        file: files[0] || 'test.js',
-        line: 20,
-        severity: severity === 'critical' ? 'critical' : 'medium',
-        category: 'security',
-        message: 'Potential security vulnerability',
-        suggestion: 'Add input validation',
-        confidence: ConfidenceLevel.HIGH
-      });
-    }
-
-    if (task.type === AgentType.PERFORMANCE_ENGINEER) {
-      findings.push({
-        file: files[0] || 'test.js',
-        line: 30,
-        severity: 'medium',
-        category: 'performance',
-        message: 'Performance bottleneck detected',
-        suggestion: 'Optimize algorithm',
-        confidence: ConfidenceLevel.MEDIUM
-      });
-    }
-
-    if (task.type === AgentType.FRONTEND_REVIEWER) {
-      findings.push({
-        file: files[0] || 'test.js',
-        line: 40,
-        severity: 'low',
-        category: 'accessibility',
-        message: 'Accessibility issue found',
-        suggestion: 'Add ARIA labels',
-        confidence: ConfidenceLevel.MEDIUM
-      });
-    }
-
-    return findings;
-  }
 
   private getConfidenceValue(confidence: ConfidenceLevel): number {
     const values = {
@@ -640,6 +554,13 @@ export class AgentCoordinator extends EventEmitter {
       [ConfidenceLevel.VERY_HIGH]: 1.0
     };
     return values[confidence];
+  }
+
+  private getConfidenceFromValue(value: number): ConfidenceLevel {
+    if (value >= 0.8) return ConfidenceLevel.VERY_HIGH;
+    if (value >= 0.6) return ConfidenceLevel.HIGH;
+    if (value >= 0.4) return ConfidenceLevel.MEDIUM;
+    return ConfidenceLevel.LOW;
   }
 
   private emitEvent(type: AgentEvent['type'], taskId: string, agentType: AgentType, data?: Record<string, any>): void {

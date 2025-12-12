@@ -1,6 +1,6 @@
 {
   "name": "ai-eng-system",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "description": "AI Engineering System with context engineering and research orchestration for Claude Code",
   "author": "v1truv1us",
   "license": "MIT",

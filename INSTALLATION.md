@@ -99,14 +99,14 @@ bun run install:local
 
 ### Claude Code
 - **Commands:** 15 namespaced slash commands (`/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/research`, etc.)
-- **Agents:** 24 specialized agents
+- **Agents:** 26 specialized agents
 - **Skills:** 4 skill packages (devops, prompting, research, plugin-dev)
 - **Location:** `~/.claude/plugins/ai-eng-system/`
 - **Format:** Markdown files with YAML frontmatter
 
 ### OpenCode
 - **Commands:** 15 namespaced commands (`/ai-eng/plan`, `/ai-eng/review`, etc.)
-- **Agents:** 24 specialized agents (`ai-eng/architect-advisor`, etc.)
+- **Agents:** 26 specialized agents (`ai-eng/architect-advisor`, etc.)
 - **Skills:** 4 skill packages (devops, prompting, research, plugin-dev)
 - **Location:** `~/.config/opencode/` (global) or `.opencode/` (local)
 - **Namespace:** `ai-eng/`

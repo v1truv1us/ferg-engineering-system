@@ -5,15 +5,94 @@
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 import { CodeReviewExecutor } from '../../src/agents/code-review-executor.js';
 import { AgentCoordinator } from '../../src/agents/coordinator.js';
-import { 
+import { AgentRegistry } from '../../src/agents/registry.js';
+import {
   CodeReviewInput,
   ConfidenceLevel,
-  AgentCoordinatorConfig
+  AgentCoordinatorConfig,
+  AgentType,
+  AgentDefinition
 } from '../../src/agents/types.js';
+
+// Mock registry for testing
+class MockAgentRegistry extends AgentRegistry {
+  private mockAgents: Map<AgentType, AgentDefinition>;
+
+  constructor() {
+    super();
+    this.mockAgents = new Map<AgentType, AgentDefinition>([
+      [AgentType.CODE_REVIEWER, {
+        type: AgentType.CODE_REVIEWER,
+        name: 'code-reviewer',
+        description: 'Code review agent',
+        mode: 'subagent' as const,
+        temperature: 0.1,
+        capabilities: ['code-review', 'security'],
+        handoffs: [],
+        tags: [],
+        category: 'quality',
+        tools: { read: true, grep: false, glob: false, list: false, bash: false, edit: false, write: false, patch: false },
+        promptPath: '',
+        prompt: 'Code review prompt'
+      }],
+      [AgentType.SECURITY_SCANNER, {
+        type: AgentType.SECURITY_SCANNER,
+        name: 'security-scanner',
+        description: 'Security scanning agent',
+        mode: 'subagent' as const,
+        temperature: 0.1,
+        capabilities: ['security', 'vulnerabilities'],
+        handoffs: [],
+        tags: [],
+        category: 'quality',
+        tools: { read: true, grep: false, glob: false, list: false, bash: false, edit: false, write: false, patch: false },
+        promptPath: '',
+        prompt: 'Security scanning prompt'
+      }],
+      [AgentType.PERFORMANCE_ENGINEER, {
+        type: AgentType.PERFORMANCE_ENGINEER,
+        name: 'performance-engineer',
+        description: 'Performance analysis agent',
+        mode: 'subagent' as const,
+        temperature: 0.1,
+        capabilities: ['performance', 'optimization'],
+        handoffs: [],
+        tags: [],
+        category: 'quality',
+        tools: { read: true, grep: false, glob: false, list: false, bash: false, edit: false, write: false, patch: false },
+        promptPath: '',
+        prompt: 'Performance analysis prompt'
+      }],
+      [AgentType.FRONTEND_REVIEWER, {
+        type: AgentType.FRONTEND_REVIEWER,
+        name: 'frontend-reviewer',
+        description: 'Frontend review agent',
+        mode: 'subagent' as const,
+        temperature: 0.1,
+        capabilities: ['frontend', 'ui', 'accessibility'],
+        handoffs: [],
+        tags: [],
+        category: 'quality',
+        tools: { read: true, grep: false, glob: false, list: false, bash: false, edit: false, write: false, patch: false },
+        promptPath: '',
+        prompt: 'Frontend review prompt'
+      }]
+    ]);
+  }
+
+  get(type: AgentType): AgentDefinition | undefined {
+    return this.mockAgents.get(type);
+  }
+
+  getAllAgents(): AgentDefinition[] {
+    return Array.from(this.mockAgents.values());
+  }
+}
 
 describe('CodeReviewExecutor', () => {
   let codeReviewExecutor: CodeReviewExecutor;
   let coordinator: AgentCoordinator;
+  let registry: AgentRegistry;
   let config: AgentCoordinatorConfig;
 
   beforeEach(() => {
@@ -25,7 +104,8 @@ describe('CodeReviewExecutor', () => {
       enableCaching: false, // Disable for testing
       logLevel: 'error'
     };
-    coordinator = new AgentCoordinator(config);
+    registry = new MockAgentRegistry() as any;
+    coordinator = new AgentCoordinator(config, registry);
     codeReviewExecutor = new CodeReviewExecutor(coordinator);
   });
 

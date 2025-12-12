@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2025-12-12
+
 ### Added
+- **docs-writer Agent**: Specialized documentation page writer
+  - Expert technical documentation writer with 15+ years experience
+  - Specific formatting rules: 1-3 word titles, 5-10 word descriptions
+  - Text chunks ≤2 sentences, sections separated by ---
+  - Imperative section titles, JS/TS code formatting (no semicolons/commas)
+  - Complements documentation-specialist for individual page writing
 - Documentation update plan and comprehensive fixes
 - CHANGELOG.md for version tracking
 
@@ -15,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Repository references updated from `ferg-cod3s` to `v1truv1us`
 - Package names corrected to `@v1truv1us/ai-eng-system`
 - Command counts updated to reflect 15 total commands
-- Agent counts updated to reflect 24 total agents
+- Agent counts updated to reflect 25 total agents (added docs-writer)
 - Namespace references updated to `ai-eng/`
 - Build commands updated from `npm` to `bun`
 

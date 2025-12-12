@@ -28,11 +28,7 @@ describe('Research Workflow Integration', () => {
       externalSearchTimeout: 10000
     };
 
-    // Mock file system operations
-    mock.module('fs/promises', () => ({
-      readFile: mock(() => Promise.resolve('mock file content')),
-      writeFile: mock(() => Promise.resolve(undefined))
-    }));
+    // Skip mocking for now to isolate the ResearchScope issue
 
     orchestrator = new ResearchOrchestrator(mockConfig);
   });

@@ -103,7 +103,7 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 |---------|-------------|------------|
 | /plan | Create detailed implementation plans | read-only |
 | /work | Execute plans with quality gates and tracking | build |
-| /review | Multi-perspective code review (24 agents) | read-only |
+| /review | Multi-perspective code review (26 agents) | read-only |
 | /research | Multi-phase research orchestration | read-only |
 | /seo | SEO audit with Core Web Vitals | read-only |
 | /deploy | Pre-deployment checklist for Coolify | build |
