@@ -1,21 +1,36 @@
-name: Notify Marketplace
+name: Update Marketplace
 
 on:
   release:
     types: [published]
 
 permissions:
-  id-token: write
-  contents: read
+  contents: write
 
 jobs:
-  notify-marketplace:
+  update-marketplace:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger marketplace update
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ferg-cod3s/ferg-marketplace
-          event-type: release
-          client-payload: '{"version": "${{ github.event.release.tag_name }}", "repository": "${{ github.repository }}", "release_url": "${{ github.event.release.html_url }}"}'
+      - uses: actions/checkout@v4
+
+      - name: Update marketplace.json version
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          # Remove 'v' prefix from tag name
+          CLEAN_VERSION="${VERSION#v}"
+          echo "Updating marketplace.json to version $CLEAN_VERSION"
+
+          # Update version using jq
+          jq --arg version "$CLEAN_VERSION" \
+            '.plugins[0].version = $version' \
+            marketplace.json > tmp.json && mv tmp.json marketplace.json
+
+          echo "✅ Updated marketplace.json to version $CLEAN_VERSION"
+
+      - name: Commit and push marketplace update
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add marketplace.json
+          git diff --staged --quiet || git commit -m "Update ai-eng-system to ${{ github.event.release.tag_name }}"
+          git push

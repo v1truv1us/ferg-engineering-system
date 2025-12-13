@@ -3,7 +3,7 @@ name: Test Workflow
 on:
   push:
     branches:
-      - claude/ferg-engineering-scaffold-01S8XxGkhKtLp4hzpbjJsfcw
+      - main
 
 jobs:
   test:

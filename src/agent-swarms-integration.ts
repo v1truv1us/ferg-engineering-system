@@ -209,6 +209,33 @@ export class AgentSwarmsIntegration {
         swarm_types: ['MultiAgentRouter']
       },
 
+      'docs-writer': {
+        id: 'docs-writer',
+        name: 'Documentation Writer',
+        description: 'Specialized documentation page writer with specific formatting rules',
+        capabilities: [
+          { name: 'documentation', description: 'Technical documentation writing', confidence: 0.95 },
+          { name: 'content-creation', description: 'Content creation and formatting', confidence: 0.90 },
+          { name: 'technical-writing', description: 'Technical writing and editing', confidence: 0.85 }
+        ],
+        handoffs: ['documentation-specialist', 'seo-specialist'],
+        swarm_types: ['MultiAgentRouter', 'SequentialWorkflow']
+      },
+
+      'documentation-specialist': {
+        id: 'documentation-specialist',
+        name: 'Documentation Specialist',
+        description: 'Comprehensive technical documentation generation and API docs',
+        capabilities: [
+          { name: 'documentation', description: 'Comprehensive documentation generation', confidence: 0.95 },
+          { name: 'api-documentation', description: 'API documentation and guides', confidence: 0.90 },
+          { name: 'technical-specs', description: 'Technical specifications and guides', confidence: 0.85 },
+          { name: 'user-guides', description: 'User guides and tutorials', confidence: 0.80 }
+        ],
+        handoffs: ['docs-writer', 'architect-advisor', 'frontend-reviewer'],
+        swarm_types: ['SequentialWorkflow', 'AgentRearrange']
+      },
+
       // === Development & Coding (additional) ===
       'api-builder-enhanced': {
         id: 'api-builder-enhanced',

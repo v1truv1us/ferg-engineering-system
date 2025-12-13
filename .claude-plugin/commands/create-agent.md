@@ -18,7 +18,7 @@ Create a new OpenCode agent using AI assistance.
 ## Usage
 
 ```bash
-/ferg/create-agent "code reviewer that checks for security issues"
+/ai-eng/create-agent "code reviewer that checks for security issues"
 ```
 
 ## Output Location
@@ -32,17 +32,17 @@ Agent will be saved to:
 
 ### Security Review Agent
 ```bash
-/ferg/create-agent "security scanner that finds vulnerabilities"
+/ai-eng/create-agent "security scanner that finds vulnerabilities"
 ```
 
 ### Documentation Agent
 ```bash
-/ferg/create-agent "technical writer for API documentation"
+/ai-eng/create-agent "technical writer for API documentation"
 ```
 
 ### Data Analysis Agent
 ```bash
-/ferg/create-agent "data analyst for database queries"
+/ai-eng/create-agent "data analyst for database queries"
 ```
 
 The agent-creator will handle platform-specific formatting and ensure the agent follows best practices for triggering, expertise, and integration.

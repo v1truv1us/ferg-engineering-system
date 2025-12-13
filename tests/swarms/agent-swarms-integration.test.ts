@@ -18,9 +18,9 @@ describe('AgentSwarmsIntegration', () => {
   });
 
   describe('Agent Registry', () => {
-    it('should have all 24 agents registered', () => {
+    it('should have all 26 agents registered', () => {
       const agents = integration.getAvailableAgents();
-      expect(agents.length).toBe(24);
+      expect(agents.length).toBe(26);
     });
 
     it('should have all Architecture & Planning agents', () => {
@@ -98,7 +98,9 @@ describe('AgentSwarmsIntegration', () => {
     it('should have all Content & SEO agents', () => {
       const contentAgents = [
         'seo-specialist',
-        'prompt-optimizer'
+        'prompt-optimizer',
+        'docs-writer',
+        'documentation-specialist'
       ];
 
       contentAgents.forEach(agentId => {

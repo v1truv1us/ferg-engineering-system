@@ -15,8 +15,12 @@
         "source": "github",
         "repo": "v1truv1us/ai-eng-system"
       },
-      "description": "AI Engineering System with context engineering, research orchestration, atomic task planning, and 24 specialized agents for Claude Code & OpenCode",
-      "version": "0.2.3",
+      "package": {
+        "registry": "github",
+        "name": "@v1truv1us/ai-eng-system"
+      },
+      "description": "AI Engineering System with context engineering, research orchestration, atomic task planning, and 26 specialized agents for Claude Code & OpenCode",
+      "version": "0.3.4",
       "author": {
         "name": "v1truv1us",
         "email": "contact@v1truv1us.dev"

@@ -49,7 +49,7 @@ When a user describes what they want an agent to do, you will:
    - Show assistant using the Agent tool to launch the agent
 
 7. **Determine Platform Format**: Based on context, generate appropriate format:
-   - If in ferg-engineering-system content/ → canonical YAML format
+   - If in ai-eng-system content/ → canonical YAML format
    - If in user's project → OpenCode table format
    - If in Claude Code project → Claude Code YAML format
 
@@ -142,7 +142,7 @@ User describes agent need, trigger agent-creator.
 
 | Context | Output Location | Format |
 |----------|-----------------|--------|
-| In ferg-engineering-system | `content/agents/agent-name.md` | Canonical YAML |
+| In ai-eng-system | `content/agents/agent-name.md` | Canonical YAML |
 | User's OpenCode project | `.opencode/agent/agent-name.md` | Table format |
 | User's Claude Code project | `.claude-plugin/agents/agent-name.md` | YAML format |
 | Global preference | Ask user or detect from context | Platform-specific |
@@ -196,9 +196,9 @@ Every agent must meet these standards:
 - **Very complex requirements**: Break into multiple specialized agents
 - **User wants specific model**: Honor model preference in configuration
 
-## Integration with Ferg System
+## Integration with AI Engineering System
 
-The agent-creator integrates with existing ferg-engineering agents:
+The agent-creator integrates with existing ai-eng-system agents:
 - Can invoke `@architect-advisor` for complex architectural decisions
 - Uses same quality standards and research-backed prompting
 - Follows established patterns from existing agents

@@ -344,9 +344,9 @@ export default tool({
 })
 ```
 
-## Integration with Ferg System
+## Integration with AI Engineering System
 
-The tool-creator integrates with existing ferg-engineering components:
+The tool-creator integrates with existing ai-eng-system components:
 - Creates tools in the established `.opencode/tool/` directory structure
 - Follows same quality standards as existing tools
 - Uses research-backed prompting techniques from `incentive-prompting` skill

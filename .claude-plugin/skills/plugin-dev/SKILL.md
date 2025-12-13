@@ -1,6 +1,6 @@
 ---
 name: plugin-dev
-description: This skill should be used when creating extensions for Claude Code or OpenCode, including plugins, commands, agents, skills, and custom tools. Covers both platforms with format specifications, best practices, and the ferg-engineering build system.
+description: This skill should be used when creating extensions for Claude Code or OpenCode, including plugins, commands, agents, skills, and custom tools. Covers both platforms with format specifications, best practices, and the ai-eng-system build system.
 version: 1.0.0
 ---
 
@@ -8,7 +8,7 @@ version: 1.0.0
 
 ## Overview
 
-The ferg-engineering-system supports extension development for both Claude Code and OpenCode through a unified content system with automated transformation. Understanding this system enables creating well-organized, maintainable extensions that integrate seamlessly with both platforms.
+The ai-eng-system supports extension development for both Claude Code and OpenCode through a unified content system with automated transformation. Understanding this system enables creating well-organized, maintainable extensions that integrate seamlessly with both platforms.
 
 ## Extension Types
 
@@ -30,9 +30,9 @@ Create content in `content/` directory, let build.ts transform to platform forma
 ```
 content/
 ├── commands/my-command.md  → dist/.claude-plugin/commands/
-│                           → dist/.opencode/command/ferg/
+│                           → dist/.opencode/command/ai-eng/
 └── agents/my-agent.md      → dist/.claude-plugin/agents/
-                            → dist/.opencode/agent/ferg/
+                            → dist/.opencode/agent/ai-eng/
 ```
 
 ### 2. Platform-Specific Development
@@ -139,10 +139,10 @@ export default tool({
 
 ## Directory Locations
 
-### For Development in ferg-engineering-system
+### For Development in ai-eng-system
 
 ```
-ferg-engineering-system/
+ai-eng-system/
 ├── content/
 │   ├── commands/              # Add new commands here
 │   └── agents/                # Add new agents here
@@ -208,15 +208,15 @@ export default (async ({ client, project, directory, worktree, $ }) => {
 ### 1. Create Component
 
 Use plugin-dev commands:
-- `/ferg/create-agent` - Create new agent
-- `/ferg/create-command` - Create new command
-- `/ferg/create-skill` - Create new skill
-- `/ferg/create-tool` - Create new custom tool
+- `/ai-eng/create-agent` - Create new agent
+- `/ai-eng/create-command` - Create new command
+- `/ai-eng/create-skill` - Create new skill
+- `/ai-eng/create-tool` - Create new custom tool
 
 ### 2. Build
 
 ```bash
-cd ferg-engineering-system
+cd ai-eng-system
 bun run build              # Build all platforms
 bun run build --watch        # Watch mode
 bun run build --validate      # Validate content
@@ -226,7 +226,7 @@ bun run build --validate      # Validate content
 
 **Claude Code:**
 ```bash
-claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
+claude plugin add https://github.com/v1truv1us/ai-eng-system
 ```
 
 **OpenCode:**
@@ -275,7 +275,7 @@ claude plugin add https://github.com/ferg-cod3s/ferg-engineering-system
 
 ### Examples
 
-Study existing components in ferg-engineering-system:
+Study existing components in ai-eng-system:
 - `content/commands/plan.md` - Command structure
 - `content/agents/architect-advisor.md` - Agent structure
 - `skills/prompting/incentive-prompting/SKILL.md` - Skill structure
@@ -298,25 +298,25 @@ Study existing components in ferg-engineering-system:
 - Invalid YAML syntax
 - Wrong file permissions
 
-## Integration with Ferg Engineering
+## Integration with AI Engineering System
 
-The plugin-dev system integrates seamlessly with existing ferg-engineering components:
+The plugin-dev system integrates seamlessly with existing ai-eng-system components:
 
 ### Existing Commands
-- `/ferg/plan` - Implementation planning
-- `/ferg/review` - Code review
-- `/ferg/work` - Task execution
+- `/ai-eng/plan` - Implementation planning
+- `/ai-eng/review` - Code review
+- `/ai-eng/work` - Task execution
 
 ### Existing Agents
-- `ferg/architect-advisor` - Architecture guidance
-- `ferg/frontend-reviewer` - Frontend review
-- `ferg/seo-specialist` - SEO optimization
+- `ai-eng/architect-advisor` - Architecture guidance
+- `ai-eng/frontend-reviewer` - Frontend review
+- `ai-eng/seo-specialist` - SEO optimization
 
 ### Plugin-Dev Commands
-- `/ferg/create-plugin` - Full plugin development workflow
-- `/ferg/create-agent` - Quick agent creation
-- `/ferg/create-command` - Quick command creation
-- `/ferg/create-skill` - Quick skill creation
-- `/ferg/create-tool` - Quick tool creation
+- `/ai-eng/create-plugin` - Full plugin development workflow
+- `/ai-eng/create-agent` - Quick agent creation
+- `/ai-eng/create-command` - Quick command creation
+- `/ai-eng/create-skill` - Quick skill creation
+- `/ai-eng/create-tool` - Quick tool creation
 
 All use the same quality standards and research-backed prompting techniques.

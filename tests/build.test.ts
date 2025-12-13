@@ -316,7 +316,7 @@ Missing description field.
     it('should transform agents to OpenCode table format', async () => {
       await runBuild()
       
-      const opencodeAgentPath = join(DIST_DIR, '.opencode', 'agent', 'ferg', 'test-agent.md')
+      const opencodeAgentPath = join(DIST_DIR, '.opencode', 'agent', 'ai-eng', 'test-agent.md')
       const content = await readFile(opencodeAgentPath, 'utf-8')
       
       // Should contain table format

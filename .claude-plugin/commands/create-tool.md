@@ -18,7 +18,7 @@ Create a new OpenCode custom tool using AI assistance.
 ## Usage
 
 ```bash
-/ferg/create-tool "database query executor with connection pooling"
+/ai-eng/create-tool "database query executor with connection pooling"
 ```
 
 ## Output Location
@@ -32,22 +32,22 @@ Tool will be saved to:
 
 ### Database Tool
 ```bash
-/ferg/create-tool "PostgreSQL query builder with parameter binding"
+/ai-eng/create-tool "PostgreSQL query builder with parameter binding"
 ```
 
 ### File Processing Tool
 ```bash
-/ferg/create-tool "CSV processor with validation and transformation"
+/ai-eng/create-tool "CSV processor with validation and transformation"
 ```
 
 ### API Client Tool
 ```bash
-/ferg/create-tool "REST API client with retry logic and authentication"
+/ai-eng/create-tool "REST API client with retry logic and authentication"
 ```
 
 ### System Integration Tool
 ```bash
-/ferg/create-tool "Docker container management with status monitoring"
+/ai-eng/create-tool "Docker container management with status monitoring"
 ```
 
 The tool-creator will handle TypeScript compilation, Zod validation, error handling, and OpenCode tool integration patterns.

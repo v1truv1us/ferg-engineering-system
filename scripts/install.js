@@ -80,9 +80,9 @@ function installOpenCode(targetDir, description) {
   }
   
   // Copy plugin
-  const pluginSource = path.join(sourceDir, 'plugin', 'ferg-engineering.ts');
+  const pluginSource = path.join(sourceDir, 'plugin', 'ai-eng-system.ts');
   if (fs.existsSync(pluginSource)) {
-    const dest = path.join(pluginDir, 'ferg-engineering.ts');
+    const dest = path.join(pluginDir, 'ai-eng-system.ts');
     fs.copyFileSync(pluginSource, dest);
     console.log(`   ✅ Plugin script`);
   }

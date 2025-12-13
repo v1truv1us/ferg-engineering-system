@@ -5,6 +5,7 @@
     "": {
       "name": "@ferg-cod3s/engineering-system",
       "dependencies": {
+        "@v1truv1us/ai-eng-system": "^0.3.2",
         "commander": "^14.0.2",
         "glob": "^13.0.0",
         "yaml": "^2.8.2",
@@ -21,6 +22,8 @@
     "@isaacs/brace-expansion": ["@isaacs/brace-expansion@5.0.0", "", { "dependencies": { "@isaacs/balanced-match": "^4.0.1" } }, "sha512-ZT55BDLV0yv0RBm2czMiZ+SqCGO7AvmOM3G/w2xhVPH+te0aKgFjmBvGlL1dH+ql2tgGO3MVrbb3jCKyvpgnxA=="],
 
     "@types/node": ["@types/node@20.19.25", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-ZsJzA5thDQMSQO788d7IocwwQbI8B5OPzmqNvpf3NY/+MHDAS759Wo0gd2WQeXYt5AAAQjzcrTVC6SKCuYgoCQ=="],
+
+    "@v1truv1us/ai-eng-system": ["@v1truv1us/ai-eng-system@0.3.2", "https://npm.pkg.github.com/download/@v1truv1us/ai-eng-system/0.3.2/cb2b58a740afa386dc0969144b365a5862c5915d", { "dependencies": { "commander": "^14.0.2", "glob": "^13.0.0", "yaml": "^2.8.2" }, "bin": { "ai-eng-install": "scripts/install.js" } }, "sha512-8RTYVpdLR5KcCT2nw1MADjseI7QPcrZ9T4hEopM1Lzu5VyzL543GsSFOVaD4nUuMObauBad7DRcpltdRUHIq9A=="],
 
     "bun-types": ["bun-types@1.3.3", "", { "dependencies": { "@types/node": "*" } }, "sha512-z3Xwlg7j2l9JY27x5Qn3Wlyos8YAp0kKRlrePAOjgjMGS5IG6E7Jnlx736vH9UVI4wUICwwhC9anYL++XeOgTQ=="],
 

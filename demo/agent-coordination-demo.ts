@@ -12,7 +12,7 @@ async function runAgentCoordinationDemo() {
 
   console.log('🎯 System Overview:');
   console.log('The Ferg Engineering System now includes:');
-  console.log('• 24 specialized agents working together');
+   console.log('• 26 specialized agents working together');
   console.log('• Intelligent task routing and execution');
   console.log('• Inter-agent communication and handoffs');
   console.log('• Self-improvement through performance analysis');
@@ -22,7 +22,7 @@ async function runAgentCoordinationDemo() {
   console.log('📋 Key Components Implemented:');
 
   console.log('\n1. Agent Registry (✅ Complete)');
-  console.log('   • Loads 24 agents from .claude-plugin/agents/');
+   console.log('   • Loads 26 agents from .claude-plugin/agents/');
   console.log('   • Parses frontmatter for capabilities and handoffs');
   console.log('   • Provides capability-based agent discovery');
 
@@ -87,7 +87,7 @@ async function runAgentCoordinationDemo() {
   console.log('   • Measures improvement effectiveness over time');
 
   console.log('\n📊 System Statistics:');
-  console.log('   • 24 agents with specialized capabilities');
+   console.log('   • 26 agents with specialized capabilities');
   console.log('   • 15 commands for different workflows');
   console.log('   • 6 skills for enhanced functionality');
   console.log('   • Context engineering with memory persistence');

@@ -351,7 +351,7 @@ Every plugin must meet these standards:
 
 ## Integration with Existing System
 
-The plugin-validator integrates with ferg-engineering components:
+The plugin-validator integrates with ai-eng-system components:
 - Can validate both canonical content and built outputs
 - Uses same quality standards as existing agents
 - Maintains consistency across the plugin ecosystem

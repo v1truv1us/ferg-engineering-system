@@ -299,14 +299,14 @@ All tests completed with coverage report.
 
 ### Existing Commands
 
-- `/ferg/plan` - Implementation planning
-- `/ferg/review` - Multi-perspective code review
-- `/ferg/deploy` - Deployment automation
+- `/ai-eng/plan` - Implementation planning
+- `/ai-eng/review` - Multi-perspective code review
+- `/ai-eng/deploy` - Deployment automation
 
 ### Plugin-Dev Commands
 
-- `/ferg/create-command` - Quick command creation
-- `/ferg/create-agent` - Quick agent creation
-- `/ferg/create-plugin` - Full plugin development workflow
+- `/ai-eng/create-command` - Quick command creation
+- `/ai-eng/create-agent` - Quick agent creation
+- `/ai-eng/create-plugin` - Full plugin development workflow
 
 All commands follow the same quality standards and use the build.ts transformation system.

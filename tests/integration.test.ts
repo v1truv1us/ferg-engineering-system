@@ -18,7 +18,7 @@ import { join, basename } from 'path'
 import { tmpdir } from 'os'
 import { execSync } from 'child_process'
 
-const TEST_ROOT = join(tmpdir(), `ferg-integration-${Date.now()}`)
+const TEST_ROOT = join(tmpdir(), `ai-eng-integration-${Date.now()}`)
 const ORIGINAL_ROOT = process.cwd()
 
 describe('Ferg Engineering System - Integration Tests', () => {
@@ -81,8 +81,8 @@ describe('Ferg Engineering System - Integration Tests', () => {
       const opencodeDir = join(TEST_ROOT, 'dist', '.opencode')
       
       // Check main components
-      expect(existsSync(join(opencodeDir, 'command', 'ferg'))).toBe(true)
-      expect(existsSync(join(opencodeDir, 'agent', 'ferg'))).toBe(true)
+      expect(existsSync(join(opencodeDir, 'command', 'ai-eng'))).toBe(true)
+      expect(existsSync(join(opencodeDir, 'agent', 'ai-eng'))).toBe(true)
     })
 
     it('should copy skills to both platforms', async () => {
@@ -105,7 +105,7 @@ describe('Ferg Engineering System - Integration Tests', () => {
 
     it('should transform all commands correctly', async () => {
       const contentCommandsDir = join(TEST_ROOT, 'content', 'commands')
-      const opencodeCommandsDir = join(TEST_ROOT, 'dist', '.opencode', 'command', 'ferg')
+      const opencodeCommandsDir = join(TEST_ROOT, 'dist', '.opencode', 'command', 'ai-eng')
       const claudeCommandsDir = join(TEST_ROOT, 'dist', '.claude-plugin', 'commands')
       
       // Get all command files
@@ -133,7 +133,7 @@ describe('Ferg Engineering System - Integration Tests', () => {
 
     it('should transform all agents correctly', async () => {
       const contentAgentsDir = join(TEST_ROOT, 'content', 'agents')
-      const opencodeAgentsDir = join(TEST_ROOT, 'dist', '.opencode', 'agent', 'ferg')
+      const opencodeAgentsDir = join(TEST_ROOT, 'dist', '.opencode', 'agent', 'ai-eng')
       const claudeAgentsDir = join(TEST_ROOT, 'dist', '.claude-plugin', 'agents')
       
       const { readdir } = await import('fs/promises')
@@ -369,8 +369,8 @@ description: invalid: yaml: structure: unclosed
       const pluginJsonPath = join(TEST_ROOT, 'dist', '.claude-plugin', 'plugin.json')
       const pluginJson = JSON.parse(await readFile(pluginJsonPath, 'utf-8'))
       
-      expect(pluginJson.name).toBe('ferg-engineering')
-      expect(pluginJson.description).toBe('Compounding engineering system for Claude Code')
+      expect(pluginJson.name).toBe('ai-eng-system')
+      expect(pluginJson.description).toBe('AI Engineering System with context engineering and research orchestration for Claude Code')
       expect(pluginJson.author).toBe('v1truv1us')
       expect(pluginJson.license).toBe('MIT')
       

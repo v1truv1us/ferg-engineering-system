@@ -18,7 +18,7 @@ Create a new OpenCode command using AI assistance.
 ## Usage
 
 ```bash
-/ferg/create-command "deploy to staging with pre-checks"
+/ai-eng/create-command "deploy to staging with pre-checks"
 ```
 
 ## Output Location
@@ -32,17 +32,17 @@ Command will be saved to:
 
 ### Deployment Command
 ```bash
-/ferg/create-command "deploy application with health checks"
+/ai-eng/create-command "deploy application with health checks"
 ```
 
 ### Testing Command
 ```bash
-/ferg/create-command "run integration tests with coverage"
+/ai-eng/create-command "run integration tests with coverage"
 ```
 
 ### Documentation Command
 ```bash
-/ferg/create-command "generate API docs from code"
+/ai-eng/create-command "generate API docs from code"
 ```
 
 The command-creator will handle platform-specific formatting and ensure the command follows best practices for arguments, shell integration, and tool usage.

@@ -18,7 +18,7 @@ Create a new OpenCode skill using AI assistance.
 ## Usage
 
 ```bash
-/ferg/create-skill "database optimization for PostgreSQL"
+/ai-eng/create-skill "database optimization for PostgreSQL"
 ```
 
 ## Output Location
@@ -32,17 +32,17 @@ Skill will be saved to:
 
 ### Database Skill
 ```bash
-/ferg/create-skill "database query optimization"
+/ai-eng/create-skill "database query optimization"
 ```
 
 ### API Integration Skill
 ```bash
-/ferg/create-skill "REST API client for external service"
+/ai-eng/create-skill "REST API client for external service"
 ```
 
 ### Security Skill
 ```bash
-/ferg/create-skill "security vulnerability scanning"
+/ai-eng/create-skill "security vulnerability scanning"
 ```
 
 The skill-creator will handle progressive disclosure, proper frontmatter, and ensure compatibility with opencode-skills plugin.

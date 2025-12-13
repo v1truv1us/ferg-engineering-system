@@ -1,7 +1,7 @@
 {
-  "name": "ferg-engineering",
+  "name": "ai-eng-system",
   "version": "0.2.3",
-  "description": "Compounding engineering system for Claude Code & OpenCode. Shared agents, commands, and skills.",
+  "description": "AI Engineering System with context engineering and research orchestration for Claude Code",
   "author": {
     "name": "v1truv1us",
     "email": "contact@v1truv1us.dev"
@@ -10,15 +10,20 @@
   "repository": "https://github.com/v1truv1us/ai-eng-system",
   "license": "MIT",
   "keywords": [
+    "ai",
     "engineering",
-    "workflow",
+    "context",
+    "research",
+    "orchestration",
     "agents",
-    "review",
+    "workflow",
     "planning",
+    "review",
     "deployment",
     "seo",
     "optimization",
-    "research"
+    "atomic-tasks",
+    "quality-gates"
   ],
   "commands": [
     "./.claude-plugin/commands/plan.md",

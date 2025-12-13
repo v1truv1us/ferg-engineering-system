@@ -320,7 +320,7 @@ Create a complete, high-quality OpenCode extension from initial concept to teste
 
 4. **Suggest improvements** (optional):
    - Additional components that could enhance plugin
-   - Integration opportunities with existing ferg-engineering components
+   - Integration opportunities with existing ai-eng-system components
    - Testing strategies for robustness
 
 **Output**: Complete, documented plugin ready for use or publication

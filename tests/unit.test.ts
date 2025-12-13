@@ -11,7 +11,7 @@ import { join } from 'path'
 import { tmpdir } from 'os'
 
 // Test utilities
-const TEST_DIR = join(tmpdir(), `ferg-unit-${Date.now()}`)
+const TEST_DIR = join(tmpdir(), `ai-eng-unit-${Date.now()}`)
 
 describe('Ferg Engineering System - Unit Tests', () => {
   

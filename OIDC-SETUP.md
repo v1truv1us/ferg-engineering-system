@@ -125,7 +125,7 @@ name: Auto-publish from Main
 on:
   push:
     branches:
-      - claude/ferg-engineering-scaffold-01S8XxGkhKtLp4hzpbjJsfcw  # Current default branch
+      - main  # Current default branch
 
 permissions:
   id-token: write
@@ -298,7 +298,7 @@ gh repo create v1truv1us/ai-eng-marketplace --public --description "AI Engineeri
   "license": "MIT",
   "plugins": [
     {
-      "name": "ferg-engineering",
+      "name": "ai-eng-system",
       "description": "Compounding engineering system with shared agents, commands, and skills for Claude Code & OpenCode",
       "version": "2.0.0",
       "author": "ferg-cod3s",

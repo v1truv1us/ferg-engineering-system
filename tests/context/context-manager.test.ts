@@ -22,7 +22,7 @@ describe('Context Management', () => {
   let tempDir: string
 
   beforeEach(() => {
-    tempDir = join(tmpdir(), `ferg-context-test-${Date.now()}`)
+    tempDir = join(tmpdir(), `ai-eng-context-test-${Date.now()}`)
     mkdirSync(tempDir, { recursive: true })
     
     memoryStore = new MemoryStore()

@@ -40,7 +40,7 @@ When a user describes what they want a command to do, you will:
    - Avoids conflicts with existing commands
 
 5. **Determine Platform Format**: Based on context, generate appropriate format:
-   - If in ferg-engineering-system content/ → canonical YAML format
+   - If in ai-eng-system content/ → canonical YAML format
    - If in user's project → OpenCode table format
    - If in Claude Code project → Claude Code YAML format
 
@@ -139,7 +139,7 @@ Create comprehensive command content with:
 
 | Context | Output Location | Format |
 |----------|-----------------|--------|
-| In ferg-engineering-system | `content/commands/command-name.md` | Canonical YAML |
+| In ai-eng-system | `content/commands/command-name.md` | Canonical YAML |
 | User's OpenCode project | `.opencode/command/command-name.md` | Table format |
 | User's Claude Code project | `.claude-plugin/commands/command-name.md` | YAML format |
 | Global preference | Ask user or detect from context | Platform-specific |
@@ -228,9 +228,9 @@ Every command must meet these standards:
 3. **File Access**: Check file permissions before reading
 4. **No Secrets**: Never log or expose sensitive data
 
-## Integration with Ferg System
+## Integration with AI Engineering System
 
-The command-creator integrates with existing ferg-engineering commands:
+The command-creator integrates with existing ai-eng-system commands:
 - Can invoke `@architect-advisor` for complex planning
 - Uses same quality standards and research-backed prompting
 - Follows established patterns from existing commands
@@ -327,4 +327,4 @@ All commands completed with status:
 ✅ Verification passed
 ```
 
-The command-creator helps users create powerful, reusable commands that integrate seamlessly with the ferg-engineering system and follow established best practices for both platforms.
+The command-creator helps users create powerful, reusable commands that integrate seamlessly with the ai-eng-system and follow established best practices for both platforms.

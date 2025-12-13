@@ -11,7 +11,7 @@ import { QualityGateRunner } from '../../src/execution/quality-gates.js';
 import { TaskType, QualityGateType, TaskStatus } from '../../src/execution/types.js';
 
 describe('Execution Engine Integration', () => {
-  const testDir = '/tmp/ferg-test';
+  const testDir = '/tmp/ai-eng-test';
   let planParser: PlanParser;
   let taskExecutor: TaskExecutor;
   let gateRunner: QualityGateRunner;

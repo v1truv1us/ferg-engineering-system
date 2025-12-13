@@ -18,7 +18,7 @@ describe('ExecutorCLI', () => {
 
   beforeEach(() => {
     cli = new ExecutorCLI()
-    tempDir = join(tmpdir(), `ferg-cli-test-${Date.now()}`)
+    tempDir = join(tmpdir(), `ai-eng-cli-test-${Date.now()}`)
   })
 
   afterEach(() => {

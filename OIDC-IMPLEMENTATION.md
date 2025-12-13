@@ -90,7 +90,7 @@ git push origin v2.0.1-test
 
 ### 4. Push Main Repository
 ```bash
-git push origin claude/ferg-engineering-scaffold-01S8XxGkhKtLp4hzpbjJsfcw
+git push origin main
 ```
 
 ## 📊 Benefits Achieved

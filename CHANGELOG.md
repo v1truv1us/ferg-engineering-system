@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **documentation-specialist Agent**: Comprehensive technical documentation generation
+  - Senior technical documentation specialist with 15+ years experience
+  - Generates API docs, user guides, technical specifications, and reference materials
+  - Analyzes codebases to create accurate, user-friendly documentation
+  - Proactive documentation needs identification for code changes and new features
+- Updated agent registry to include all 26 specialized agents
+- Fixed swarm integration tests to reflect correct agent count
+
 ## [0.3.1] - 2025-12-12
 
 ### Added

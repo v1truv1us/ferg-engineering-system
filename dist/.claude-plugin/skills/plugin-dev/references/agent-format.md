@@ -234,15 +234,15 @@ You are a senior code reviewer with 10+ years of experience...
 
 ### Existing Agents
 
-- `ferg/architect-advisor` - System architecture guidance
-- `ferg/frontend-reviewer` - Frontend code review
-- `ferg/seo-specialist` - SEO optimization
-- `ferg/prompt-optimizer` - Prompt enhancement
+- `ai-eng/architect-advisor` - System architecture guidance
+- `ai-eng/frontend-reviewer` - Frontend code review
+- `ai-eng/seo-specialist` - SEO optimization
+- `ai-eng/prompt-optimizer` - Prompt enhancement
 
 ### Plugin-Dev Agents
 
-- `ferg/agent-creator` - AI-assisted agent generation
-- `ferg/skill-creator` - Skill development guidance
-- `ferg/plugin-validator` - Plugin structure validation
+- `ai-eng/agent-creator` - AI-assisted agent generation
+- `ai-eng/skill-creator` - Skill development guidance
+- `ai-eng/plugin-validator` - Plugin structure validation
 
 All agents follow the same quality standards and use the build.ts transformation system.

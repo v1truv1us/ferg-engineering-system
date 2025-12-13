@@ -296,7 +296,7 @@ export default tool({
 
 ### Tool Creator Agent
 
-The `ferg/tool-creator` agent helps create custom tools:
+The `ai-eng/tool-creator` agent helps create custom tools:
 
 ```yaml
 ---
