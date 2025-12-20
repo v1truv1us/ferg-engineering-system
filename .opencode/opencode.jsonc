@@ -4,5 +4,5 @@
   // AI Engineering System configuration
   // Loaded by OpenCode when you install this project as a config directory.
 
-  "plugin": ["file://./plugin/ai-eng-system.ts"]
+  "plugin": ["./plugin/ai-eng-system.ts"]
 }

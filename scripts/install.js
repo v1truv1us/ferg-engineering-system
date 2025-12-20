@@ -18,18 +18,24 @@ const NAMESPACE_PREFIX = "ai-eng";
 
 // Parse command line arguments
 const args = process.argv.slice(2);
-const isGlobal = args.includes('--global');
+
+// Global install by default when no args, or with --global
+const isGlobal = args.length === 0 || args.includes('--global');
+
+// Local install only with --local
 const isLocal = args.includes('--local');
 
-if (!isGlobal && !isLocal) {
+// Fail on unknown flags (help for everything else)
+if (args.length > 2) {
   console.log('🔧 Ferg Engineering System Installer');
   console.log('=====================================\n');
   console.log('Usage:');
-  console.log('  bun run install:global   # Install globally to ~/.config/opencode');
+  console.log('  bun run install:global   # Install globally to ~/.config/opencode (default)');
   console.log('  bun run install:local    # Install locally to .opencode/');
   console.log('\nOr use directly:');
   console.log('  bun scripts/install.js --global');
   console.log('  bun scripts/install.js --local');
+  console.log('\nDefault is global when no flags provided');
   process.exit(1);
 }
 

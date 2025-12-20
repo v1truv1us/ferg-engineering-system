@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "description": "Initialize ai-eng-system on session start",
+        "hooks": [
+           {
+             "type": "notification",
+             "message": "🔧 Ferg Engineering System loaded. Commands: /ai-eng/plan, /ai-eng/review, /ai-eng/seo, /ai-eng/work, /ai-eng/compound, /ai-eng/deploy, /ai-eng/optimize, /ai-eng/recursive-init, /ai-eng/create-plugin, /ai-eng/create-agent, /ai-eng/create-command, /ai-eng/create-skill, /ai-eng/create-tool, /ai-eng/research, /ai-eng/context"
+           }
+        ]
+      }
+    ]
+  }
+}

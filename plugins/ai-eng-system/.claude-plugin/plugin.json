@@ -1,0 +1,28 @@
+{
+  "name": "ai-eng-system",
+  "version": "0.3.4",
+  "description": "AI Engineering System with context engineering, research orchestration, and 15 commands, 29 specialized agents, and 4 skill packs for Claude Code",
+  "author": {
+    "name": "v1truv1us",
+    "email": "contact@v1truv1us.dev"
+  },
+  "homepage": "https://github.com/v1truv1us/ai-eng-system#readme",
+  "repository": "https://github.com/v1truv1us/ai-eng-system",
+  "license": "MIT",
+  "keywords": [
+    "ai",
+    "engineering",
+    "context",
+    "research",
+    "orchestration",
+    "agents",
+    "workflow",
+    "planning",
+    "review",
+    "deployment",
+    "seo",
+    "optimization",
+    "atomic-tasks",
+    "quality-gates"
+  ]
+}

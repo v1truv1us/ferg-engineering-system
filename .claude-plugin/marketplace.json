@@ -1,4 +1,5 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "ai-eng-marketplace",
   "owner": {
     "name": "v1truv1us",
@@ -11,14 +12,7 @@
   "plugins": [
     {
       "name": "ai-eng-system",
-      "source": {
-        "source": "github",
-        "repo": "v1truv1us/ai-eng-system"
-      },
-      "package": {
-        "registry": "github",
-        "name": "@v1truv1us/ai-eng-system"
-      },
+      "source": "./plugins/ai-eng-system",
       "description": "AI Engineering System with context engineering, research orchestration, 15 commands, 29 specialized agents, and 4 skill packs for Claude Code & OpenCode",
       "version": "0.3.4",
       "author": {
