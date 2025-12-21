@@ -11,3 +11,6 @@ bun.lockb
 
 # Context engineering local storage (user-specific, not committed)
 .ferg-context/
+
+# Build scratch
+build.ts.tmp

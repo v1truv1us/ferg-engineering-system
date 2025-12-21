@@ -1,13 +1,13 @@
 # Installation Guide
 
-This guide covers all installation methods for the Ferg Engineering System across Claude Code and OpenCode platforms.
+This guide covers installation methods for the AI Engineering System across Claude Code and OpenCode platforms.
 
 ## 🚀 Quick Start
 
 | Platform | Recommended Method | Commands |
 |----------|-------------------|----------|
-| **Claude Code** | Marketplace | `/plugin marketplace add v1truv1us/ai-eng-marketplace`<br>`/plugin install ai-eng-system@v1truv1us` |
-| **OpenCode** | GitHub Packages | `npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com` |
+| **Claude Code** | Marketplace | `/plugin marketplace add v1truv1us/ai-eng-system`<br>`/plugin install ai-eng-system@ai-eng-marketplace` |
+| **OpenCode** | Shell Script | `bun scripts/install.js` |
 
 ## 📋 Detailed Installation Methods
 
@@ -15,8 +15,8 @@ This guide covers all installation methods for the Ferg Engineering System acros
 
 #### Option 1: Marketplace (Recommended)
 ```bash
-/plugin marketplace add v1truv1us/ai-eng-marketplace
-/plugin install ai-eng-system@v1truv1us
+/plugin marketplace add v1truv1us/ai-eng-system
+/plugin install ai-eng-system@ai-eng-marketplace
 ```
 
 **Benefits:**
@@ -25,88 +25,69 @@ This guide covers all installation methods for the Ferg Engineering System acros
 - ✅ Version management
 - ✅ Team distribution support
 
-#### Option 2: Direct Repository
+#### Option 2: Direct Plugin Install (Testing)
 ```bash
-claude plugin add https://github.com/v1truv1us/ai-eng-system
+/plugin install ./plugins/ai-eng-system
 ```
 
 **Benefits:**
-- ✅ Simple one-liner
-- ✅ No marketplace setup
+- ✅ Simple one-liner for development
+- ✅ Test embedded plugin directly
 - ❌ Manual updates required
 
 ### OpenCode
 
-#### Option 1: GitHub Packages (Recommended)
+#### Option 1: Shell Script (Recommended)
 ```bash
-npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
-```
-
-**Benefits:**
-- ✅ No npmjs.com account needed
-- ✅ Integrated with GitHub authentication
-- ✅ Private packages free for public repos
-- ✅ Automatic provenance and security
-
-#### Option 2: npm Package (Alternative)
-```bash
-npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
-```
-
-**Benefits:**
-- ✅ Global installation
-- ✅ Version management
-- ✅ Easy updates with `npm update -g`
-- ✅ Works across projects
-
-#### Option 2: Shell Script
-```bash
+# Clone the repository
 git clone https://github.com/v1truv1us/ai-eng-system
 cd ai-eng-system
-bun run install:global
+
+# Global install (recommended)
+bun scripts/install.js
+
+# Or local install
+bun scripts/install.js --local
 ```
 
 **Benefits:**
 - ✅ No npm required
 - ✅ Full control over installation
-- ✅ Can modify source
-- ❌ Manual updates
+- ✅ Can modify source if needed
+- ✅ Works offline after initial clone
 
-#### Option 3: Project-Local
+#### Option 2: GitHub Packages (Alternative)
 ```bash
-git clone https://github.com/v1truv1us/ai-eng-system
-cd ai-eng-system
-bun run install:local
+npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 ```
 
 **Benefits:**
-- ✅ Project-specific installation
-- ✅ No global changes
-- ✅ Version per project
-- ❌ Must repeat for each project
+- ✅ Integrated with GitHub authentication
+- ✅ Automatic provenance and security
+- ✅ Version management
+- ❌ Requires npm setup
 
 ## 🔧 Installation Comparison
 
 | Method | Platform | Setup Complexity | Update Process | Version Management | Global/Local |
 |--------|----------|------------------|----------------|-------------------|---------------|
 | **Marketplace** | Claude Code | Medium (2 steps) | Automatic | ✅ | Global |
-| **Direct Repo** | Claude Code | Low (1 step) | Manual | ❌ | Global |
+| **Direct Plugin** | Claude Code | Low (1 step) | Manual | ❌ | Global |
+| **Shell Script** | OpenCode | Medium (clone+run) | Re-run script | ❌ | Global/Local |
 | **GitHub Packages** | OpenCode | Low (1 command) | `npm update` | ✅ | Global |
-| **Shell Script** | OpenCode | Medium (clone+run) | Re-run script | ❌ | Global |
-| **Project-Local** | OpenCode | Medium (clone+run) | Re-run script | ❌ | Local |
 
 ## 📦 What Gets Installed
 
 ### Claude Code
 - **Commands:** 15 namespaced slash commands (`/ai-eng/plan`, `/ai-eng/review`, `/ai-eng/optimize`, `/ai-eng/research`, etc.)
-- **Agents:** 26 specialized agents
+- **Agents:** 29 specialized agents
 - **Skills:** 4 skill packages (devops, prompting, research, plugin-dev)
 - **Location:** `~/.claude/plugins/ai-eng-system/`
 - **Format:** Markdown files with YAML frontmatter
 
 ### OpenCode
 - **Commands:** 15 namespaced commands (`/ai-eng/plan`, `/ai-eng/review`, etc.)
-- **Agents:** 26 specialized agents (`ai-eng/architect-advisor`, etc.)
+- **Agents:** 29 specialized agents (`ai-eng/architect-advisor`, etc.)
 - **Skills:** 4 skill packages (devops, prompting, research, plugin-dev)
 - **Location:** `~/.config/opencode/` (global) or `.opencode/` (local)
 - **Namespace:** `ai-eng/`
@@ -121,8 +102,8 @@ bun run install:local
 /plugin list
 
 # Reinstall if needed
-/plugin uninstall ai-eng-system@v1truv1us
-/plugin install ai-eng-system@v1truv1us
+/plugin uninstall ai-eng-system
+/plugin install ai-eng-system@ai-eng-marketplace
 ```
 
 **"Command not found" in OpenCode**
@@ -135,9 +116,8 @@ ls ~/.config/opencode/agent/ai-eng/
 /ai-eng/plan "test installation"
 
 # Reinstall if needed
-npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
-# or
-./setup-global.sh
+cd /path/to/ai-eng-system
+bun scripts/install.js
 ```
 
 **Permission errors**
@@ -146,7 +126,7 @@ npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
 npm install -g @v1truv1us/ai-eng-system --unsafe-perm --registry https://npm.pkg.github.com
 
 # For shell scripts
-chmod +x setup*.sh
+chmod +x scripts/install.js
 ```
 
 **Bun not found**
@@ -165,7 +145,7 @@ After installation, verify everything works:
 **Claude Code:**
 ```bash
 # Test a command
-/plan "test installation"
+/ai-eng/plan "test installation"
 
 # List plugins
 /plugin list
@@ -175,32 +155,25 @@ After installation, verify everything works:
 ```bash
 # Test a command
 /ai-eng/plan "test installation"
-
-# Use verification script
-./verify-install.sh
 ```
 
 ## 🔄 Updates
 
 ### Claude Code (Marketplace)
 ```bash
-/plugin update ai-eng-system@v1truv1us
+/plugin update ai-eng-system@ai-eng-marketplace
+```
+
+### OpenCode (Shell Script)
+```bash
+cd /path/to/ai-eng-system
+git pull origin main
+bun scripts/install.js
 ```
 
 ### OpenCode (GitHub Packages)
 ```bash
 npm update -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
-```
-
-### OpenCode (npm Alternative)
-```bash
-npm update -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
-```
-
-### Manual Updates
-```bash
-git pull origin main
-./setup-global.sh  # or ./setup.sh for local
 ```
 
 ## 🏢 Enterprise Distribution
@@ -213,27 +186,30 @@ git pull origin main
 3. Use `/plugin update` for maintenance
 
 **OpenCode:**
-1. Add npm install to onboarding scripts
+1. Add shell script to onboarding scripts
 2. Include in development environment setup
-3. Use `npm update` in CI/CD for updates
+3. Use git pull + reinstall in CI/CD for updates
 
 ### CI/CD Integration
 
 ```bash
 # .github/workflows/setup.yml
-- name: Install Ferg Engineering
+- name: Install AI Engineering System
   run: |
     if command -v claude &> /dev/null; then
-      claude plugin add https://github.com/v1truv1us/ai-eng-system
+      claude plugin marketplace add v1truv1us/ai-eng-system
+      claude plugin install ai-eng-system@ai-eng-marketplace
     else
-      npm install -g @v1truv1us/ai-eng-system --registry https://npm.pkg.github.com
+      git clone https://github.com/v1truv1us/ai-eng-system /tmp/ai-eng-system
+      cd /tmp/ai-eng-system
+      bun scripts/install.js
     fi
 ```
 
 ## 📚 Additional Resources
 
 - [Main README](../README.md) - Overview and quick reference
-- [Architecture Guide](../README.md#architecture-v20) - System design
+- [Architecture Guide](../README.md#architecture) - System design
 - [Development Guide](../README.md#development) - Contributing and building
-- [Plugin Documentation](PLUGIN.md) - Technical details
+- [Plugin Documentation](PLUGIN.md) - Technical plugin details
 - [Agent Coordination](AGENTS.md) - Agent usage patterns
