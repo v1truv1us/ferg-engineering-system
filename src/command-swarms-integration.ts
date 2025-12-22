@@ -67,23 +67,16 @@ export class CommandSwarmsIntegration {
 
       deploy: {
         command: 'deploy',
-        description: 'Pre-deployment checklist for Coolify',
+        description: 'Prepare deployment checklist for: ${baseTask}. Ensure all prerequisites are met, configurations are correct, and monitoring is in place.',
         capabilities: ['deployment', 'devops', 'monitoring'],
         swarmType: 'SequentialWorkflow'
       },
 
-      optimize: {
-        command: 'optimize',
-        description: 'Prompt enhancement with research-backed techniques',
-        capabilities: ['prompt-engineering', 'ai-interaction'],
+      clean: {
+        command: 'clean',
+        description: 'Remove AI-generated verbosity, slop patterns, and redundant content with preview and confirmation',
+        capabilities: ['text-cleanup', 'pattern-matching', 'content-optimization'],
         swarmType: 'MultiAgentRouter'
-      },
-
-      seo: {
-        command: 'seo',
-        description: 'SEO audit with Core Web Vitals',
-        capabilities: ['seo', 'technical-seo', 'frontend'],
-        swarmType: 'SequentialWorkflow'
       },
 
       create: {
@@ -176,8 +169,20 @@ export class CommandSwarmsIntegration {
       case 'deploy':
         return `Prepare deployment checklist for: ${baseTask}. Ensure all prerequisites are met, configurations are correct, and monitoring is in place.`;
 
+      case 'clean':
+        return `Remove AI-generated verbosity, slop patterns, and redundant content from: ${baseTask}. Apply preview-apply workflow with quality assurance.`;
+
+      case 'clean-slop':
+        return `Remove AI-generated conversational filler and slop patterns from text: ${baseTask}. Use pattern matching with context awareness and user confirmation.`;
+
+      case 'clean-comments':
+        return `Optimize code comments by removing redundancy and improving conciseness: ${baseTask}. Apply comment-specific patterns and preserve essential technical information.`;
+
+      case 'clean-docs':
+        return `Clean documentation by removing verbosity, conversational filler, and redundant explanations: ${baseTask}. Maintain technical accuracy while improving clarity and scannability.`;
+
       case 'optimize':
-        return `Optimize prompts and AI interactions for: ${baseTask}. Apply research-backed techniques for improved quality and effectiveness.`;
+        return `Interactive optimization for prompts, code, queries, and more using research-backed techniques and web best practices: ${baseTask}. Apply research-driven enhancement with user feedback and confirmation.`;
 
       case 'seo':
         return `Perform SEO audit and optimization for: ${baseTask}. Check technical SEO, content optimization, and Core Web Vitals.`;
