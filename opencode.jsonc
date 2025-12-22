@@ -1,0 +1,9 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // AI Engineering System configuration
+  // Loaded by OpenCode when you install this project as a config directory.
+  //
+  // Commands and agents are provided by markdown config under:
+  // .opencode/command and .opencode/agent in the built distribution.
+}

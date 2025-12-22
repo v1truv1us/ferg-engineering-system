@@ -1,0 +1,7 @@
+[install]
+registry = "https://registry.npmjs.org"
+
+[install.scopes]
+# Ensure ai-eng-system and related packages use public registry
+ai-eng-system = { url = "https://registry.npmjs.org" }
+@v1truv1us = { url = "https://npm.pkg.github.com" }
