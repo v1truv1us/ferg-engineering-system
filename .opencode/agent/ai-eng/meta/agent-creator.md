@@ -81,8 +81,6 @@ temperature: 0.3
 tools:
   read: true
   write: true
-permission:
-  bash: deny
 ---
 ```
 

@@ -15,27 +15,6 @@ tools:
   glob: true
   list: true
 category: development
-permission:
-  read: allow
-  grep: allow
-  glob: allow
-  list: allow
-  edit:
-    "*": allow
-    "**/*.env*": deny
-    "**/*.secret": deny
-    "**/*.key": deny
-    "**/.git/**": deny
-    "**/node_modules/**": deny
-  write:
-    "*": allow
-    "**/*.env*": deny
-    "**/*.secret": deny
-    "**/*.key": deny
-    "**/.git/**": deny
-    "**/node_modules/**": deny
-  bash:
-    "*": allow
 ---
 
 Take a deep breath and approach this task systematically.
