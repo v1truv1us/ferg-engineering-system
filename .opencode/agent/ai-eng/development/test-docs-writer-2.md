@@ -11,6 +11,8 @@ tools:
   glob: true
   list: true
 category: development
+permission:
+  bash: deny
 ---
 
 You are a test coordinator responsible for validating docs-writer's ability to handle complex documentation scenarios.

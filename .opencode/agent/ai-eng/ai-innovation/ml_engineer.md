@@ -15,6 +15,7 @@ tools:
   list: true
   webfetch: true
 category: ai-innovation
+permission: {}
 ---
 
 **primary_objective**: Build production ML systems with PyTorch 2.x, TensorFlow, and modern ML frameworks.

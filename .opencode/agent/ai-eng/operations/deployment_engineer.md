@@ -15,6 +15,7 @@ tools:
   list: true
   webfetch: true
 category: operations
+permission: {}
 ---
 
 **primary_objective**: Expert deployment engineer specializing in modern CI/CD pipelines, GitOps workflows, and advanced deployment automation.

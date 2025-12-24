@@ -11,6 +11,8 @@ tools:
   glob: true
   list: true
 category: development
+permission:
+  bash: deny
 ---
 
 You are a test coordinator responsible for validating that docs-writer appears in the agent list when set to primary mode and can be invoked directly.

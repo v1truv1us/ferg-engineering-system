@@ -7,6 +7,7 @@ tools:
   write: true
   bash: true
 category: quality-testing
+permission: {}
 ---
 
 Take a deep breath and approach this task systematically.
