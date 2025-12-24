@@ -14,40 +14,6 @@ tools:
   glob: true
   list: true
 category: development
-permission:
-  read: allow
-  grep: allow
-  glob: allow
-  list: allow
-  edit:
-    "*": allow
-    "**/*.env*": deny
-    "**/*.secret": deny
-    "**/*.key": deny
-    "**/*.pem": deny
-    "**/*.crt": deny
-    "**/.git/**": deny
-    "**/node_modules/**": deny
-    "**/.env": deny
-    "**/.env.local": deny
-    "**/.env.production": deny
-  write:
-    "*": allow
-    "**/*.env*": deny
-    "**/*.secret": deny
-    "**/*.key": deny
-    "**/*.pem": deny
-    "**/*.crt": deny
-    "**/.git/**": deny
-    "**/node_modules/**": deny
-    "**/.env": deny
-    "**/.env.local": deny
-    "**/.env.production": deny
-  bash:
-    "*": allow
-    rm -rf /*: deny
-    rm -rf .*: deny
-    ":(){ :|:& };:": deny
 ---
 
 Take a deep breath and approach this task systematically.
