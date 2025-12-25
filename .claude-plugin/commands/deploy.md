@@ -33,3 +33,5 @@ Provide deployment instructions for Coolify including:
 - [ ] Health checks passing
 - [ ] Logs showing normal operation
 - [ ] Key user flows working
+
+$ARGUMENTS

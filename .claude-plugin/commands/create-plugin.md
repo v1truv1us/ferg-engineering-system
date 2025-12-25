@@ -18,7 +18,7 @@ Create a complete, high-quality OpenCode extension from initial concept to teste
 - **Progressive disclosure**: Create lean skills with references/examples
 - **Use TodoWrite**: Track all progress throughout all phases
 
-**Initial request:** $ARGUMENTS
+**Initial request:** [provided plugin description]
 
 ---
 
@@ -398,3 +398,4 @@ Every component must meet these standards:
 ---
 
 **Begin with Phase 1: Discovery**
+$ARGUMENTS

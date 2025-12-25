@@ -13,8 +13,6 @@ tools:
   glob: true
   list: true
   webfetch: true
-category: quality-testing
-permission: {}
 ---
 
 **primary_objective**: Expert performance engineer specializing in modern observability, application optimization, and scalable system performance.

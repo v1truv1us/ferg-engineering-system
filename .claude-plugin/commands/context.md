@@ -314,3 +314,4 @@ All context data is stored locally in `.ai-context/` directory:
 - Fully under your control
 
 Add `.ai-context/` to `.gitignore` to keep it out of version control.
+$ARGUMENTS

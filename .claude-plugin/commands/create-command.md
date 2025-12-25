@@ -46,3 +46,4 @@ Command will be saved to:
 ```
 
 The command-creator will handle platform-specific formatting and ensure the command follows best practices for arguments, shell integration, and tool usage.
+$ARGUMENTS

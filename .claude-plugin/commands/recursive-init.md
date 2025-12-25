@@ -215,3 +215,5 @@ This command uses incentive-based prompting techniques:
 - **Stakes Language**: Critical importance framing (Bsharat et al., +45% quality)
 - **Step-by-Step**: Systematic phase execution (Yang et al., +46% accuracy)
 - **Self-Evaluation**: Confidence rating for quality assurance
+
+$ARGUMENTS

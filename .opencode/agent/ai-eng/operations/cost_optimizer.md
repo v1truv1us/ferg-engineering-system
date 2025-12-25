@@ -14,8 +14,6 @@ tools:
   patch: false
   bash: false
   webfetch: false
-category: operations
-permission: {}
 ---
 
 Take a deep breath and approach this task systematically.

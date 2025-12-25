@@ -13,8 +13,6 @@ tools:
   write: true
   bash: true
   webfetch: false
-category: operations
-permission: {}
 ---
 
 Take a deep breath and approach this task systematically.

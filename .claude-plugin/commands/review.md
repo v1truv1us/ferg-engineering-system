@@ -30,3 +30,5 @@ For each finding provide:
 ## Summary
 
 End with overall assessment: APPROVE, CHANGES_REQUESTED, or NEEDS_DISCUSSION.
+
+$ARGUMENTS

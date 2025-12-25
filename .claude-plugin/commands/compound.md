@@ -24,3 +24,5 @@ Document a solved problem to build team knowledge over time.
 ## Philosophy
 
 Each solved problem should make future similar problems easier. This is compounding engineering - every unit of work improves the system for next time.
+
+$ARGUMENTS

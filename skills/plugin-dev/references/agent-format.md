@@ -8,12 +8,12 @@ Agents are specialized AI assistants that provide focused expertise for specific
 
 | Aspect | Claude Code | OpenCode | Canonical (content/) |
 |---------|-------------|----------|------------------|
-| **Frontmatter** | YAML block | YAML table | YAML block |
+| **Frontmatter** | YAML block | YAML block | YAML block |
 | **File Extension** | `.md` | `.md` | `.md` |
 | **Mode Specification** | `mode: subagent` | `mode: subagent` | `mode: subagent` |
 | **Model Override** | `model: sonnet` | `model: sonnet` | `model: sonnet` |
-| **Tool Control** | `tools: [...]` | `tools: { read: true }` | `tools: { read: true } |
-| **Color Coding** | `color: cyan` | `color: cyan` | `color: cyan` |
+| **Tool Control** | `tools: [...]` | `tools: { read: true }` | `tools: { read: true }` |
+| **Color Coding** | Named colors OK | Hex format only (e.g., `#00FFFF`) | Named colors OK (auto-converted to hex) |
 | **Temperature** | `temperature: 0.3` | `temperature: 0.3` | `temperature: 0.3` |
 | **Permissions** | N/A | `permission: { bash: deny }` | `permission: { bash: deny }` |
 
@@ -74,6 +74,8 @@ Build.ts transforms canonical to OpenCode format (table frontmatter):
 
 Agent system prompt here...
 ```
+
+**Note on Color Format**: OpenCode requires hex color codes (e.g., `#00FFFF`) while Claude Code accepts named colors (e.g., `cyan`). The build.ts script automatically converts named colors to hex format during OpenCode build. Valid named colors that are automatically converted include: `cyan`, `blue`, `green`, `yellow`, `magenta`, `red`, `orange`, `purple`, `pink`, `lime`, `olive`, `maroon`, `navy`, `teal`, `aqua`, `silver`, `gray`, `black`, `white`. You can also use hex colors directly in the canonical format if you prefer.
 
 ## Agent Modes
 
@@ -246,3 +248,21 @@ You are a senior code reviewer with 10+ years of experience...
 - `ai-eng/plugin-validator` - Plugin structure validation
 
 All agents follow the same quality standards and use the build.ts transformation system.
+
+## Build Transformations
+
+The `build.ts` script performs automatic transformations to ensure compatibility:
+
+### Color Format Conversion
+- **Canonical → Claude Code**: Preserves named colors (e.g., `color: cyan`)
+- **Canonical → OpenCode**: Converts named colors to hex format (e.g., `color: cyan` → `color: "#00FFFF"`)
+
+### Field Removal
+- **OpenCode only**: Removes `name` and `category` fields from frontmatter
+- **Permission cleaning**: Filters to valid OpenCode permission keys (edit, bash, webfetch, doom_loop, external_directory)
+
+### Validation
+The build script validates OpenCode output:
+- Checks for hex color format (`^#[0-9a-fA-F]{6}$`)
+- Ensures required fields are present (description, mode)
+- Validates nested directory structure (ai-eng/<category>/<agent>.md)

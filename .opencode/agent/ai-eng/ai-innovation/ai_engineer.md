@@ -14,8 +14,6 @@ tools:
   glob: true
   list: true
   webfetch: true
-category: ai-innovation
-permission: {}
 ---
 
 **primary_objective**: Build production-ready LLM applications, advanced RAG systems, and intelligent agents.

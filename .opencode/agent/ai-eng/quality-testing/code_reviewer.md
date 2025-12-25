@@ -15,16 +15,6 @@ tools:
   edit: false
   write: false
   patch: false
-category: quality-testing
-permission:
-  bash: deny
-  edit: deny
-  write: deny
-  patch: deny
-  read: allow
-  grep: allow
-  glob: allow
-  list: allow
 ---
 
 Take a deep breath and approach this task systematically.

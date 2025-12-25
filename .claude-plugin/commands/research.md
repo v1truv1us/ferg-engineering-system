@@ -31,7 +31,7 @@ outputs:
 
 # Research Command
 
-Conduct comprehensive research for: $ARGUMENTS
+Conduct comprehensive research for: provided query or topic.
 
 ## Expert Context
 

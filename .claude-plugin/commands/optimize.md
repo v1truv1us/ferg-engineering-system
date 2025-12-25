@@ -77,3 +77,5 @@ Please:
 - **Kong et al. (2023)**: Persona prompting research
 
 See `skills/prompting/incentive-prompting/SKILL.md` for full documentation.
+
+$ARGUMENTS

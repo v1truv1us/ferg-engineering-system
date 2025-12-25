@@ -1,9 +1,0 @@
-{
-  "$schema": "https://opencode.ai/config.json",
-
-  // AI Engineering System configuration
-  "plugin": ["opencode-skills"]
-
-  // Commands are provided as markdown files in .opencode/command/ai-eng/
-  // No additional plugin configuration required for ai-eng-system
-}

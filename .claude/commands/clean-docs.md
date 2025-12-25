@@ -1,1 +1,0 @@
-/home/vitruvius/git/ai-eng-system/dist/.claude-plugin/commands/clean-docs.md

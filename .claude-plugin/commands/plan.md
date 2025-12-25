@@ -6,7 +6,7 @@ agent: plan
 
 # Plan Command
 
-Create a structured, atomic implementation plan for: $ARGUMENTS
+Create a structured, atomic implementation plan for: provided feature or task.
 
 ## Planning Philosophy
 
@@ -170,3 +170,5 @@ After generating the plan:
 - **Checkpoints**: Each phase should end with a working (possibly incomplete) state
 - **Escape hatches**: Note where you could stop and still have value
 - **Evidence-based**: Include file paths and code snippets from discovery
+
+$ARGUMENTS
