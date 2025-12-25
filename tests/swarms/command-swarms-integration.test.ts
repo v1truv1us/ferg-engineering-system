@@ -249,13 +249,15 @@ describe('CommandSwarmsIntegration - Task Formatting', () => {
       const commands = integration.getAvailableCommands();
       const commandNames = commands.map(c => c.command);
       
+      expect(commands.length).toBe(7);
+      
+      // Core 7 commands
       expect(commandNames).toContain('plan');
       expect(commandNames).toContain('work');
       expect(commandNames).toContain('review');
       expect(commandNames).toContain('research');
       expect(commandNames).toContain('deploy');
-      expect(commandNames).toContain('optimize');
-      expect(commandNames).toContain('seo');
+      expect(commandNames).toContain('clean');
       expect(commandNames).toContain('create');
     });
   });
@@ -385,6 +387,6 @@ describe('Singleton Pattern', () => {
     const instance = getCommandSwarmsIntegration();
     const commands = instance.getAvailableCommands();
     
-    expect(commands.length).toBe(8);
+    expect(commands.length).toBe(7);
   });
 });

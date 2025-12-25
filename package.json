@@ -1,6 +1,6 @@
 {
     "name": "ai-eng-system",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
     "type": "module",
     "main": "./dist/index.js",

@@ -321,12 +321,64 @@ Missing description field.
 
     it('should copy skills to dist', async () => {
       await runBuild()
-      
+
       const skillsDistDir = join(DIST_DIR, 'skills')
       expect(existsSync(skillsDistDir)).toBe(true)
-      
+
       const testSkillPath = join(skillsDistDir, 'test-skill', 'SKILL.md')
       expect(existsSync(testSkillPath)).toBe(true)
+    })
+
+    it('should copy skills to OpenCode structure with flat layout', async () => {
+      await runBuild()
+
+      // Check OpenCode skill directory (singular)
+      const opencodeSkillDir = join(DIST_DIR, '.opencode', 'skill')
+      expect(existsSync(opencodeSkillDir)).toBe(true)
+
+      // Check flattened skill
+      const testSkillPath = join(opencodeSkillDir, 'test-skill', 'SKILL.md')
+      expect(existsSync(testSkillPath)).toBe(true)
+    })
+
+    it('should validate skill names match regex', async () => {
+      // Create invalid skill name with underscore
+      const invalidSkillDir = join(SKILLS_DIR, 'invalid_skill')
+      await mkdir(invalidSkillDir, { recursive: true })
+      await writeFile(join(invalidSkillDir, 'SKILL.md'), `---
+name: invalid_skill
+description: Test invalid name
+---
+# Invalid
+`)
+
+      try {
+        // Build should fail with code 1
+        await expect(runBuild()).rejects.toThrow(/Build failed with code 1/)
+      } finally {
+        // Cleanup always runs
+        await rm(invalidSkillDir, { recursive: true })
+      }
+    })
+
+    it('should validate skill name matches directory name', async () => {
+      // Create skill with mismatched name
+      const mismatchSkillDir = join(SKILLS_DIR, 'test-skill')
+      await mkdir(mismatchSkillDir, { recursive: true })
+      await writeFile(join(mismatchSkillDir, 'SKILL.md'), `---
+name: different-name
+description: Mismatch test
+---
+# Test
+`)
+
+      try {
+        // Build should fail with code 1
+        await expect(runBuild()).rejects.toThrow(/Build failed with code 1/)
+      } finally {
+        // Cleanup always runs
+        await rm(mismatchSkillDir, { recursive: true })
+      }
     })
   })
 

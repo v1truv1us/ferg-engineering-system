@@ -65,6 +65,11 @@ const NAMED_COLOR_TO_HEX: Record<string, string> = {
     white: "#FFFFFF",
 };
 
+// Skill name validation (from OpenCode docs: https://opencode.ai/docs/skills)
+const SKILL_NAME_REGEX = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const SKILL_NAME_MIN_LENGTH = 1;
+const SKILL_NAME_MAX_LENGTH = 64;
+
 type FrontmatterParseResult = {
     meta: Record<string, any>;
     body: string;
@@ -130,6 +135,109 @@ function serializeFrontmatter(meta: Record<string, any>): string {
     return YAML.stringify(meta).trimEnd();
 }
 
+/**
+ * Validate skill name matches OpenCode requirements
+ * https://opencode.ai/docs/skills#validate-names
+ */
+function validateSkillName(name: string, filePath: string): void {
+    if (name.length < SKILL_NAME_MIN_LENGTH || name.length > SKILL_NAME_MAX_LENGTH) {
+        throw new Error(
+            `Skill name '${name}' must be ${SKILL_NAME_MIN_LENGTH}-${SKILL_NAME_MAX_LENGTH} characters: ${filePath}`
+        );
+    }
+    if (!SKILL_NAME_REGEX.test(name)) {
+        throw new Error(
+            `Skill name '${name}' must be lowercase alphanumeric with single hyphens (regex: ${SKILL_NAME_REGEX}): ${filePath}`
+        );
+    }
+}
+
+interface SkillInfo {
+    name: string;
+    sourceDir: string;  // Full path to skill directory
+    skillFile: string;  // Full path to SKILL.md
+}
+
+/**
+ * Discover all skills in the skills directory recursively
+ * Returns skill info including validated names and paths
+ */
+async function discoverSkills(skillsRoot: string): Promise<SkillInfo[]> {
+    const skills: SkillInfo[] = [];
+
+    async function findSkillFiles(dir: string): Promise<string[]> {
+        const files: string[] = [];
+        if (!existsSync(dir)) return files;
+
+        const entries = await readdir(dir, { withFileTypes: true });
+        for (const entry of entries) {
+            const fullPath = join(dir, entry.name);
+            if (entry.isDirectory()) {
+                files.push(...await findSkillFiles(fullPath));
+            } else if (entry.name === "SKILL.md") {
+                files.push(fullPath);
+            }
+        }
+
+        return files;
+    }
+
+    const skillFiles = await findSkillFiles(skillsRoot);
+
+    for (const skillFile of skillFiles) {
+        const sourceDir = dirname(skillFile);
+        const dirName = basename(sourceDir);
+
+        // Read frontmatter to get skill name
+        const content = await readFile(skillFile, "utf-8");
+        const parsed = parseFrontmatterStrict(content, skillFile);
+        const name = (parsed.meta.name || dirName) as string;
+
+        // Validate name matches directory
+        if (parsed.meta.name && parsed.meta.name !== dirName) {
+            throw new Error(
+                `Skill frontmatter name '${parsed.meta.name}' must match directory name '${dirName}': ${skillFile}`
+            );
+        }
+
+        // Validate skill name format
+        validateSkillName(name, skillFile);
+
+        skills.push({ name, sourceDir, skillFile });
+    }
+
+    return skills;
+}
+
+/**
+ * Copy skills with flattened structure
+ * Takes nested skills from source and copies them flat to destination
+ */
+async function copySkillsFlat(skillsRoot: string, destDir: string): Promise<void> {
+    const skills = await discoverSkills(skillsRoot);
+
+    if (skills.length === 0) return;
+
+    await mkdir(destDir, { recursive: true });
+
+    // Check for duplicate skill names
+    const seenNames = new Map<string, string>();
+    for (const skill of skills) {
+        if (seenNames.has(skill.name)) {
+            throw new Error(
+                `Duplicate skill name '${skill.name}' found in:\n  - ${seenNames.get(skill.name)}\n  - ${skill.sourceDir}`
+            );
+        }
+        seenNames.set(skill.name, skill.sourceDir);
+    }
+
+    // Copy each skill to flat destination
+    for (const skill of skills) {
+        const destSkillDir = join(destDir, skill.name);
+        await copyDirRecursive(skill.sourceDir, destSkillDir);
+    }
+}
+
 function transformAgentMarkdownForOpenCode(
     markdown: string,
     filePathForErrors: string,
@@ -186,6 +294,7 @@ function transformAgentMarkdownForOpenCode(
 async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
     const cmdRoot = join(opencodeRoot, "command", NAMESPACE_PREFIX);
     const agentRoot = join(opencodeRoot, "agent", NAMESPACE_PREFIX);
+    const skillRoot = join(opencodeRoot, "skill");  // Note: singular
 
     const commandFiles = await getMarkdownFiles(cmdRoot);
     const agentFiles = await getMarkdownFiles(agentRoot);
@@ -229,6 +338,36 @@ async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
             errors.push(
                 `OpenCode agent must be nested under a category folder: ${fp}`,
             );
+    }
+
+    // Validate skills (if present)
+    if (existsSync(skillRoot)) {
+        const skillDirs = await readdir(skillRoot, { withFileTypes: true });
+        for (const entry of skillDirs) {
+            if (!entry.isDirectory()) continue;
+
+            const skillMdPath = join(skillRoot, entry.name, "SKILL.md");
+            if (!existsSync(skillMdPath)) {
+                errors.push(`Skill directory missing SKILL.md: ${entry.name}/`);
+                continue;
+            }
+
+            // Validate skill name
+            try {
+                validateSkillName(entry.name, skillMdPath);
+
+                // Validate frontmatter name matches directory
+                const content = await readFile(skillMdPath, "utf-8");
+                const { meta } = parseFrontmatterStrict(content, skillMdPath);
+                if (meta.name && meta.name !== entry.name) {
+                    errors.push(
+                        `Skill frontmatter name '${meta.name}' must match directory name '${entry.name}': ${skillMdPath}`
+                    );
+                }
+            } catch (e) {
+                errors.push(e instanceof Error ? e.message : String(e));
+            }
+        }
     }
 
     if (errors.length) {
@@ -317,12 +456,16 @@ async function buildOpenCode(): Promise<void> {
         // Clean target directories before building to remove stale files
         const commandsDir = join(targetDir, "command", NAMESPACE_PREFIX);
         const agentsDir = join(targetDir, "agent", NAMESPACE_PREFIX);
+        const skillsDir = join(targetDir, "skill");  // Note: singular, per OpenCode docs
 
         if (existsSync(commandsDir)) {
             await rm(commandsDir, { recursive: true, force: true });
         }
         if (existsSync(agentsDir)) {
             await rm(agentsDir, { recursive: true, force: true });
+        }
+        if (existsSync(skillsDir)) {
+            await rm(skillsDir, { recursive: true, force: true });
         }
 
         await mkdir(commandsDir, { recursive: true });
@@ -344,6 +487,10 @@ async function buildOpenCode(): Promise<void> {
             await mkdir(categoryDir, { recursive: true });
             await writeFile(join(categoryDir, basename(src)), transformed.markdown);
         }
+
+        // Skills: Copy to .opencode/skill/ (singular, flat structure)
+        // This is OpenCode's expected location: https://opencode.ai/docs/skills
+        await copySkillsFlat(SKILLS_DIR, skillsDir);
 
         // Copy OpenCode config
         const opencodeConfigSrc = join(ROOT, ".opencode", "opencode.jsonc");
@@ -383,8 +530,15 @@ async function copySkillsToDist(): Promise<void> {
 
 async function buildNpmEntrypoint(): Promise<void> {
     // Build npm-loadable OpenCode plugin entrypoint.
+    // Skip if src/index.ts doesn't exist (e.g., in test environments)
+    const srcIndexPath = join(ROOT, "src", "index.ts");
+    if (!existsSync(srcIndexPath)) {
+        console.log("⚠️  Skipping npm entrypoint build (src/index.ts not found)");
+        return;
+    }
+
     const result = await Bun.build({
-        entrypoints: [join(ROOT, "src", "index.ts")],
+        entrypoints: [srcIndexPath],
         outdir: DIST_DIR,
         target: "node",
         format: "esm",

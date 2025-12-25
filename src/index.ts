@@ -50,10 +50,12 @@ function installToProject(pluginDir: string, projectDir: string): void {
         copyRecursive(agentsSrc, agentsDest)
     }
 
-    // Copy skills (to .opencode/skills/)
-    if (fs.existsSync(distSkillsDir)) {
-        const skillsDest = path.join(targetOpenCodeDir, 'skills')
-        copyRecursive(distSkillsDir, skillsDest)
+    // Copy skills (to .opencode/skill/)
+    // OpenCode expects skills at .opencode/skill/ (singular, per https://opencode.ai/docs/skills)
+    const distSkillDir = path.join(distDir, '.opencode', 'skill')
+    if (fs.existsSync(distSkillDir)) {
+        const skillDest = path.join(targetOpenCodeDir, 'skill')
+        copyRecursive(distSkillDir, skillDest)
     }
 }
 
@@ -63,7 +65,7 @@ function installToProject(pluginDir: string, projectDir: string): void {
  * When loaded, this plugin automatically installs:
  * - Commands to {projectDir}/.opencode/command/ai-eng/
  * - Agents to {projectDir}/.opencode/agent/ai-eng/
- * - Skills to {projectDir}/.opencode/skills/
+ * - Skills to {projectDir}/.opencode/skill/
  *
  * All files are copied from the plugin's dist/ directory to the project's
  * .opencode/ directory where opencode.jsonc is located.

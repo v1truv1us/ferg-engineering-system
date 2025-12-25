@@ -122,11 +122,17 @@ function install(targetDir: string, silent = false): void {
         if (!silent) console.log(`  ✓ agent/${NAMESPACE_PREFIX}/ (${agentCount} agents)`)
     }
 
-    // Copy skills (to .opencode/skills/)
-    if (fs.existsSync(distSkillsDir)) {
-        const skillsDest = path.join(targetOpenCodeDir, 'skills')
-        copyRecursive(distSkillsDir, skillsDest)
-        if (!silent) console.log(`  ✓ skills/`)
+    // Copy skills (to .opencode/skill/)
+    // OpenCode expects skills at .opencode/skill/ (singular, per https://opencode.ai/docs/skills)
+    const distSkillDir = path.join(distDir, '.opencode', 'skill')
+    if (fs.existsSync(distSkillDir)) {
+        const skillDest = path.join(targetOpenCodeDir, 'skill')
+        copyRecursive(distSkillDir, skillDest)
+
+        // Count skills
+        const skillDirs = fs.readdirSync(distSkillDir)
+        const skillCount = skillDirs.length
+        if (!silent) console.log(`  ✓ skill/ (${skillCount} skills)`)
     }
 
     if (!silent) {
