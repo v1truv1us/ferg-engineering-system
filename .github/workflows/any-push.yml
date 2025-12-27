@@ -1,9 +1,0 @@
-name: Any Push Test
-
-on: [push]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "This workflow runs on ANY push"

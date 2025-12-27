@@ -2,20 +2,24 @@
  * Unit tests for the Plan Parser
  */
 
-import { describe, it, expect, beforeEach } from 'bun:test';
-import { PlanParser } from '../../src/execution/plan-parser.js';
-import { TaskType, QualityGateType, ValidationErrorType } from '../../src/execution/types.js';
+import { beforeEach, describe, expect, it } from "bun:test";
+import { PlanParser } from "../../src/execution/plan-parser.js";
+import {
+    QualityGateType,
+    TaskType,
+    ValidationErrorType,
+} from "../../src/execution/types.js";
 
-describe('PlanParser', () => {
-  let parser: PlanParser;
+describe("PlanParser", () => {
+    let parser: PlanParser;
 
-  beforeEach(() => {
-    parser = new PlanParser();
-  });
+    beforeEach(() => {
+        parser = new PlanParser();
+    });
 
-  describe('Basic Plan Parsing', () => {
-    it('should parse a valid minimal plan', () => {
-      const planContent = `
+    describe("Basic Plan Parsing", () => {
+        it("should parse a valid minimal plan", () => {
+            const planContent = `
 metadata:
   id: test-plan
   name: Test Plan
@@ -23,17 +27,17 @@ metadata:
 tasks: []
 `;
 
-      const plan = parser.parseContent(planContent);
-      
-      expect(plan.metadata.id).toBe('test-plan');
-      expect(plan.metadata.name).toBe('Test Plan');
-      expect(plan.metadata.version).toBe('1.0.0');
-      expect(plan.tasks).toEqual([]);
-      expect(parser.getErrors()).toHaveLength(0);
-    });
+            const plan = parser.parseContent(planContent);
 
-    it('should parse a complete plan with tasks and quality gates', () => {
-      const planContent = `
+            expect(plan.metadata.id).toBe("test-plan");
+            expect(plan.metadata.name).toBe("Test Plan");
+            expect(plan.metadata.version).toBe("1.0.0");
+            expect(plan.tasks).toEqual([]);
+            expect(parser.getErrors()).toHaveLength(0);
+        });
+
+        it("should parse a complete plan with tasks and quality gates", () => {
+            const planContent = `
 metadata:
   id: complete-plan
   name: Complete Plan
@@ -70,60 +74,68 @@ qualityGates:
       files: "src/**/*.ts"
 `;
 
-      const plan = parser.parseContent(planContent);
-      
-      expect(plan.metadata.id).toBe('complete-plan');
-      expect(plan.tasks).toHaveLength(2);
-      expect(plan.qualityGates).toHaveLength(1);
-      
-      const buildTask = plan.tasks.find(t => t.id === 'build');
-      expect(buildTask?.type).toBe(TaskType.BUILD);
-      expect(buildTask?.timeout).toBe(300);
-      expect(buildTask?.retry?.maxAttempts).toBe(3);
-      
-      const testTask = plan.tasks.find(t => t.id === 'test');
-      expect(testTask?.dependsOn).toEqual(['build']);
-      
-      const lintGate = plan.qualityGates?.find(g => g.id === 'lint-gate');
-      expect(lintGate?.type).toBe(QualityGateType.LINT);
-      expect(lintGate?.required).toBe(true);
-      
-      expect(parser.getErrors()).toHaveLength(0);
-    });
-  });
+            const plan = parser.parseContent(planContent);
 
-  describe('Validation Errors', () => {
-    it('should reject invalid YAML syntax', () => {
-      const invalidYaml = `
+            expect(plan.metadata.id).toBe("complete-plan");
+            expect(plan.tasks).toHaveLength(2);
+            expect(plan.qualityGates).toHaveLength(1);
+
+            const buildTask = plan.tasks.find((t) => t.id === "build");
+            expect(buildTask?.type).toBe(TaskType.BUILD);
+            expect(buildTask?.timeout).toBe(300);
+            expect(buildTask?.retry?.maxAttempts).toBe(3);
+
+            const testTask = plan.tasks.find((t) => t.id === "test");
+            expect(testTask?.dependsOn).toEqual(["build"]);
+
+            const lintGate = plan.qualityGates?.find(
+                (g) => g.id === "lint-gate",
+            );
+            expect(lintGate?.type).toBe(QualityGateType.LINT);
+            expect(lintGate?.required).toBe(true);
+
+            expect(parser.getErrors()).toHaveLength(0);
+        });
+    });
+
+    describe("Validation Errors", () => {
+        it("should reject invalid YAML syntax", () => {
+            const invalidYaml = `
 metadata:
   id: test
   name: Test
   invalid: [unclosed array
 `;
 
-      expect(() => parser.parseContent(invalidYaml)).toThrow('Invalid YAML syntax');
-    });
+            expect(() => parser.parseContent(invalidYaml)).toThrow(
+                "Invalid YAML syntax",
+            );
+        });
 
-    it('should require metadata section', () => {
-      const planContent = `
+        it("should require metadata section", () => {
+            const planContent = `
 tasks: []
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('metadata section is required');
-    });
+            expect(() => parser.parseContent(planContent)).toThrow(
+                "metadata section is required",
+            );
+        });
 
-    it('should require required metadata fields', () => {
-      const planContent = `
+        it("should require required metadata fields", () => {
+            const planContent = `
 metadata:
   name: Test Plan
 tasks: []
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('metadata.id is required');
-    });
+            expect(() => parser.parseContent(planContent)).toThrow(
+                "metadata.id is required",
+            );
+        });
 
-    it('should validate task structure', () => {
-      const planContent = `
+        it("should validate task structure", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -137,11 +149,13 @@ tasks:
     # Missing command field
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('requires a valid command');
-    });
+            expect(() => parser.parseContent(planContent)).toThrow(
+                "requires a valid command",
+            );
+        });
 
-    it('should validate task types', () => {
-      const planContent = `
+        it("should validate task types", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -153,11 +167,13 @@ tasks:
     type: invalid-type
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('Invalid task type "invalid-type"');
-    });
+            expect(() => parser.parseContent(planContent)).toThrow(
+                'Invalid task type "invalid-type"',
+            );
+        });
 
-    it('should validate quality gate types', () => {
-      const planContent = `
+        it("should validate quality gate types", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -169,11 +185,13 @@ qualityGates:
     type: invalid-gate-type
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('Invalid quality gate type "invalid-gate-type"');
-    });
+            expect(() => parser.parseContent(planContent)).toThrow(
+                'Invalid quality gate type "invalid-gate-type"',
+            );
+        });
 
-    it('should detect duplicate task IDs', () => {
-      const planContent = `
+        it("should detect duplicate task IDs", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -187,13 +205,15 @@ tasks:
     command: echo "second"
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('Duplicate task ID: duplicate');
+            expect(() => parser.parseContent(planContent)).toThrow(
+                "Duplicate task ID: duplicate",
+            );
+        });
     });
-  });
 
-  describe('Dependency Validation', () => {
-    it('should validate task dependencies', () => {
-      const planContent = `
+    describe("Dependency Validation", () => {
+        it("should validate task dependencies", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -206,11 +226,13 @@ tasks:
       - nonexistent-task
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('depends on unknown task "nonexistent-task"');
-    });
+            expect(() => parser.parseContent(planContent)).toThrow(
+                'depends on unknown task "nonexistent-task"',
+            );
+        });
 
-    it('should detect circular dependencies', () => {
-      const planContent = `
+        it("should detect circular dependencies", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -228,11 +250,13 @@ tasks:
       - task1
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('Circular dependency detected');
-    });
+            expect(() => parser.parseContent(planContent)).toThrow(
+                "Circular dependency detected",
+            );
+        });
 
-    it('should handle complex dependency chains', () => {
-      const planContent = `
+        it("should handle complex dependency chains", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -259,15 +283,15 @@ tasks:
       - task3
 `;
 
-      const plan = parser.parseContent(planContent);
-      expect(plan.tasks).toHaveLength(4);
-      expect(parser.getErrors()).toHaveLength(0);
+            const plan = parser.parseContent(planContent);
+            expect(plan.tasks).toHaveLength(4);
+            expect(parser.getErrors()).toHaveLength(0);
+        });
     });
-  });
 
-  describe('Field Validation', () => {
-    it('should validate timeout values', () => {
-      const planContent = `
+    describe("Field Validation", () => {
+        it("should validate timeout values", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -279,11 +303,13 @@ tasks:
     timeout: -10
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('timeout must be a positive number');
-    });
+            expect(() => parser.parseContent(planContent)).toThrow(
+                "timeout must be a positive number",
+            );
+        });
 
-    it('should validate retry configuration', () => {
-      const planContent = `
+        it("should validate retry configuration", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -297,11 +323,13 @@ tasks:
       delay: -5
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('retry.maxAttempts must be a positive number');
-    });
+            expect(() => parser.parseContent(planContent)).toThrow(
+                "retry.maxAttempts must be a positive number",
+            );
+        });
 
-    it('should provide warnings for version format', () => {
-      const planContent = `
+        it("should provide warnings for version format", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -309,15 +337,19 @@ metadata:
 tasks: []
 `;
 
-      parser.parseContent(planContent);
-      const warnings = parser.getWarnings();
-      expect(warnings.some(w => w.includes('should follow semantic versioning'))).toBe(true);
+            parser.parseContent(planContent);
+            const warnings = parser.getWarnings();
+            expect(
+                warnings.some((w) =>
+                    w.includes("should follow semantic versioning"),
+                ),
+            ).toBe(true);
+        });
     });
-  });
 
-  describe('Error Handling', () => {
-    it('should collect multiple errors', () => {
-      const planContent = `
+    describe("Error Handling", () => {
+        it("should collect multiple errors", () => {
+            const planContent = `
 metadata:
   # Missing id and name
   version: 1.0.0
@@ -330,21 +362,21 @@ tasks:
     type: invalid-type
 `;
 
-      try {
-        parser.parseContent(planContent);
-        expect.fail('Should have thrown validation errors');
-      } catch (error) {
-        expect(error).toBeInstanceOf(Error);
-        const errorMessage = (error as Error).message;
-        expect(errorMessage).toContain('metadata.id is required');
-        expect(errorMessage).toContain('metadata.name is required');
-        expect(errorMessage).toContain('requires a valid name');
-        expect(errorMessage).toContain('Invalid task type');
-      }
-    });
+            try {
+                parser.parseContent(planContent);
+                expect.fail("Should have thrown validation errors");
+            } catch (error) {
+                expect(error).toBeInstanceOf(Error);
+                const errorMessage = (error as Error).message;
+                expect(errorMessage).toContain("metadata.id is required");
+                expect(errorMessage).toContain("metadata.name is required");
+                expect(errorMessage).toContain("requires a valid name");
+                expect(errorMessage).toContain("Invalid task type");
+            }
+        });
 
-    it('should handle non-object tasks array', () => {
-      const planContent = `
+        it("should handle non-object tasks array", () => {
+            const planContent = `
 metadata:
   id: test
   name: Test
@@ -356,13 +388,15 @@ tasks:
     command: echo "valid"
 `;
 
-      expect(() => parser.parseContent(planContent)).toThrow('Task at index 0 must be an object');
+            expect(() => parser.parseContent(planContent)).toThrow(
+                "Task at index 0 must be an object",
+            );
+        });
     });
-  });
 
-  describe('Edge Cases', () => {
-    it('should handle empty plan', () => {
-      const planContent = `
+    describe("Edge Cases", () => {
+        it("should handle empty plan", () => {
+            const planContent = `
 metadata:
   id: empty
   name: Empty Plan
@@ -371,14 +405,14 @@ tasks: []
 qualityGates: []
 `;
 
-      const plan = parser.parseContent(planContent);
-      expect(plan.tasks).toHaveLength(0);
-      expect(plan.qualityGates).toHaveLength(0);
-      expect(parser.getErrors()).toHaveLength(0);
-    });
+            const plan = parser.parseContent(planContent);
+            expect(plan.tasks).toHaveLength(0);
+            expect(plan.qualityGates).toHaveLength(0);
+            expect(parser.getErrors()).toHaveLength(0);
+        });
 
-    it('should handle optional fields gracefully', () => {
-      const planContent = `
+        it("should handle optional fields gracefully", () => {
+            const planContent = `
 metadata:
   id: minimal
   name: Minimal Plan
@@ -390,14 +424,14 @@ tasks:
     # All optional fields omitted
 `;
 
-      const plan = parser.parseContent(planContent);
-      const task = plan.tasks[0];
-      expect(task.description).toBeUndefined();
-      expect(task.workingDirectory).toBeUndefined();
-      expect(task.timeout).toBeUndefined();
-      expect(task.retry).toBeUndefined();
-      expect(task.dependsOn).toEqual([]);
-      expect(task.environment).toEqual({});
+            const plan = parser.parseContent(planContent);
+            const task = plan.tasks[0];
+            expect(task.description).toBeUndefined();
+            expect(task.workingDirectory).toBeUndefined();
+            expect(task.timeout).toBeUndefined();
+            expect(task.retry).toBeUndefined();
+            expect(task.dependsOn).toEqual([]);
+            expect(task.environment).toEqual({});
+        });
     });
-  });
 });

@@ -6,13 +6,23 @@
  * Integrates with existing ai-eng-system agents
  */
 
-import { SwarmsClient, SwarmConfig, Swarm as SwarmType, TaskResult, SwarmHealth } from './swarms-client.js';
+import { SwarmsClient } from "./swarms-client.js";
+import type {
+    SwarmConfig,
+    SwarmHealth,
+    Swarm as SwarmType,
+    TaskResult,
+} from "./swarms-client.js";
 
 export interface TypeScriptSwarmsOptions {
-  timeout?: number;
-  maxConcurrency?: number;
-  useRealResponses?: boolean; // If false, uses mock responses
-  executeTask?: (agentId: string, task: string, context?: any) => Promise<string>;
+    timeout?: number;
+    maxConcurrency?: number;
+    useRealResponses?: boolean; // If false, uses mock responses
+    executeTask: (
+        agentId: string,
+        task: string,
+        context?: any,
+    ) => Promise<string>;
 }
 
 /**
@@ -22,36 +32,51 @@ class MockAgent {
     public id: string;
     public instructions: string;
     public capabilities: string[];
-    private executeTask?: (agentId: string, task: string, context?: any) => Promise<string>;
+    private executeTask?: (
+        agentId: string,
+        task: string,
+        context?: any,
+    ) => Promise<string>;
 
-    constructor(id: string, instructions: string, capabilities: string[], executeTask?: (agentId: string, task: string, context?: any) => Promise<string>) {
-      this.id = id;
-      this.instructions = instructions;
-      this.capabilities = capabilities;
-      this.executeTask = executeTask;
+    constructor(
+        id: string,
+        instructions: string,
+        capabilities: string[],
+        executeTask?: (
+            agentId: string,
+            task: string,
+            context?: any,
+        ) => Promise<string>,
+    ) {
+        this.id = id;
+        this.instructions = instructions;
+        this.capabilities = capabilities;
+        this.executeTask = executeTask;
     }
 
     /**
      * Process a task with mock intelligence
      */
     async process(task: string, context?: any): Promise<string> {
-      if (this.executeTask) {
-        return this.executeTask(this.id, task, context);
-      }
+        if (this.executeTask) {
+            return this.executeTask(this.id, task, context);
+        }
 
-      // Simulate processing time
-      await new Promise(resolve => setTimeout(resolve, Math.random() * 500 + 200));
+        // Simulate processing time
+        await new Promise((resolve) =>
+            setTimeout(resolve, Math.random() * 500 + 200),
+        );
 
-      // Generate mock response based on agent type and task
-      return this.generateMockResponse(task, context);
+        // Generate mock response based on agent type and task
+        return this.generateMockResponse(task, context);
     }
 
     /**
      * Generate intelligent mock responses based on agent expertise
      */
     private generateMockResponse(task: string, context?: any): string {
-      const responses: Record<string, (task: string) => string> = {
-        'architect-advisor': (task) => `
+        const responses: Record<string, (task: string) => string> = {
+            "architect-advisor": (task) => `
 🏗️ **Architecture Analysis**
 Based on the requirements, I recommend a layered architecture:
 
@@ -72,7 +97,7 @@ Based on the requirements, I recommend a layered architecture:
 - Consistency vs. availability: Eventual consistency for high availability
         `,
 
-        'backend-architect': (task) => `
+            "backend-architect": (task) => `
 🔧 **Backend Architecture Design**
 
 **Technology Stack:**
@@ -97,7 +122,7 @@ GET  /api/auth/me
 - Input sanitization and validation
         `,
 
-        'security-scanner': (task) => `
+            "security-scanner": (task) => `
 🔒 **Security Assessment**
 
 **Vulnerabilities Found:**
@@ -122,7 +147,7 @@ GET  /api/auth/me
 **OWASP Top 10 Compliance:** 6/10 requirements met
         `,
 
-        'code-reviewer': (task) => `
+            "code-reviewer": (task) => `
 👁️ **Code Review Results**
 
 **Issues Found:**
@@ -146,7 +171,7 @@ GET  /api/auth/me
 **Overall Assessment:** Good code with minor improvements needed
         `,
 
-        'performance-engineer': (task) => `
+            "performance-engineer": (task) => `
 ⚡ **Performance Analysis**
 
 **Bottlenecks Identified:**
@@ -171,7 +196,7 @@ GET  /api/auth/me
 **Expected Results:** 60% improvement in response times
         `,
 
-        'frontend-reviewer': (task) => `
+            "frontend-reviewer": (task) => `
 🎨 **Frontend Review**
 
 **UI/UX Issues:**
@@ -197,7 +222,7 @@ GET  /api/auth/me
 **Browser Compatibility:** Chrome 90+, Firefox 88+, Safari 14+
         `,
 
-        'full-stack-developer': (task) => `
+            "full-stack-developer": (task) => `
 💻 **Full-Stack Implementation Plan**
 
 **Frontend Implementation:**
@@ -237,7 +262,7 @@ CREATE TABLE sessions (
 - Input validation on both ends
         `,
 
-        'api-builder-enhanced': (task) => `
+            "api-builder-enhanced": (task) => `
 🔌 **API Design & Implementation**
 
 **REST API Specification:**
@@ -282,7 +307,7 @@ paths:
 - Request logging and monitoring
         `,
 
-        'database-optimizer': (task) => `
+            "database-optimizer": (task) => `
 🗄️ **Database Optimization Report**
 
 **Current Issues:**
@@ -316,7 +341,7 @@ WHERE u.created_at > NOW() - INTERVAL '30 days';
 **Expected Improvements:** 70% faster query performance
         `,
 
-        'test-generator': (task) => `
+            "test-generator": (task) => `
 🧪 **Test Suite Generation**
 
 **Unit Tests:**
@@ -351,7 +376,7 @@ describe('AuthService', () => {
 **Testing Strategy:** TDD with continuous integration
         `,
 
-        'deployment-engineer': (task) => `
+            "deployment-engineer": (task) => `
 🚀 **Deployment Strategy**
 
 **Infrastructure Setup:**
@@ -389,7 +414,7 @@ jobs:
 **Rollback Strategy:** Blue-green deployment with instant rollback capability
         `,
 
-        'monitoring-expert': (task) => `
+            "monitoring-expert": (task) => `
 📊 **Monitoring & Observability Setup**
 
 **Metrics to Track:**
@@ -425,7 +450,7 @@ dashboard:
 - Database connection pool exhausted
         `,
 
-        'cost-optimizer': (task) => `
+            "cost-optimizer": (task) => `
 💰 **Cloud Cost Optimization**
 
 **Current Cost Analysis:**
@@ -455,7 +480,7 @@ dashboard:
 **Implementation Timeline:** 2-4 weeks
         `,
 
-        'seo-specialist': (task) => `
+            "seo-specialist": (task) => `
 🔍 **SEO Analysis & Recommendations**
 
 **On-Page SEO Issues:**
@@ -484,7 +509,7 @@ dashboard:
 **Keyword Opportunities:** "secure login", "JWT authentication", "password security"
         `,
 
-        'prompt-optimizer': (task) => `
+            "prompt-optimizer": (task) => `
 🎯 **Prompt Optimization Analysis**
 
 **Current Prompt Issues:**
@@ -511,7 +536,7 @@ dashboard:
 **Expected Quality Improvement:** 45-115% based on research
         `,
 
-        'documentation-specialist': (task) => `
+            "documentation-specialist": (task) => `
 📚 **Technical Documentation Plan**
 
 **Documentation Structure:**
@@ -558,7 +583,7 @@ Authenticate a user and return JWT tokens.
 **Quality Standards:** Complete, accurate, up-to-date, searchable
         `,
 
-        'docs-writer': (task) => `
+            "docs-writer": (task) => `
 ✍️ **Documentation Writing**
 
 # Secure User Authentication System
@@ -617,7 +642,7 @@ const tokens = await auth.login({
 - All requests require HTTPS
         `,
 
-        'infrastructure-builder': (task) => `
+            "infrastructure-builder": (task) => `
 🏗️ **Infrastructure Architecture**
 
 **Cloud Architecture:**
@@ -656,7 +681,7 @@ const tokens = await auth.login({
 **Cost Optimization:** Reserved instances, spot instances, auto-shutdown for dev environments
         `,
 
-        'java-pro': (task) => `
+            "java-pro": (task) => `
 ☕ **Java Implementation**
 
 **Technology Stack:**
@@ -715,7 +740,7 @@ public class SecurityConfig {
 - Unit testing with JUnit 5 and Mockito
         `,
 
-        'ai-engineer': (task) => `
+            "ai-engineer": (task) => `
 🤖 **AI Integration Design**
 
 **AI Features to Implement:**
@@ -761,7 +786,7 @@ def assess_login_risk(login_data):
 **Ethical Considerations:** Privacy protection, bias mitigation, explainable AI
         `,
 
-        'ml-engineer': (task) => `
+            "ml-engineer": (task) => `
 🧠 **Machine Learning Implementation**
 
 **ML Problem Framing:**
@@ -806,7 +831,7 @@ model.compile(
 **Expected Performance:** 95% accuracy, 85% precision, 90% recall
         `,
 
-        'agent-creator': (task) => `
+            "agent-creator": (task) => `
 🎭 **Agent Creation Workflow**
 
 **Agent Specification:**
@@ -849,7 +874,7 @@ system_prompt: |
 - Document expected behaviors
         `,
 
-        'command-creator': (task) => `
+            "command-creator": (task) => `
 ⚡ **Command Creation Workflow**
 
 **Command Specification:**
@@ -892,7 +917,7 @@ parameters:
 - Rollback capability verified
         `,
 
-        'skill-creator': (task) => `
+            "skill-creator": (task) => `
 🛠️ **Skill Creation with Progressive Disclosure**
 
 **Skill Structure:**
@@ -966,7 +991,7 @@ app.use(session({
 - Link to related concepts
         `,
 
-        'tool-creator': (task) => `
+            "tool-creator": (task) => `
 🔧 **Custom Tool Creation for OpenCode**
 
 **Tool Specification:**
@@ -1044,7 +1069,7 @@ export const authAgent = createAgent({
 - Performance benchmarking
         `,
 
-        'plugin-validator': (task) => `
+            "plugin-validator": (task) => `
 ✅ **Plugin Validation Checklist**
 
 **Structure Validation:**
@@ -1092,410 +1117,585 @@ export const authAgent = createAgent({
 - **Compatibility**: ✅ Cross-platform
 
 **Overall Assessment:** Plugin ready for production use
-        `
-      };
+        `,
+        };
 
-      const responseFn = responses[this.id];
-      return responseFn ? responseFn(task) : `🤖 **${this.id}** processed: ${task}\n\nAs a ${this.id}, I've analyzed your request and provided recommendations above.`;
+        const responseFn = responses[this.id];
+        return responseFn
+            ? responseFn(task)
+            : `🤖 **${this.id}** processed: ${task}\n\nAs a ${this.id}, I've analyzed your request and provided recommendations above.`;
     }
-  }
+}
 /**
  * Pure TypeScript swarm executor with local orchestration
  */
-export class TypeScriptSwarmsExecutor implements SwarmsClient {
-  private options: Required<TypeScriptSwarmsOptions>;
-  private activeSwarms: Map<string, { agents: MockAgent[]; config: SwarmConfig }> = new Map();
-  private swarmCounter = 0;
+export class TypeScriptSwarmsExecutor extends SwarmsClient {
+    private options: Required<TypeScriptSwarmsOptions>;
+    private activeSwarms: Map<
+        string,
+        { agents: MockAgent[]; config: SwarmConfig }
+    > = new Map();
+    private swarmCounter = 0;
 
-  constructor(options: TypeScriptSwarmsOptions = {}) {
-    this.options = {
-      timeout: options.timeout || 300000, // 5 minutes
-      maxConcurrency: options.maxConcurrency || 3,
-      useRealResponses: options.useRealResponses || false,
-      ...options
-    };
-  }
-
-  /**
-   * Create a new swarm with mock agents
-   */
-  async createSwarm(config: SwarmConfig): Promise<SwarmType> {
-    const swarmId = `ts-swarm_${++this.swarmCounter}_${Date.now()}`;
-
-    // Create mock agents for each named agent
-    const agents = this.createAgentsForSwarm(config.agents);
-
-    const swarmInfo: SwarmType = {
-      id: swarmId,
-      name: config.name,
-      agents: config.agents,
-      swarm_type: config.swarm_type,
-      status: 'created',
-      created_at: new Date().toISOString()
-    };
-
-    this.activeSwarms.set(swarmId, { agents, config });
-    return swarmInfo;
-  }
-
-  /**
-   * Create MockAgent instances for each named agent
-   */
-  private createAgentsForSwarm(agentNames: string[]): MockAgent[] {
-    const agents: MockAgent[] = [];
-
-    for (const agentName of agentNames) {
-      const agent = new MockAgent(
-        agentName,
-        this.getAgentInstructions(agentName),
-        this.getAgentCapabilities(agentName),
-        this.options.executeTask
-      );
-      agents.push(agent);
+    constructor(options: TypeScriptSwarmsOptions = {} as any) {
+        super({ baseUrl: "typescript://" });
+        this.options = {
+            timeout: options.timeout ?? 300000, // 5 minutes
+            maxConcurrency: options.maxConcurrency ?? 3,
+            useRealResponses: options.useRealResponses ?? false,
+            executeTask:
+                options.executeTask ??
+                (async () => {
+                    return "Mock response from TypeScript executor";
+                }),
+        };
     }
 
-    return agents;
-  }
+    /**
+     * Create a new swarm with mock agents
+     */
+    async createSwarm(config: SwarmConfig): Promise<SwarmType> {
+        const swarmId = `ts-swarm_${++this.swarmCounter}_${Date.now()}`;
 
-  /**
-   * Get instructions for a specific agent
-   */
-  private getAgentInstructions(agentName: string): string {
-    const instructions: Record<string, string> = {
-      'architect-advisor': 'Senior software architect specializing in system design, scalability, and technical leadership.',
-      'backend-architect': 'Backend architecture specialist focusing on APIs, databases, and server-side systems.',
-      'frontend-reviewer': 'Frontend development expert reviewing UI/UX, accessibility, and user experience.',
-      'full-stack-developer': 'Full-stack developer implementing complete features with clean, maintainable code.',
-      'code-reviewer': 'Code quality specialist identifying bugs, security issues, and performance problems.',
-      'security-scanner': 'Security expert identifying vulnerabilities and recommending best practices.',
-      'performance-engineer': 'Performance optimization specialist analyzing bottlenecks and improving speed.',
-      'api-builder-enhanced': 'API development expert designing REST/GraphQL APIs with authentication and documentation.',
-      'database-optimizer': 'Database specialist optimizing queries, schemas, and performance.',
-      'test-generator': 'Testing expert creating comprehensive test suites and quality assurance.',
-      'deployment-engineer': 'DevOps specialist designing CI/CD pipelines and managing deployments.',
-      'monitoring-expert': 'Monitoring specialist implementing observability and alerting systems.',
-      'cost-optimizer': 'Cloud cost optimization expert analyzing spending and resource usage.',
-      'ai-engineer': 'AI/ML engineer implementing machine learning solutions and AI features.',
-      'ml-engineer': 'Machine learning engineer building models, training pipelines, and deployments.',
-      'seo-specialist': 'SEO expert optimizing content and implementing technical SEO.',
-      'prompt-optimizer': 'Prompt engineering specialist optimizing AI prompts with research-backed techniques.',
-      'documentation-specialist': 'Technical documentation expert creating comprehensive guides and references.',
-      'docs-writer': 'Documentation writer creating clear, concise content with proper formatting.',
-      'infrastructure-builder': 'Infrastructure specialist designing cloud architectures and IaC.',
-      'java-pro': 'Java development expert writing idiomatic code and enterprise patterns.',
-      'agent-creator': 'Agent creation specialist designing AI agents for various platforms.',
-      'command-creator': 'Command creation specialist designing CLI commands for workflows.',
-      'skill-creator': 'Skill creation specialist designing modular skills with progressive disclosure.',
-      'tool-creator': 'Tool creation specialist building custom tools for OpenCode.',
-      'plugin-validator': 'Plugin validation specialist ensuring quality standards and best practices.'
-    };
+        // Create mock agents for each named agent
+        const agents = this.createAgentsForSwarm(config.agents);
 
-    return instructions[agentName] || `Expert assistant specializing in ${agentName} tasks.`;
-  }
+        const swarmInfo: SwarmType = {
+            id: swarmId,
+            name: config.name,
+            agents: config.agents,
+            swarm_type: config.swarm_type,
+            status: "created",
+            created_at: new Date().toISOString(),
+        };
 
-  /**
-   * Get capabilities for a specific agent
-   */
-  private getAgentCapabilities(agentName: string): string[] {
-    const capabilities: Record<string, string[]> = {
-      'architect-advisor': ['architecture', 'design', 'scalability', 'system-design'],
-      'backend-architect': ['api-design', 'database', 'backend', 'server-side'],
-      'frontend-reviewer': ['ui', 'ux', 'accessibility', 'frontend', 'react'],
-      'full-stack-developer': ['full-stack', 'implementation', 'coding', 'web-development'],
-      'code-reviewer': ['code-quality', 'security', 'performance', 'best-practices'],
-      'security-scanner': ['security', 'vulnerabilities', 'compliance', 'penetration-testing'],
-      'performance-engineer': ['performance', 'optimization', 'bottlenecks', 'monitoring'],
-      'api-builder-enhanced': ['api', 'rest', 'graphql', 'authentication', 'documentation'],
-      'database-optimizer': ['database', 'queries', 'optimization', 'indexing'],
-      'test-generator': ['testing', 'quality-assurance', 'unit-tests', 'integration-tests'],
-      'deployment-engineer': ['devops', 'ci-cd', 'deployment', 'infrastructure'],
-      'monitoring-expert': ['monitoring', 'observability', 'alerting', 'metrics'],
-      'cost-optimizer': ['cost-optimization', 'cloud', 'resource-management', 'finops'],
-      'ai-engineer': ['ai', 'machine-learning', 'integration', 'model-deployment'],
-      'ml-engineer': ['ml', 'data-science', 'model-training', 'mlops'],
-      'seo-specialist': ['seo', 'search-engines', 'content-optimization', 'analytics'],
-      'prompt-optimizer': ['prompt-engineering', 'ai-interaction', 'optimization'],
-      'documentation-specialist': ['documentation', 'technical-writing', 'api-docs'],
-      'docs-writer': ['content-creation', 'formatting', 'user-guides'],
-      'infrastructure-builder': ['infrastructure', 'cloud', 'iac', 'scalability'],
-      'java-pro': ['java', 'enterprise', 'spring', 'backend'],
-      'agent-creator': ['agent-design', 'ai-agents', 'platform-integration'],
-      'command-creator': ['command-design', 'cli', 'workflow-automation'],
-      'skill-creator': ['skill-design', 'modular-systems', 'progressive-disclosure'],
-      'tool-creator': ['tool-development', 'custom-tools', 'integration'],
-      'plugin-validator': ['validation', 'quality-assurance', 'standards']
-    };
-
-    return capabilities[agentName] || ['general', 'analysis', 'recommendations'];
-  }
-
-  /**
-   * Get functions/tools for a specific agent
-   */
-  private getAgentFunctions(agentName: string): any[] {
-    // For now, return empty array - can be extended with specific tools
-    return [];
-  }
-
-  /**
-   * Get swarm details
-   */
-  async getSwarm(swarmId: string): Promise<SwarmType> {
-    const swarmData = this.activeSwarms.get(swarmId);
-    if (!swarmData) {
-      throw new Error(`Swarm not found: ${swarmId}`);
+        this.activeSwarms.set(swarmId, { agents, config });
+        return swarmInfo;
     }
 
-    return {
-      id: swarmId,
-      name: swarmData.config.name,
-      agents: swarmData.config.agents,
-      swarm_type: swarmData.config.swarm_type,
-      status: 'active',
-      created_at: new Date().toISOString()
-    };
-  }
+    /**
+     * Create MockAgent instances for each named agent
+     */
+    private createAgentsForSwarm(agentNames: string[]): MockAgent[] {
+        const agents: MockAgent[] = [];
 
-  /**
-   * List all active swarms
-   */
-  async listSwarms(): Promise<SwarmType[]> {
-    return Array.from(this.activeSwarms.entries()).map(([id, data]) => ({
-      id,
-      name: data.config.name,
-      agents: data.config.agents,
-      swarm_type: data.config.swarm_type,
-      status: 'active',
-      created_at: new Date().toISOString()
-    }));
-  }
-
-  /**
-   * Run a task on a swarm using mock agent orchestration
-   */
-  async runTask(swarmId: string, task: string, options: {
-    timeout?: number;
-    context?: Record<string, any>;
-  } = {}): Promise<TaskResult> {
-    const swarmData = this.activeSwarms.get(swarmId);
-    if (!swarmData) {
-      throw new Error(`Swarm not found: ${swarmId}`);
-    }
-
-    const startTime = Date.now();
-    const timeout = options.timeout || this.options.timeout;
-
-    try {
-      let output = '';
-      let agentUsed = swarmData.config.agents[0] || 'unknown';
-
-      // Simulate swarm orchestration based on swarm type
-      switch (swarmData.config.swarm_type) {
-        case 'SequentialWorkflow':
-          // Run through agents in sequence
-          for (const agent of swarmData.agents) {
-            const partialResult = await agent.process(task, { step: 'sequential' });
-            output += partialResult + '\n\n';
-            agentUsed = agent.id;
-            // Simulate agent handoff delay
-            await new Promise(resolve => setTimeout(resolve, 100));
-          }
-          break;
-
-        case 'MultiAgentRouter':
-          // Route to most appropriate agent
-          const bestAgent = this.selectBestAgent(task, swarmData.agents);
-          output = await bestAgent.process(task, { step: 'routed' });
-          agentUsed = bestAgent.id;
-          break;
-
-        case 'AgentRearrange':
-          // Simulate dynamic agent rearrangement
-          const rearrangedAgents = this.rearrangeAgents(task, swarmData.agents);
-          for (const agent of rearrangedAgents) {
-            const partialResult = await agent.process(task, { step: 'rearranged' });
-            output += `**${agent.id}**: ${partialResult}\n\n`;
-            agentUsed = agent.id;
-          }
-          break;
-
-        default:
-          // Default to first agent
-          const defaultAgent = swarmData.agents[0];
-          if (defaultAgent) {
-            output = await defaultAgent.process(task, { step: 'default' });
-            agentUsed = defaultAgent.id;
-          } else {
-            throw new Error('No agents available in swarm');
-          }
-      }
-
-      return {
-        task_id: `task_${Date.now()}`,
-        swarm_id: swarmId,
-        status: 'success',
-        output: output.trim(),
-        execution_time: Date.now() - startTime,
-        agent_used: agentUsed
-      };
-
-    } catch (error) {
-      return {
-        task_id: `task_${Date.now()}`,
-        swarm_id: swarmId,
-        status: 'failed',
-        output: '',
-        execution_time: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      };
-    }
-  }
-
-  /**
-   * Select the best agent for a task based on keywords
-   */
-  private selectBestAgent(task: string, agents: MockAgent[]): MockAgent {
-    const taskLower = task.toLowerCase();
-
-    // Simple keyword-based routing
-    const routingRules: Record<string, string[]> = {
-      'architect': ['architect-advisor', 'backend-architect', 'infrastructure-builder'],
-      'security': ['security-scanner', 'code-reviewer'],
-      'performance': ['performance-engineer', 'database-optimizer'],
-      'frontend': ['frontend-reviewer'],
-      'backend': ['backend-architect', 'api-builder-enhanced'],
-      'database': ['database-optimizer'],
-      'testing': ['test-generator'],
-      'deployment': ['deployment-engineer'],
-      'monitoring': ['monitoring-expert'],
-      'cost': ['cost-optimizer'],
-      'ai': ['ai-engineer', 'ml-engineer'],
-      'seo': ['seo-specialist'],
-      'prompt': ['prompt-optimizer'],
-      'documentation': ['documentation-specialist', 'docs-writer'],
-      'java': ['java-pro'],
-      'agent': ['agent-creator'],
-      'command': ['command-creator'],
-      'skill': ['skill-creator'],
-      'tool': ['tool-creator'],
-      'plugin': ['plugin-validator']
-    };
-
-    for (const [keyword, agentNames] of Object.entries(routingRules)) {
-      if (taskLower.includes(keyword)) {
         for (const agentName of agentNames) {
-          const agent = agents.find(a => a.id === agentName);
-          if (agent) return agent;
+            const agent = new MockAgent(
+                agentName,
+                this.getAgentInstructions(agentName),
+                this.getAgentCapabilities(agentName),
+                this.options.executeTask,
+            );
+            agents.push(agent);
         }
-      }
+
+        return agents;
     }
 
-    // Default to first agent
-    return agents[0];
-  }
+    /**
+     * Get instructions for a specific agent
+     */
+    private getAgentInstructions(agentName: string): string {
+        const instructions: Record<string, string> = {
+            "architect-advisor":
+                "Senior software architect specializing in system design, scalability, and technical leadership.",
+            "backend-architect":
+                "Backend architecture specialist focusing on APIs, databases, and server-side systems.",
+            "frontend-reviewer":
+                "Frontend development expert reviewing UI/UX, accessibility, and user experience.",
+            "full-stack-developer":
+                "Full-stack developer implementing complete features with clean, maintainable code.",
+            "code-reviewer":
+                "Code quality specialist identifying bugs, security issues, and performance problems.",
+            "security-scanner":
+                "Security expert identifying vulnerabilities and recommending best practices.",
+            "performance-engineer":
+                "Performance optimization specialist analyzing bottlenecks and improving speed.",
+            "api-builder-enhanced":
+                "API development expert designing REST/GraphQL APIs with authentication and documentation.",
+            "database-optimizer":
+                "Database specialist optimizing queries, schemas, and performance.",
+            "test-generator":
+                "Testing expert creating comprehensive test suites and quality assurance.",
+            "deployment-engineer":
+                "DevOps specialist designing CI/CD pipelines and managing deployments.",
+            "monitoring-expert":
+                "Monitoring specialist implementing observability and alerting systems.",
+            "cost-optimizer":
+                "Cloud cost optimization expert analyzing spending and resource usage.",
+            "ai-engineer":
+                "AI/ML engineer implementing machine learning solutions and AI features.",
+            "ml-engineer":
+                "Machine learning engineer building models, training pipelines, and deployments.",
+            "seo-specialist":
+                "SEO expert optimizing content and implementing technical SEO.",
+            "prompt-optimizer":
+                "Prompt engineering specialist optimizing AI prompts with research-backed techniques.",
+            "documentation-specialist":
+                "Technical documentation expert creating comprehensive guides and references.",
+            "docs-writer":
+                "Documentation writer creating clear, concise content with proper formatting.",
+            "infrastructure-builder":
+                "Infrastructure specialist designing cloud architectures and IaC.",
+            "java-pro":
+                "Java development expert writing idiomatic code and enterprise patterns.",
+            "agent-creator":
+                "Agent creation specialist designing AI agents for various platforms.",
+            "command-creator":
+                "Command creation specialist designing CLI commands for workflows.",
+            "skill-creator":
+                "Skill creation specialist designing modular skills with progressive disclosure.",
+            "tool-creator":
+                "Tool creation specialist building custom tools for OpenCode.",
+            "plugin-validator":
+                "Plugin validation specialist ensuring quality standards and best practices.",
+        };
 
-  /**
-   * Rearrange agents based on task complexity
-   */
-  private rearrangeAgents(task: string, agents: MockAgent[]): MockAgent[] {
-    // Simple rearrangement: put most relevant agents first
-    const bestAgent = this.selectBestAgent(task, agents);
-    const otherAgents = agents.filter(a => a.id !== bestAgent.id);
+        return (
+            instructions[agentName] ||
+            `Expert assistant specializing in ${agentName} tasks.`
+        );
+    }
 
-    return [bestAgent, ...otherAgents.slice(0, 2)]; // Limit to 3 agents for demo
-  }
+    /**
+     * Get capabilities for a specific agent
+     */
+    private getAgentCapabilities(agentName: string): string[] {
+        const capabilities: Record<string, string[]> = {
+            "architect-advisor": [
+                "architecture",
+                "design",
+                "scalability",
+                "system-design",
+            ],
+            "backend-architect": [
+                "api-design",
+                "database",
+                "backend",
+                "server-side",
+            ],
+            "frontend-reviewer": [
+                "ui",
+                "ux",
+                "accessibility",
+                "frontend",
+                "react",
+            ],
+            "full-stack-developer": [
+                "full-stack",
+                "implementation",
+                "coding",
+                "web-development",
+            ],
+            "code-reviewer": [
+                "code-quality",
+                "security",
+                "performance",
+                "best-practices",
+            ],
+            "security-scanner": [
+                "security",
+                "vulnerabilities",
+                "compliance",
+                "penetration-testing",
+            ],
+            "performance-engineer": [
+                "performance",
+                "optimization",
+                "bottlenecks",
+                "monitoring",
+            ],
+            "api-builder-enhanced": [
+                "api",
+                "rest",
+                "graphql",
+                "authentication",
+                "documentation",
+            ],
+            "database-optimizer": [
+                "database",
+                "queries",
+                "optimization",
+                "indexing",
+            ],
+            "test-generator": [
+                "testing",
+                "quality-assurance",
+                "unit-tests",
+                "integration-tests",
+            ],
+            "deployment-engineer": [
+                "devops",
+                "ci-cd",
+                "deployment",
+                "infrastructure",
+            ],
+            "monitoring-expert": [
+                "monitoring",
+                "observability",
+                "alerting",
+                "metrics",
+            ],
+            "cost-optimizer": [
+                "cost-optimization",
+                "cloud",
+                "resource-management",
+                "finops",
+            ],
+            "ai-engineer": [
+                "ai",
+                "machine-learning",
+                "integration",
+                "model-deployment",
+            ],
+            "ml-engineer": ["ml", "data-science", "model-training", "mlops"],
+            "seo-specialist": [
+                "seo",
+                "search-engines",
+                "content-optimization",
+                "analytics",
+            ],
+            "prompt-optimizer": [
+                "prompt-engineering",
+                "ai-interaction",
+                "optimization",
+            ],
+            "documentation-specialist": [
+                "documentation",
+                "technical-writing",
+                "api-docs",
+            ],
+            "docs-writer": ["content-creation", "formatting", "user-guides"],
+            "infrastructure-builder": [
+                "infrastructure",
+                "cloud",
+                "iac",
+                "scalability",
+            ],
+            "java-pro": ["java", "enterprise", "spring", "backend"],
+            "agent-creator": [
+                "agent-design",
+                "ai-agents",
+                "platform-integration",
+            ],
+            "command-creator": ["command-design", "cli", "workflow-automation"],
+            "skill-creator": [
+                "skill-design",
+                "modular-systems",
+                "progressive-disclosure",
+            ],
+            "tool-creator": ["tool-development", "custom-tools", "integration"],
+            "plugin-validator": [
+                "validation",
+                "quality-assurance",
+                "standards",
+            ],
+        };
 
-  /**
-   * Get health status
-   */
-  async getHealth(): Promise<SwarmHealth> {
-    return {
-      status: 'healthy',
-      agents_available: 26, // Our 26 specialized agents
-      active_swarms: this.activeSwarms.size,
-      uptime_seconds: process.uptime()
-    };
-  }
+        return (
+            capabilities[agentName] || [
+                "general",
+                "analysis",
+                "recommendations",
+            ]
+        );
+    }
 
-  /**
-   * Delete a swarm
-   */
-  async deleteSwarm(swarmId: string): Promise<void> {
-    this.activeSwarms.delete(swarmId);
-  }
+    /**
+     * Get functions/tools for a specific agent
+     */
+    private getAgentFunctions(agentName: string): any[] {
+        // For now, return empty array - can be extended with specific tools
+        return [];
+    }
 
-  /**
-   * Get available agents
-   */
-  async getAvailableAgents(): Promise<string[]> {
-    return [
-      // Architecture & Planning
-      'architect-advisor',
-      'backend-architect',
-      'infrastructure-builder',
-      // Development & Coding
-      'frontend-reviewer',
-      'full-stack-developer',
-      'api-builder-enhanced',
-      'database-optimizer',
-      'java-pro',
-      // Quality & Testing
-      'code-reviewer',
-      'test-generator',
-      'security-scanner',
-      'performance-engineer',
-      // DevOps & Deployment
-      'deployment-engineer',
-      'monitoring-expert',
-      'cost-optimizer',
-      // AI & Machine Learning
-      'ai-engineer',
-      'ml-engineer',
-      // Content & SEO
-      'seo-specialist',
-      'prompt-optimizer',
-      'documentation-specialist',
-      'docs-writer',
-      // Plugin Development
-      'agent-creator',
-      'command-creator',
-      'skill-creator',
-      'tool-creator',
-      'plugin-validator'
-    ];
-  }
+    /**
+     * Get swarm details
+     */
+    async getSwarm(swarmId: string): Promise<SwarmType> {
+        const swarmData = this.activeSwarms.get(swarmId);
+        if (!swarmData) {
+            throw new Error(`Swarm not found: ${swarmId}`);
+        }
 
-  /**
-   * Register agent (mock implementation)
-   */
-  async registerAgent(agentConfig: {
-    name: string;
-    description: string;
-    capabilities: string[];
-  }): Promise<{ agent_id: string }> {
-    const agentId = `agent_${Date.now()}`;
-    console.log(`Registered TypeScript agent: ${agentConfig.name} (${agentId})`);
-    return { agent_id: agentId };
-  }
+        return {
+            id: swarmId,
+            name: swarmData.config.name,
+            agents: swarmData.config.agents,
+            swarm_type: swarmData.config.swarm_type,
+            status: "running",
+            created_at: new Date().toISOString(),
+        };
+    }
+
+    /**
+     * List all active swarms
+     */
+    async listSwarms(): Promise<SwarmType[]> {
+        return Array.from(this.activeSwarms.entries()).map(([id, data]) => ({
+            id,
+            name: data.config.name,
+            agents: data.config.agents,
+            swarm_type: data.config.swarm_type,
+            status: "running",
+            created_at: new Date().toISOString(),
+        }));
+    }
+
+    /**
+     * Run a task on a swarm using mock agent orchestration
+     */
+    async runTask(
+        swarmId: string,
+        task: string,
+        options: {
+            timeout?: number;
+            context?: Record<string, any>;
+        } = {},
+    ): Promise<TaskResult> {
+        const swarmData = this.activeSwarms.get(swarmId);
+        if (!swarmData) {
+            throw new Error(`Swarm not found: ${swarmId}`);
+        }
+
+        const startTime = Date.now();
+        const timeout = options.timeout || this.options.timeout;
+
+        try {
+            let output = "";
+            let agentUsed = swarmData.config.agents[0] || "unknown";
+
+            // Simulate swarm orchestration based on swarm type
+            switch (swarmData.config.swarm_type) {
+                case "SequentialWorkflow":
+                    // Run through agents in sequence
+                    for (const agent of swarmData.agents) {
+                        const partialResult = await agent.process(task, {
+                            step: "sequential",
+                        });
+                        output += `${partialResult}\n\n`;
+                        agentUsed = agent.id;
+                        // Simulate agent handoff delay
+                        await new Promise((resolve) =>
+                            setTimeout(resolve, 100),
+                        );
+                    }
+                    break;
+
+                case "MultiAgentRouter": {
+                    // Route to most appropriate agent
+                    const bestAgent = this.selectBestAgent(
+                        task,
+                        swarmData.agents,
+                    );
+                    output = await bestAgent.process(task, { step: "routed" });
+                    agentUsed = bestAgent.id;
+                    break;
+                }
+
+                case "AgentRearrange": {
+                    // Simulate dynamic agent rearrangement
+                    const rearrangedAgents = this.rearrangeAgents(
+                        task,
+                        swarmData.agents,
+                    );
+                    for (const agent of rearrangedAgents) {
+                        const partialResult = await agent.process(task, {
+                            step: "rearranged",
+                        });
+                        output += `**${agent.id}**: ${partialResult}\n\n`;
+                        agentUsed = agent.id;
+                    }
+                    break;
+                }
+
+                default: {
+                    // Default to first agent
+                    const defaultAgent = swarmData.agents[0];
+                    if (defaultAgent) {
+                        output = await defaultAgent.process(task, {
+                            step: "default",
+                        });
+                        agentUsed = defaultAgent.id;
+                    } else {
+                        throw new Error("No agents available in swarm");
+                    }
+                }
+            }
+
+            return {
+                task_id: `task_${Date.now()}`,
+                swarm_id: swarmId,
+                status: "success",
+                output: output.trim(),
+                execution_time: Date.now() - startTime,
+                agent_used: agentUsed,
+            };
+        } catch (error) {
+            return {
+                task_id: `task_${Date.now()}`,
+                swarm_id: swarmId,
+                status: "failed",
+                output: "",
+                execution_time: Date.now() - startTime,
+                error: error instanceof Error ? error.message : "Unknown error",
+            };
+        }
+    }
+
+    /**
+     * Select the best agent for a task based on keywords
+     */
+    private selectBestAgent(task: string, agents: MockAgent[]): MockAgent {
+        const taskLower = task.toLowerCase();
+
+        // Simple keyword-based routing
+        const routingRules: Record<string, string[]> = {
+            architect: [
+                "architect-advisor",
+                "backend-architect",
+                "infrastructure-builder",
+            ],
+            security: ["security-scanner", "code-reviewer"],
+            performance: ["performance-engineer", "database-optimizer"],
+            frontend: ["frontend-reviewer"],
+            backend: ["backend-architect", "api-builder-enhanced"],
+            database: ["database-optimizer"],
+            testing: ["test-generator"],
+            deployment: ["deployment-engineer"],
+            monitoring: ["monitoring-expert"],
+            cost: ["cost-optimizer"],
+            ai: ["ai-engineer", "ml-engineer"],
+            seo: ["seo-specialist"],
+            prompt: ["prompt-optimizer"],
+            documentation: ["documentation-specialist", "docs-writer"],
+            java: ["java-pro"],
+            agent: ["agent-creator"],
+            command: ["command-creator"],
+            skill: ["skill-creator"],
+            tool: ["tool-creator"],
+            plugin: ["plugin-validator"],
+        };
+
+        for (const [keyword, agentNames] of Object.entries(routingRules)) {
+            if (taskLower.includes(keyword)) {
+                for (const agentName of agentNames) {
+                    const agent = agents.find((a) => a.id === agentName);
+                    if (agent) return agent;
+                }
+            }
+        }
+
+        // Default to first agent
+        return agents[0];
+    }
+
+    /**
+     * Rearrange agents based on task complexity
+     */
+    private rearrangeAgents(task: string, agents: MockAgent[]): MockAgent[] {
+        // Simple rearrangement: put most relevant agents first
+        const bestAgent = this.selectBestAgent(task, agents);
+        const otherAgents = agents.filter((a) => a.id !== bestAgent.id);
+
+        return [bestAgent, ...otherAgents.slice(0, 2)]; // Limit to 3 agents for demo
+    }
+
+    /**
+     * Get health status
+     */
+    async getHealth(): Promise<SwarmHealth> {
+        return {
+            status: "healthy",
+            agents_available: 26, // Our 26 specialized agents
+            active_swarms: this.activeSwarms.size,
+            uptime_seconds: process.uptime(),
+        };
+    }
+
+    /**
+     * Delete a swarm
+     */
+    async deleteSwarm(swarmId: string): Promise<void> {
+        this.activeSwarms.delete(swarmId);
+    }
+
+    /**
+     * Get available agents
+     */
+    async getAvailableAgents(): Promise<string[]> {
+        return [
+            // Architecture & Planning
+            "architect-advisor",
+            "backend-architect",
+            "infrastructure-builder",
+            // Development & Coding
+            "frontend-reviewer",
+            "full-stack-developer",
+            "api-builder-enhanced",
+            "database-optimizer",
+            "java-pro",
+            // Quality & Testing
+            "code-reviewer",
+            "test-generator",
+            "security-scanner",
+            "performance-engineer",
+            // DevOps & Deployment
+            "deployment-engineer",
+            "monitoring-expert",
+            "cost-optimizer",
+            // AI & Machine Learning
+            "ai-engineer",
+            "ml-engineer",
+            // Content & SEO
+            "seo-specialist",
+            "prompt-optimizer",
+            "documentation-specialist",
+            "docs-writer",
+            // Plugin Development
+            "agent-creator",
+            "command-creator",
+            "skill-creator",
+            "tool-creator",
+            "plugin-validator",
+        ];
+    }
+
+    /**
+     * Register agent (mock implementation)
+     */
+    async registerAgent(agentConfig: {
+        name: string;
+        description: string;
+        capabilities: string[];
+    }): Promise<{ agent_id: string }> {
+        const agentId = `agent_${Date.now()}`;
+        console.log(
+            `Registered TypeScript agent: ${agentConfig.name} (${agentId})`,
+        );
+        return { agent_id: agentId };
+    }
 }
 
 /**
  * Factory function to create TypeScript swarm client
  */
-export function createTypeScriptSwarmsClient(options?: TypeScriptSwarmsOptions): SwarmsClient {
-  return new TypeScriptSwarmsExecutor(options);
+export function createTypeScriptSwarmsClient(
+    options?: TypeScriptSwarmsOptions,
+): SwarmsClient {
+    return new TypeScriptSwarmsExecutor(options);
 }
 
 /**
  * Check if TypeScript swarms are available
  */
 export async function checkTypeScriptSwarmsAvailable(): Promise<boolean> {
-  try {
-    // Try to create a test swarm
-    const client = new TypeScriptSwarmsExecutor();
-    const health = await client.getHealth();
-    return health.status === 'healthy';
-  } catch (error) {
-    return false;
-  }
+    try {
+        // Try to create a test swarm
+        const client = new TypeScriptSwarmsExecutor();
+        const health = await client.getHealth();
+        return health.status === "healthy";
+    } catch (error) {
+        return false;
+    }
 }

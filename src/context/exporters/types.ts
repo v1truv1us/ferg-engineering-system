@@ -5,8 +5,8 @@
  * (e.g. markdown file, Obsidian vault).
  */
 
-import type { CommandContextEnvelope } from "../types"
+import type { CommandContextEnvelope } from "../types";
 
 export interface ContextExporter {
-  exportEnvelope(envelope: CommandContextEnvelope): Promise<void>
+    exportEnvelope(envelope: CommandContextEnvelope): Promise<void>;
 }

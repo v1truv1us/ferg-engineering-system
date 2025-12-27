@@ -16,7 +16,7 @@ Comprehensive synthesis of research conducted on agent swarm execution strategie
 
 - **Current Architecture**: Local synchronous execution with simulated agent coordination, limited by machine resources
 - **Cloud Architecture**: SST-managed AWS infrastructure with WebSocket APIs, SQS queues, EventBridge, and Lambda/Fargate workers enabling distributed swarm execution
-- **Decision Context**: Local-first approach adopted for v0.3.0 release, with cloud execution as future option
+- **Decision Context**: Local-first approach adopted for current release, with cloud execution as future option
 - **Cost Analysis**: Local execution incurs $0 infrastructure costs vs. cloud execution with variable AWS charges ($10-100+/month depending on usage)
 - **Technical Benefits**: Cloud enables massive parallelism, persistence, and resource isolation but adds complexity and latency
 - **Implementation**: Hybrid architecture designed to support both execution strategies with minimal code changes
@@ -47,7 +47,7 @@ This document synthesizes multiple research streams conducted on agent swarm exe
 - Cross-machine coordination capabilities
 
 **Current Recommendation:**
-Local execution for v0.3.0 release due to cost, complexity, and privacy advantages. Cloud execution remains viable for future scaling needs when local resource limitations become prohibitive.
+Local execution for current release due to cost, complexity, and privacy advantages. Cloud execution remains viable for future scaling needs when local resource limitations become prohibitive.
 
 ## Current Architecture Analysis
 
@@ -325,7 +325,7 @@ Agent Pool (Lambda/Fargate Workers)
 
 ## Implementation Plan
 
-### Local Execution Implementation (Current v0.3.0)
+### Local Execution Implementation (Current)
 
 #### Phase 1: Foundation (2-3 weeks)
 - Fix existing code quality issues (undefined variables, duplicate code)
@@ -345,7 +345,7 @@ Agent Pool (Lambda/Fargate Workers)
 - Add observability and monitoring
 - Performance optimization and caching
 
-### Cloud Execution Implementation (Future v0.4.0+)
+### Cloud Execution Implementation (Future)
 
 #### Phase 1: Infrastructure Setup (2-3 weeks)
 - Create SST configuration (`sst.config.ts`)
@@ -422,17 +422,17 @@ class AgentCoordinator {
 
 ### Evolutionary Path
 
-#### v0.3.0 (Current): Local-First
+#### Current: Local-First
 - Complete local swarm implementation
 - Performance optimization for local execution
 - Foundation for cloud migration
 
-#### v0.4.0: Hybrid Execution
+#### Future: Hybrid Execution
 - Cloud execution as optional feature
 - User choice between local/cloud per task
 - Gradual migration of complex workflows
 
-#### v0.5.0+: Cloud-Native
+#### Future: Cloud-Native
 - Cloud execution as default for complex tasks
 - Advanced swarm orchestration
 - Multi-region deployment for global teams
@@ -441,7 +441,7 @@ class AgentCoordinator {
 
 ### Final Recommendations
 
-**For v0.3.0 Release:**
+**For Current Release:**
 Stick with local execution to maintain focus on core functionality, minimize costs, and ensure privacy. The hybrid architecture foundation enables future cloud migration without architectural debt.
 
 **For Future Releases:**

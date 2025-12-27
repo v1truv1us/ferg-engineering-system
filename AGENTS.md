@@ -72,6 +72,23 @@ All subagents are enhanced with research-backed techniques:
 
 ## Usage Examples
 
+### Spec-Driven Workflow
+```
+# Complete spec-driven development with ai-eng-system
+/ai-eng/research "authentication patterns"      # Gather context
+/ai-eng/specify "user authentication"        # Create specification
+/ai-eng/plan --from-spec=specs/auth     # Create implementation plan
+/ai-eng/work "specs/auth/plan"              # Execute with quality gates
+/ai-eng/review                               # Multi-agent code review
+```
+
+### Using prompt-refinement skill
+The prompt-refinement skill is automatically invoked by:
+- `/ai-eng/research` - Clarifies research scope and depth
+- `/ai-eng/specify` - Clarifies user stories and requirements
+- `/ai-eng/plan` - Clarifies technical approach and constraints
+- `/ai-eng/work` - Clarifies execution context and quality requirements
+
 ### Using prompt-optimizer
 ```
 Ask the prompt-optimizer to enhance: "Help me fix this slow database query"
@@ -89,22 +106,24 @@ Use the architect-advisor to evaluate: Should we use microservices or a monolith
 
 ## Skills Available
 
-| Skill | Location | Purpose |
+ | Skill | Location | Purpose |
 |-------|----------|---------|
 | coolify-deploy | skills/devops/ | Coolify deployment best practices |
 | git-worktree | skills/devops/ | Git worktree workflow |
+| prompt-refinement | skills/prompting/prompt-refinement/ | TCRO structuring with phase-specific clarification |
 | incentive-prompting | skills/prompting/ | Research-backed prompting techniques |
 | comprehensive-research | skills/research/ | Multi-phase research orchestration |
 | plugin-dev | skills/plugin-dev/ | Plugin development knowledge base |
 
 ## Commands Available
 
-| Command | Description | Agent Mode |
+ | Command | Description | Agent Mode |
 |---------|-------------|------------|
+| /research | Multi-phase research orchestration | read-only |
+| /specify | Create feature specifications | read-only |
 | /plan | Create detailed implementation plans | read-only |
 | /work | Execute plans with quality gates and tracking | build |
 | /review | Multi-perspective code review (29 agents) | read-only |
-| /research | Multi-phase research orchestration | read-only |
 | /seo | SEO audit with Core Web Vitals | read-only |
 | /deploy | Pre-deployment checklist for Coolify | build |
 | /optimize | Prompt enhancement (+45% quality) | build |
@@ -170,9 +189,52 @@ bun run install:global  # Global OpenCode install
 bun run install:local    # Local OpenCode install
 ```
 
+## Task Management with TODO.md
+
+The project uses **TODO.md** as the central task management system. This file tracks:
+
+### Task Categories
+- **High Priority** - Critical items requiring immediate attention
+- **Medium Priority** - Important items for next iteration
+- **Low Priority** - Nice-to-have enhancements
+- **Completed Tasks** - Historical record of completed work
+
+### Using TODO.md
+
+1. **Check current tasks** before starting work:
+   ```bash
+   # Read TODO.md to understand what needs attention
+   ```
+
+2. **Update task status** when working on items:
+   - Mark tasks as `[x]` when completed
+   - Move tasks between priority levels as needed
+   - Add new tasks as they arise
+
+3. **Reference TODO.md in agent workflows**:
+   - When using `/ai-eng/work`, check TODO.md for related tasks
+   - When using `/ai-eng/research`, consider TODO.md items that need context
+   - After completing work, update TODO.md to reflect progress
+
+### TODO Integration with Agents
+
+The TODO system integrates with agent workflows:
+
+- **plan mode agents** can reference TODO.md for planning context
+- **build mode agents** should check TODO.md for implementation priorities
+- **review mode agents** can verify TODO items are properly addressed
+
+### Maintaining TODO.md
+
+Keep TODO.md current by:
+- Reviewing and updating task priorities regularly
+- Adding detailed notes when tasks are completed
+- Using consistent formatting for task descriptions
+- Including version information and dates in headers
+
 ## Research References
 
 - Bsharat et al. (2023) — "Principled Instructions Are All You Need" — MBZUAI
-- Yang et al. (2023) — "Large Language Models as Optimizers" (OPRO) — Google DeepMind  
+- Yang et al. (2023) — "Large Language Models as Optimizers" (OPRO) — Google DeepMind
 - Li et al. (2023) — Challenge framing research — ICLR 2024
 - Kong et al. (2023) — Persona prompting research

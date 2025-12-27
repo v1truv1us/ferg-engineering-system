@@ -7,66 +7,70 @@
  * Can run in local mode (embedded) or remote mode (separate server).
  */
 
-import { execSync, spawn } from 'child_process';
-import { existsSync, writeFileSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { execSync, spawn } from "node:child_process";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 
-const SETUP_MODE = process.env.SWARMS_MODE || 'local'; // 'local' or 'remote'
-const PYTHON_CMD = process.env.PYTHON_CMD || 'python3';
+const SETUP_MODE = process.env.SWARMS_MODE || "local"; // 'local' or 'remote'
+const PYTHON_CMD = process.env.PYTHON_CMD || "python3";
 
 async function main() {
-  console.log('🚀 Setting up Swarms Integration for Ferg Engineering System');
-  console.log(`📦 Mode: ${SETUP_MODE}`);
+    console.log("🚀 Setting up Swarms Integration for Ferg Engineering System");
+    console.log(`📦 Mode: ${SETUP_MODE}`);
 
-  if (SETUP_MODE === 'local') {
-    await setupLocalMode();
-  } else {
-    await setupRemoteMode();
-  }
+    if (SETUP_MODE === "local") {
+        await setupLocalMode();
+    } else {
+        await setupRemoteMode();
+    }
 
-  console.log('✅ Swarms integration setup complete!');
-  console.log('\n📚 Usage:');
-  console.log('  import { createSwarmsClient } from "./src/local-swarms-executor";');
-  console.log('  const client = createSwarmsClient({ mode: "local" });');
+    console.log("✅ Swarms integration setup complete!");
+    console.log("\n📚 Usage:");
+    console.log(
+        '  import { createSwarmsClient } from "./src/local-swarms-executor";',
+    );
+    console.log('  const client = createSwarmsClient({ mode: "local" });');
 }
 
 async function setupLocalMode() {
-  console.log('\n🔧 Setting up Local Mode (Embedded Execution)');
+    console.log("\n🔧 Setting up Local Mode (Embedded Execution)");
 
-  // Check if Python is available
-  try {
-    execSync(`${PYTHON_CMD} --version`, { stdio: 'pipe' });
-    console.log('✅ Python available');
-  } catch (error) {
-    console.error('❌ Python not found. Please install Python 3.8+');
-    process.exit(1);
-  }
+    // Check if Python is available
+    try {
+        execSync(`${PYTHON_CMD} --version`, { stdio: "pipe" });
+        console.log("✅ Python available");
+    } catch (error) {
+        console.error("❌ Python not found. Please install Python 3.8+");
+        process.exit(1);
+    }
 
-  // Install swarms via pip
-  console.log('📦 Installing Swarms framework...');
-  try {
-    execSync(`${PYTHON_CMD} -m pip install swarms`, { stdio: 'inherit' });
-    console.log('✅ Swarms installed');
-  } catch (error) {
-    console.warn('⚠️  Swarms installation failed, but local executor will work with fallback mode');
-  }
+    // Install swarms via pip
+    console.log("📦 Installing Swarms framework...");
+    try {
+        execSync(`${PYTHON_CMD} -m pip install swarms`, { stdio: "inherit" });
+        console.log("✅ Swarms installed");
+    } catch (error) {
+        console.warn(
+            "⚠️  Swarms installation failed, but local executor will work with fallback mode",
+        );
+    }
 
-  // Create requirements.txt for documentation
-  const requirements = [
-    'swarms>=0.1.0',
-    'openai>=1.0.0',
-    'anthropic>=0.30.0'
-  ];
+    // Create requirements.txt for documentation
+    const requirements = [
+        "swarms>=0.1.0",
+        "openai>=1.0.0",
+        "anthropic>=0.30.0",
+    ];
 
-  writeFileSync('requirements-swarms.txt', requirements.join('\n'));
-  console.log('📄 Created requirements-swarms.txt');
+    writeFileSync("requirements-swarms.txt", requirements.join("\n"));
+    console.log("📄 Created requirements-swarms.txt");
 }
 
 async function setupRemoteMode() {
-  console.log('\n🌐 Setting up Remote Mode (Separate Server)');
+    console.log("\n🌐 Setting up Remote Mode (Separate Server)");
 
-  // Create Docker setup for remote server
-  const dockerfile = `
+    // Create Docker setup for remote server
+    const dockerfile = `
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -88,7 +92,7 @@ EXPOSE 8000
 CMD ["python", "swarms-server.py"]
 `;
 
-  const dockerCompose = `
+    const dockerCompose = `
 version: '3.8'
 
 services:
@@ -104,7 +108,7 @@ services:
     restart: unless-stopped
 `;
 
-  const serverCode = `
+    const serverCode = `
 #!/usr/bin/env python3
 """
 Swarms API Server for Ferg Engineering System
@@ -246,19 +250,19 @@ if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=port)
 `;
 
-  writeFileSync('Dockerfile.swarms', dockerfile);
-  writeFileSync('docker-compose.swarms.yml', dockerCompose);
-  writeFileSync('swarms-server.py', serverCode);
+    writeFileSync("Dockerfile.swarms", dockerfile);
+    writeFileSync("docker-compose.swarms.yml", dockerCompose);
+    writeFileSync("swarms-server.py", serverCode);
 
-  console.log('📄 Created Docker setup files:');
-  console.log('  - Dockerfile.swarms');
-  console.log('  - docker-compose.swarms.yml');
-  console.log('  - swarms-server.py');
+    console.log("📄 Created Docker setup files:");
+    console.log("  - Dockerfile.swarms");
+    console.log("  - docker-compose.swarms.yml");
+    console.log("  - swarms-server.py");
 
-  console.log('\n🚀 To start the remote server:');
-  console.log('  docker-compose -f docker-compose.swarms.yml up -d');
+    console.log("\n🚀 To start the remote server:");
+    console.log("  docker-compose -f docker-compose.swarms.yml up -d");
 }
 
 if (import.meta.main) {
-  main().catch(console.error);
+    main().catch(console.error);
 }

@@ -14,3 +14,6 @@ bun.lockb
 
 # Build scratch
 build.ts.tmp
+
+# Husky internal files
+.husky/

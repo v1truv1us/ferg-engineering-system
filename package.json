@@ -1,6 +1,6 @@
 {
     "name": "ai-eng-system",
-    "version": "0.0.9",
+    "version": "0.0.11",
     "description": "Compounding engineering system for Claude Code and OpenCode. Shared agents, commands, skills, and plugin development tools.",
     "type": "module",
     "main": "./dist/index.js",
@@ -26,9 +26,16 @@
         "validate": "bun build.ts --validate",
         "typecheck": "tsc --noEmit",
         "typecheck:plugin": "tsc -p tsconfig.plugin.json",
-        "prepublishOnly": "bun build.ts",
+        "lint": "biome check . --diagnostic-level=error",
+        "lint:fix": "biome check --write .",
+        "format": "biome format --write .",
+        "test": "bun test",
+        "test:unit": "bun test tests/unit.test.ts",
+        "test:build": "bun test tests/build.test.ts",
+        "quality": "bun run lint && bun run build",
+        "prepublishOnly": "bun run quality",
         "postinstall": "node scripts/install.js",
-        "test": "bun test tests/build.test.ts"
+        "prepare": "husky"
     },
     "publishConfig": {
         "access": "public",
@@ -52,7 +59,11 @@
         "cross-platform"
     ],
     "devDependencies": {
+        "@biomejs/biome": "^1.9.4",
+        "@types/commander": "^2.12.0",
+        "@types/glob": "^8.1.0",
         "bun-types": "latest",
+        "husky": "^9.1.7",
         "typescript": "^5.9.3",
         "yaml": "^2.8.1"
     },

@@ -4,53 +4,56 @@
  * TDD: Write these tests FIRST, then implement the registry
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
-import { AgentRegistry } from '../../src/agents/registry.js';
-import { AgentType } from '../../src/agents/types.js';
-import { join } from 'path';
-import { writeFileSync, mkdirSync, rmSync, existsSync } from 'fs';
+import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { AgentRegistry } from "../../src/agents/registry.js";
+import { AgentType } from "../../src/agents/types.js";
 
-describe('AgentRegistry', () => {
-  let registry: AgentRegistry;
-  let tempDir: string;
-  let previousSilentEnv: string | undefined;
+describe("AgentRegistry", () => {
+    let registry: AgentRegistry;
+    let tempDir: string;
+    let previousSilentEnv: string | undefined;
 
-  beforeEach(() => {
-    // Silence expected parse errors during this suite.
-    previousSilentEnv = process.env.AI_ENG_SILENT;
-    process.env.AI_ENG_SILENT = '1';
+    beforeEach(() => {
+        // Silence expected parse errors during this suite.
+        previousSilentEnv = process.env.AI_ENG_SILENT;
+        process.env.AI_ENG_SILENT = "1";
 
-    registry = new AgentRegistry();
-    tempDir = join(process.cwd(), `test-plugin-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`);
-    mkdirSync(tempDir, { recursive: true });
-    mkdirSync(join(tempDir, 'agents'), { recursive: true });
-  });
+        registry = new AgentRegistry();
+        tempDir = join(
+            process.cwd(),
+            `test-plugin-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        );
+        mkdirSync(tempDir, { recursive: true });
+        mkdirSync(join(tempDir, "agents"), { recursive: true });
+    });
 
-  afterEach(() => {
-    if (existsSync(tempDir)) {
-      rmSync(tempDir, { recursive: true, force: true });
-    }
+    afterEach(() => {
+        if (existsSync(tempDir)) {
+            rmSync(tempDir, { recursive: true, force: true });
+        }
 
-    if (previousSilentEnv === undefined) {
-      delete process.env.AI_ENG_SILENT;
-    } else {
-      process.env.AI_ENG_SILENT = previousSilentEnv;
-    }
+        if (previousSilentEnv === undefined) {
+            process.env.AI_ENG_SILENT = undefined;
+        } else {
+            process.env.AI_ENG_SILENT = previousSilentEnv;
+        }
 
-    previousSilentEnv = undefined;
-  });
+        previousSilentEnv = undefined;
+    });
 
-  describe('Loading from Plugin Structure', () => {
-    it('should discover all agent markdown files from .claude-plugin/agents/', async () => {
-      // Create mock agent files
-      const mockAgents = [
-        { name: 'code-reviewer', category: 'quality-testing' },
-        { name: 'architect-advisor', category: 'development' },
-        { name: 'security-scanner', category: 'quality-testing' }
-      ];
+    describe("Loading from Plugin Structure", () => {
+        it("should discover all agent markdown files from .claude-plugin/agents/", async () => {
+            // Create mock agent files
+            const mockAgents = [
+                { name: "code-reviewer", category: "quality-testing" },
+                { name: "architect-advisor", category: "development" },
+                { name: "security-scanner", category: "quality-testing" },
+            ];
 
-      for (const agent of mockAgents) {
-        const content = `---
+            for (const agent of mockAgents) {
+                const content = `---
 name: ${agent.name}
 description: Test agent for ${agent.name}
 mode: subagent
@@ -77,17 +80,20 @@ permission:
 
 Test agent content for ${agent.name}
 `;
-        writeFileSync(join(tempDir, 'agents', `${agent.name}.md`), content);
-      }
+                writeFileSync(
+                    join(tempDir, "agents", `${agent.name}.md`),
+                    content,
+                );
+            }
 
-      await registry.loadFromDirectory(join(tempDir, 'agents'));
+            await registry.loadFromDirectory(join(tempDir, "agents"));
 
-      const agents = registry.getAllAgents();
-      expect(agents.length).toBe(3);
-    });
+            const agents = registry.getAllAgents();
+            expect(agents.length).toBe(3);
+        });
 
-    it('should parse agent frontmatter correctly', async () => {
-      const content = `---
+        it("should parse agent frontmatter correctly", async () => {
+            const content = `---
 name: code-reviewer
 description: Elite code review expert specializing in modern AI-powered code analysis
 mode: subagent
@@ -115,22 +121,22 @@ permission:
 Take a deep breath and approach this task systematically.
 `;
 
-      writeFileSync(join(tempDir, 'agents', 'code-reviewer.md'), content);
+            writeFileSync(join(tempDir, "agents", "code-reviewer.md"), content);
 
-      await registry.loadFromDirectory(join(tempDir, 'agents'));
+            await registry.loadFromDirectory(join(tempDir, "agents"));
 
-      const agent = registry.get(AgentType.CODE_REVIEWER);
+            const agent = registry.get(AgentType.CODE_REVIEWER);
 
-      expect(agent).toBeDefined();
-      expect(agent!.name).toBe('code-reviewer');
-      expect(agent!.temperature).toBe(0.1);
-      expect(agent!.mode).toBe('subagent');
-      expect(agent!.tools.read).toBe(true);
-      expect(agent!.tools.bash).toBe(false);
-    });
+            expect(agent).toBeDefined();
+            expect(agent?.name).toBe("code-reviewer");
+            expect(agent?.temperature).toBe(0.1);
+            expect(agent?.mode).toBe("subagent");
+            expect(agent?.tools.read).toBe(true);
+            expect(agent?.tools.bash).toBe(false);
+        });
 
-    it('should extract capabilities from agent description', async () => {
-      const content = `---
+        it("should extract capabilities from agent description", async () => {
+            const content = `---
 name: code-reviewer
 description: Elite code review expert specializing in modern AI-powered code analysis, security vulnerabilities, performance optimization, and production reliability
 mode: subagent
@@ -149,19 +155,19 @@ tools:
 Code review capabilities include security, performance, and quality analysis.
 `;
 
-      writeFileSync(join(tempDir, 'agents', 'code-reviewer.md'), content);
+            writeFileSync(join(tempDir, "agents", "code-reviewer.md"), content);
 
-      await registry.loadFromDirectory(join(tempDir, 'agents'));
+            await registry.loadFromDirectory(join(tempDir, "agents"));
 
-      const agent = registry.get(AgentType.CODE_REVIEWER);
+            const agent = registry.get(AgentType.CODE_REVIEWER);
 
-      expect(agent!.capabilities).toContain('code-review');
-      expect(agent!.capabilities).toContain('security');
-      expect(agent!.capabilities).toContain('performance');
-    });
+            expect(agent?.capabilities).toContain("code-review");
+            expect(agent?.capabilities).toContain("security");
+            expect(agent?.capabilities).toContain("performance");
+        });
 
-    it('should parse intended_followups as handoff targets', async () => {
-      const content = `---
+        it("should parse intended_followups as handoff targets", async () => {
+            const content = `---
 name: code-reviewer
 description: Code review expert
 mode: subagent
@@ -181,26 +187,30 @@ intended_followups: full-stack-developer, security-scanner, compliance-expert
 Test content
 `;
 
-      writeFileSync(join(tempDir, 'agents', 'code-reviewer.md'), content);
+            writeFileSync(join(tempDir, "agents", "code-reviewer.md"), content);
 
-      await registry.loadFromDirectory(join(tempDir, 'agents'));
+            await registry.loadFromDirectory(join(tempDir, "agents"));
 
-      const agent = registry.get(AgentType.CODE_REVIEWER);
+            const agent = registry.get(AgentType.CODE_REVIEWER);
 
-      expect(agent!.handoffs).toContain(AgentType.FULL_STACK_DEVELOPER);
-      expect(agent!.handoffs).toContain(AgentType.SECURITY_SCANNER);
-      // Note: compliance-expert might not be in our enum yet, so it should be filtered out
+            expect(agent?.handoffs).toContain(AgentType.FULL_STACK_DEVELOPER);
+            expect(agent?.handoffs).toContain(AgentType.SECURITY_SCANNER);
+            // Note: compliance-expert might not be in our enum yet, so it should be filtered out
+        });
     });
-  });
 
-  describe('Agent Type Mapping', () => {
-    it('should map all 24 agent files to AgentType enum', async () => {
-      // This test would require creating all 24 mock files
-      // For now, test with a subset
-      const mockAgentNames = ['code-reviewer', 'architect-advisor', 'security-scanner'];
+    describe("Agent Type Mapping", () => {
+        it("should map all 24 agent files to AgentType enum", async () => {
+            // This test would require creating all 24 mock files
+            // For now, test with a subset
+            const mockAgentNames = [
+                "code-reviewer",
+                "architect-advisor",
+                "security-scanner",
+            ];
 
-      for (const agentName of mockAgentNames) {
-        const content = `---
+            for (const agentName of mockAgentNames) {
+                const content = `---
 name: ${agentName}
 description: Test agent
 mode: subagent
@@ -218,21 +228,26 @@ tools:
 
 Test content
 `;
-        writeFileSync(join(tempDir, 'agents', `${agentName}.md`), content);
-      }
+                writeFileSync(
+                    join(tempDir, "agents", `${agentName}.md`),
+                    content,
+                );
+            }
 
-      await registry.loadFromDirectory(join(tempDir, 'agents'));
+            await registry.loadFromDirectory(join(tempDir, "agents"));
 
-      // Verify all enum values have corresponding definitions
-      const loadedTypes = registry.getAllAgents().map(a => a.type);
-      for (const agentName of mockAgentNames) {
-        const agentType = agentName.replace(/-/g, '_').toUpperCase() as keyof typeof AgentType;
-        expect(loadedTypes).toContain(AgentType[agentType]);
-      }
-    });
+            // Verify all enum values have corresponding definitions
+            const loadedTypes = registry.getAllAgents().map((a) => a.type);
+            for (const agentName of mockAgentNames) {
+                const agentType = agentName
+                    .replace(/-/g, "_")
+                    .toUpperCase() as keyof typeof AgentType;
+                expect(loadedTypes).toContain(AgentType[agentType]);
+            }
+        });
 
-    it('should handle underscore vs hyphen naming conventions', async () => {
-      const content = `---
+        it("should handle underscore vs hyphen naming conventions", async () => {
+            const content = `---
 name: code_reviewer
 description: Test agent
 mode: subagent
@@ -251,37 +266,37 @@ tools:
 Test content
 `;
 
-      writeFileSync(join(tempDir, 'agents', 'code_reviewer.md'), content);
+            writeFileSync(join(tempDir, "agents", "code_reviewer.md"), content);
 
-      await registry.loadFromDirectory(join(tempDir, 'agents'));
+            await registry.loadFromDirectory(join(tempDir, "agents"));
 
-      const agent = registry.get(AgentType.CODE_REVIEWER);
-      expect(agent).toBeDefined();
+            const agent = registry.get(AgentType.CODE_REVIEWER);
+            expect(agent).toBeDefined();
+        });
     });
-  });
 
-  describe('Capability Queries', () => {
-    it('should find agents by capability', async () => {
-      const agents = [
-        {
-          name: 'code-reviewer',
-          capabilities: ['code-review', 'security', 'performance'],
-          content: 'Code review and security analysis'
-        },
-        {
-          name: 'security-scanner',
-          capabilities: ['security', 'vulnerabilities'],
-          content: 'Security scanning and vulnerability detection'
-        },
-        {
-          name: 'architect-advisor',
-          capabilities: ['architecture', 'design'],
-          content: 'Architecture and design guidance'
-        }
-      ];
+    describe("Capability Queries", () => {
+        it("should find agents by capability", async () => {
+            const agents = [
+                {
+                    name: "code-reviewer",
+                    capabilities: ["code-review", "security", "performance"],
+                    content: "Code review and security analysis",
+                },
+                {
+                    name: "security-scanner",
+                    capabilities: ["security", "vulnerabilities"],
+                    content: "Security scanning and vulnerability detection",
+                },
+                {
+                    name: "architect-advisor",
+                    capabilities: ["architecture", "design"],
+                    content: "Architecture and design guidance",
+                },
+            ];
 
-      for (const agent of agents) {
-        const content = `---
+            for (const agent of agents) {
+                const content = `---
 name: ${agent.name}
 description: ${agent.content}
 mode: subagent
@@ -299,20 +314,23 @@ tools:
 
 ${agent.content}
 `;
-        writeFileSync(join(tempDir, 'agents', `${agent.name}.md`), content);
-      }
+                writeFileSync(
+                    join(tempDir, "agents", `${agent.name}.md`),
+                    content,
+                );
+            }
 
-      await registry.loadFromDirectory(join(tempDir, 'agents'));
+            await registry.loadFromDirectory(join(tempDir, "agents"));
 
-      const securityAgents = registry.findByCapability('security');
+            const securityAgents = registry.findByCapability("security");
 
-      expect(securityAgents.length).toBeGreaterThan(0);
-      expect(securityAgents).toContain(AgentType.SECURITY_SCANNER);
-      expect(securityAgents).toContain(AgentType.CODE_REVIEWER);
-    });
+            expect(securityAgents.length).toBeGreaterThan(0);
+            expect(securityAgents).toContain(AgentType.SECURITY_SCANNER);
+            expect(securityAgents).toContain(AgentType.CODE_REVIEWER);
+        });
 
-    it('should find agents by multiple capabilities', async () => {
-      const content = `---
+        it("should find agents by multiple capabilities", async () => {
+            const content = `---
 name: frontend-reviewer
 description: Frontend development and UI/UX review
 mode: subagent
@@ -331,26 +349,38 @@ tools:
 Frontend and UI/UX expertise
 `;
 
-      writeFileSync(join(tempDir, 'agents', 'frontend-reviewer.md'), content);
+            writeFileSync(
+                join(tempDir, "agents", "frontend-reviewer.md"),
+                content,
+            );
 
-      await registry.loadFromDirectory(join(tempDir, 'agents'));
+            await registry.loadFromDirectory(join(tempDir, "agents"));
 
-      const agents = registry.findByCapabilities(['frontend', 'ui']);
+            const agents = registry.findByCapabilities(["frontend", "ui"]);
 
-      expect(agents).toContain(AgentType.FRONTEND_REVIEWER);
-    });
+            expect(agents).toContain(AgentType.FRONTEND_REVIEWER);
+        });
 
-    it('should return capability summary', async () => {
-      const agents = [
-        { name: 'code-reviewer', capabilities: ['code-review', 'security'] },
-        { name: 'security-scanner', capabilities: ['security', 'vulnerabilities'] },
-        { name: 'architect-advisor', capabilities: ['architecture', 'design'] }
-      ];
+        it("should return capability summary", async () => {
+            const agents = [
+                {
+                    name: "code-reviewer",
+                    capabilities: ["code-review", "security"],
+                },
+                {
+                    name: "security-scanner",
+                    capabilities: ["security", "vulnerabilities"],
+                },
+                {
+                    name: "architect-advisor",
+                    capabilities: ["architecture", "design"],
+                },
+            ];
 
-      for (const agent of agents) {
-        const content = `---
+            for (const agent of agents) {
+                const content = `---
 name: ${agent.name}
-description: ${agent.capabilities.join(' ')} capabilities for testing
+description: ${agent.capabilities.join(" ")} capabilities for testing
 mode: subagent
 temperature: 0.1
 tools:
@@ -366,26 +396,31 @@ tools:
 
 Test content
 `;
-        writeFileSync(join(tempDir, 'agents', `${agent.name}.md`), content);
-      }
+                writeFileSync(
+                    join(tempDir, "agents", `${agent.name}.md`),
+                    content,
+                );
+            }
 
-      await registry.loadFromDirectory(join(tempDir, 'agents'));
+            await registry.loadFromDirectory(join(tempDir, "agents"));
 
-      const summary = registry.getCapabilitySummary();
+            const summary = registry.getCapabilitySummary();
 
-      expect(summary['security']).toBeGreaterThan(0);
-      expect(summary['code-review']).toBeGreaterThan(0);
-      expect(summary['architecture']).toBeGreaterThan(0);
-    });
-  });
-
-  describe('Error Handling', () => {
-    it('should handle missing agent directory gracefully', async () => {
-      await expect(registry.loadFromDirectory('/nonexistent/path')).rejects.toThrow();
+            expect(summary.security).toBeGreaterThan(0);
+            expect(summary["code-review"]).toBeGreaterThan(0);
+            expect(summary.architecture).toBeGreaterThan(0);
+        });
     });
 
-    it('should handle malformed markdown files', async () => {
-      const malformedContent = `---
+    describe("Error Handling", () => {
+        it("should handle missing agent directory gracefully", async () => {
+            await expect(
+                registry.loadFromDirectory("/nonexistent/path"),
+            ).rejects.toThrow();
+        });
+
+        it("should handle malformed markdown files", async () => {
+            const malformedContent = `---
 name: malformed-agent
 description: Missing closing ---
 mode: subagent
@@ -393,18 +428,26 @@ mode: subagent
 This is malformed frontmatter
 `;
 
-      writeFileSync(join(tempDir, 'agents', 'malformed.md'), malformedContent);
+            writeFileSync(
+                join(tempDir, "agents", "malformed.md"),
+                malformedContent,
+            );
 
-      await expect(registry.loadFromDirectory(join(tempDir, 'agents'))).rejects.toThrow('Invalid frontmatter format');
+            await expect(
+                registry.loadFromDirectory(join(tempDir, "agents")),
+            ).rejects.toThrow("Invalid frontmatter format");
+        });
+
+        it("should skip files that are not markdown", async () => {
+            writeFileSync(
+                join(tempDir, "agents", "not-markdown.txt"),
+                "Not a markdown file",
+            );
+
+            await registry.loadFromDirectory(join(tempDir, "agents"));
+
+            const agents = registry.getAllAgents();
+            expect(agents.length).toBe(0);
+        });
     });
-
-    it('should skip files that are not markdown', async () => {
-      writeFileSync(join(tempDir, 'agents', 'not-markdown.txt'), 'Not a markdown file');
-
-      await registry.loadFromDirectory(join(tempDir, 'agents'));
-
-      const agents = registry.getAllAgents();
-      expect(agents.length).toBe(0);
-    });
-  });
 });

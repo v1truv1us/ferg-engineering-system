@@ -2,452 +2,544 @@
  * Tests for CodeReviewExecutor class
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
-import { CodeReviewExecutor } from '../../src/agents/code-review-executor.js';
-import { AgentCoordinator } from '../../src/agents/coordinator.js';
-import { AgentRegistry } from '../../src/agents/registry.js';
+import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { CodeReviewExecutor } from "../../src/agents/code-review-executor.js";
+import { AgentCoordinator } from "../../src/agents/coordinator.js";
+import { AgentRegistry } from "../../src/agents/registry.js";
 import {
-  CodeReviewInput,
-  ConfidenceLevel,
-  AgentCoordinatorConfig,
-  AgentType,
-  AgentDefinition
-} from '../../src/agents/types.js';
+    type AgentCoordinatorConfig,
+    type AgentDefinition,
+    AgentType,
+    type CodeReviewInput,
+    ConfidenceLevel,
+} from "../../src/agents/types.js";
 
 // Mock registry for testing
 class MockAgentRegistry extends AgentRegistry {
-  private mockAgents: Map<AgentType, AgentDefinition>;
+    private mockAgents: Map<AgentType, AgentDefinition>;
 
-  constructor() {
-    super();
-    this.mockAgents = new Map<AgentType, AgentDefinition>([
-      [AgentType.CODE_REVIEWER, {
-        type: AgentType.CODE_REVIEWER,
-        name: 'code-reviewer',
-        description: 'Code review agent',
-        mode: 'subagent' as const,
-        temperature: 0.1,
-        capabilities: ['code-review', 'security'],
-        handoffs: [],
-        tags: [],
-        category: 'quality',
-        tools: { read: true, grep: false, glob: false, list: false, bash: false, edit: false, write: false, patch: false },
-        promptPath: '',
-        prompt: 'Code review prompt'
-      }],
-      [AgentType.SECURITY_SCANNER, {
-        type: AgentType.SECURITY_SCANNER,
-        name: 'security-scanner',
-        description: 'Security scanning agent',
-        mode: 'subagent' as const,
-        temperature: 0.1,
-        capabilities: ['security', 'vulnerabilities'],
-        handoffs: [],
-        tags: [],
-        category: 'quality',
-        tools: { read: true, grep: false, glob: false, list: false, bash: false, edit: false, write: false, patch: false },
-        promptPath: '',
-        prompt: 'Security scanning prompt'
-      }],
-      [AgentType.PERFORMANCE_ENGINEER, {
-        type: AgentType.PERFORMANCE_ENGINEER,
-        name: 'performance-engineer',
-        description: 'Performance analysis agent',
-        mode: 'subagent' as const,
-        temperature: 0.1,
-        capabilities: ['performance', 'optimization'],
-        handoffs: [],
-        tags: [],
-        category: 'quality',
-        tools: { read: true, grep: false, glob: false, list: false, bash: false, edit: false, write: false, patch: false },
-        promptPath: '',
-        prompt: 'Performance analysis prompt'
-      }],
-      [AgentType.FRONTEND_REVIEWER, {
-        type: AgentType.FRONTEND_REVIEWER,
-        name: 'frontend-reviewer',
-        description: 'Frontend review agent',
-        mode: 'subagent' as const,
-        temperature: 0.1,
-        capabilities: ['frontend', 'ui', 'accessibility'],
-        handoffs: [],
-        tags: [],
-        category: 'quality',
-        tools: { read: true, grep: false, glob: false, list: false, bash: false, edit: false, write: false, patch: false },
-        promptPath: '',
-        prompt: 'Frontend review prompt'
-      }]
-    ]);
-  }
+    constructor() {
+        super();
+        this.mockAgents = new Map<AgentType, AgentDefinition>([
+            [
+                AgentType.CODE_REVIEWER,
+                {
+                    type: AgentType.CODE_REVIEWER,
+                    name: "code-reviewer",
+                    description: "Code review agent",
+                    mode: "subagent" as const,
+                    temperature: 0.1,
+                    capabilities: ["code-review", "security"],
+                    handoffs: [],
+                    tags: [],
+                    category: "quality",
+                    tools: {
+                        read: true,
+                        grep: false,
+                        glob: false,
+                        list: false,
+                        bash: false,
+                        edit: false,
+                        write: false,
+                        patch: false,
+                    },
+                    promptPath: "",
+                    prompt: "Code review prompt",
+                },
+            ],
+            [
+                AgentType.SECURITY_SCANNER,
+                {
+                    type: AgentType.SECURITY_SCANNER,
+                    name: "security-scanner",
+                    description: "Security scanning agent",
+                    mode: "subagent" as const,
+                    temperature: 0.1,
+                    capabilities: ["security", "vulnerabilities"],
+                    handoffs: [],
+                    tags: [],
+                    category: "quality",
+                    tools: {
+                        read: true,
+                        grep: false,
+                        glob: false,
+                        list: false,
+                        bash: false,
+                        edit: false,
+                        write: false,
+                        patch: false,
+                    },
+                    promptPath: "",
+                    prompt: "Security scanning prompt",
+                },
+            ],
+            [
+                AgentType.PERFORMANCE_ENGINEER,
+                {
+                    type: AgentType.PERFORMANCE_ENGINEER,
+                    name: "performance-engineer",
+                    description: "Performance analysis agent",
+                    mode: "subagent" as const,
+                    temperature: 0.1,
+                    capabilities: ["performance", "optimization"],
+                    handoffs: [],
+                    tags: [],
+                    category: "quality",
+                    tools: {
+                        read: true,
+                        grep: false,
+                        glob: false,
+                        list: false,
+                        bash: false,
+                        edit: false,
+                        write: false,
+                        patch: false,
+                    },
+                    promptPath: "",
+                    prompt: "Performance analysis prompt",
+                },
+            ],
+            [
+                AgentType.FRONTEND_REVIEWER,
+                {
+                    type: AgentType.FRONTEND_REVIEWER,
+                    name: "frontend-reviewer",
+                    description: "Frontend review agent",
+                    mode: "subagent" as const,
+                    temperature: 0.1,
+                    capabilities: ["frontend", "ui", "accessibility"],
+                    handoffs: [],
+                    tags: [],
+                    category: "quality",
+                    tools: {
+                        read: true,
+                        grep: false,
+                        glob: false,
+                        list: false,
+                        bash: false,
+                        edit: false,
+                        write: false,
+                        patch: false,
+                    },
+                    promptPath: "",
+                    prompt: "Frontend review prompt",
+                },
+            ],
+        ]);
+    }
 
-  get(type: AgentType): AgentDefinition | undefined {
-    return this.mockAgents.get(type);
-  }
+    get(type: AgentType): AgentDefinition | undefined {
+        return this.mockAgents.get(type);
+    }
 
-  getAllAgents(): AgentDefinition[] {
-    return Array.from(this.mockAgents.values());
-  }
+    getAllAgents(): AgentDefinition[] {
+        return Array.from(this.mockAgents.values());
+    }
 }
 
-describe('CodeReviewExecutor', () => {
-  let codeReviewExecutor: CodeReviewExecutor;
-  let coordinator: AgentCoordinator;
-  let registry: AgentRegistry;
-  let config: AgentCoordinatorConfig;
+describe("CodeReviewExecutor", () => {
+    let codeReviewExecutor: CodeReviewExecutor;
+    let coordinator: AgentCoordinator;
+    let registry: AgentRegistry;
+    let config: AgentCoordinatorConfig;
 
-  beforeEach(() => {
-    config = {
-      maxConcurrency: 3,
-      defaultTimeout: 5000,
-      retryAttempts: 1,
-      retryDelay: 100,
-      enableCaching: false, // Disable for testing
-      logLevel: 'error'
-    };
-    registry = new MockAgentRegistry() as any;
-    coordinator = new AgentCoordinator(config, registry);
-    codeReviewExecutor = new CodeReviewExecutor(coordinator);
-  });
-
-  afterEach(() => {
-    coordinator.reset();
-  });
-
-  describe('Basic Code Review', () => {
-    it('should execute a basic code review', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/app.js', 'src/utils.js'],
-        reviewType: 'full',
-        severity: 'medium'
-      };
-
-      const result = await codeReviewExecutor.executeCodeReview(input);
-
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
-      expect(result.summary).toBeDefined();
-      expect(result.summary.total).toBeGreaterThanOrEqual(0);
-      expect(result.summary.bySeverity).toBeDefined();
-      expect(result.summary.byCategory).toBeDefined();
-      expect(result.recommendations).toBeInstanceOf(Array);
-      expect(result.overallScore).toBeGreaterThanOrEqual(0);
-      expect(result.overallScore).toBeLessThanOrEqual(100);
+    beforeEach(() => {
+        config = {
+            maxConcurrency: 3,
+            defaultTimeout: 5000,
+            retryAttempts: 1,
+            retryDelay: 100,
+            enableCaching: false, // Disable for testing
+            logLevel: "error",
+        };
+        registry = new MockAgentRegistry() as any;
+        coordinator = new AgentCoordinator(config, registry);
+        codeReviewExecutor = new CodeReviewExecutor(coordinator);
     });
 
-    it('should handle empty file list', async () => {
-      const input: CodeReviewInput = {
-        files: [],
-        reviewType: 'full',
-        severity: 'low'
-      };
-
-      const result = await codeReviewExecutor.executeCodeReview(input);
-
-      expect(result.findings.length).toBe(0);
-      expect(result.summary.total).toBe(0);
-      expect(result.overallScore).toBe(100); // Perfect score with no findings
+    afterEach(() => {
+        coordinator.reset();
     });
 
-    it('should handle different severity levels', async () => {
-      const criticalInput: CodeReviewInput = {
-        files: ['src/critical.js'],
-        reviewType: 'full',
-        severity: 'critical'
-      };
+    describe("Basic Code Review", () => {
+        it("should execute a basic code review", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/app.js", "src/utils.js"],
+                reviewType: "full",
+                severity: "medium",
+            };
 
-      const result = await codeReviewExecutor.executeCodeReview(criticalInput);
+            const result = await codeReviewExecutor.executeCodeReview(input);
 
-      expect(result).toBeDefined();
-      expect(result.overallScore).toBeGreaterThanOrEqual(0);
-      expect(result.recommendations.length).toBeGreaterThan(0);
-    });
-  });
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+            expect(result.summary).toBeDefined();
+            expect(result.summary.total).toBeGreaterThanOrEqual(0);
+            expect(result.summary.bySeverity).toBeDefined();
+            expect(result.summary.byCategory).toBeDefined();
+            expect(result.recommendations).toBeInstanceOf(Array);
+            expect(result.overallScore).toBeGreaterThanOrEqual(0);
+            expect(result.overallScore).toBeLessThanOrEqual(100);
+        });
 
-  describe('Focused Reviews', () => {
-    it('should execute security-focused review', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/auth.js', 'src/api.js'],
-        reviewType: 'security',
-        severity: 'high'
-      };
+        it("should handle empty file list", async () => {
+            const input: CodeReviewInput = {
+                files: [],
+                reviewType: "full",
+                severity: "low",
+            };
 
-      const result = await codeReviewExecutor.executeFocusedReview(input, 'security');
+            const result = await codeReviewExecutor.executeCodeReview(input);
 
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
-      // Security reviews should include security-related findings
-      const securityFindings = result.findings.filter(f => f.category === 'security');
-      expect(securityFindings.length).toBeGreaterThanOrEqual(0);
-    });
+            expect(result.findings.length).toBe(0);
+            expect(result.summary.total).toBe(0);
+            expect(result.overallScore).toBe(100); // Perfect score with no findings
+        });
 
-    it('should execute performance-focused review', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/algorithm.js', 'src/data-processor.js'],
-        reviewType: 'performance',
-        severity: 'medium'
-      };
+        it("should handle different severity levels", async () => {
+            const criticalInput: CodeReviewInput = {
+                files: ["src/critical.js"],
+                reviewType: "full",
+                severity: "critical",
+            };
 
-      const result = await codeReviewExecutor.executeFocusedReview(input, 'performance');
+            const result =
+                await codeReviewExecutor.executeCodeReview(criticalInput);
 
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
-      // Performance reviews should include performance-related findings
-      const performanceFindings = result.findings.filter(f => f.category === 'performance');
-      expect(performanceFindings.length).toBeGreaterThanOrEqual(0);
-    });
-
-    it('should execute frontend-focused review', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/components.jsx', 'src/styles.css'],
-        reviewType: 'frontend',
-        severity: 'medium'
-      };
-
-      const result = await codeReviewExecutor.executeFocusedReview(input, 'frontend');
-
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
-      // Frontend reviews should include frontend-related findings
-      const frontendFindings = result.findings.filter(f => f.category === 'frontend');
-      expect(frontendFindings.length).toBeGreaterThanOrEqual(0);
+            expect(result).toBeDefined();
+            expect(result.overallScore).toBeGreaterThanOrEqual(0);
+            expect(result.recommendations.length).toBeGreaterThan(0);
+        });
     });
 
-    it('should execute general-focused review', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/general.js'],
-        reviewType: 'full',
-        severity: 'low'
-      };
+    describe("Focused Reviews", () => {
+        it("should execute security-focused review", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/auth.js", "src/api.js"],
+                reviewType: "security",
+                severity: "high",
+            };
 
-      const result = await codeReviewExecutor.executeFocusedReview(input, 'general');
+            const result = await codeReviewExecutor.executeFocusedReview(
+                input,
+                "security",
+            );
 
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
-      expect(result.summary.total).toBeGreaterThanOrEqual(0);
-    });
-  });
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+            // Security reviews should include security-related findings
+            const securityFindings = result.findings.filter(
+                (f) => f.category === "security",
+            );
+            expect(securityFindings.length).toBeGreaterThanOrEqual(0);
+        });
 
-  describe('Incremental Reviews', () => {
-    it('should execute incremental review', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/feature.js', 'src/feature-test.js'],
-        reviewType: 'incremental',
-        severity: 'medium'
-      };
+        it("should execute performance-focused review", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/algorithm.js", "src/data-processor.js"],
+                reviewType: "performance",
+                severity: "medium",
+            };
 
-      const result = await codeReviewExecutor.executeIncrementalReview(input, 'main');
+            const result = await codeReviewExecutor.executeFocusedReview(
+                input,
+                "performance",
+            );
 
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
-      expect(result.summary.total).toBeGreaterThanOrEqual(0);
-    });
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+            // Performance reviews should include performance-related findings
+            const performanceFindings = result.findings.filter(
+                (f) => f.category === "performance",
+            );
+            expect(performanceFindings.length).toBeGreaterThanOrEqual(0);
+        });
 
-    it('should execute incremental review without base branch', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/changed.js'],
-        reviewType: 'incremental',
-        severity: 'medium'
-      };
+        it("should execute frontend-focused review", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/components.jsx", "src/styles.css"],
+                reviewType: "frontend",
+                severity: "medium",
+            };
 
-      const result = await codeReviewExecutor.executeIncrementalReview(input);
+            const result = await codeReviewExecutor.executeFocusedReview(
+                input,
+                "frontend",
+            );
 
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
-    });
-  });
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+            // Frontend reviews should include frontend-related findings
+            const frontendFindings = result.findings.filter(
+                (f) => f.category === "frontend",
+            );
+            expect(frontendFindings.length).toBeGreaterThanOrEqual(0);
+        });
 
-  describe('Finding Aggregation', () => {
-    it('should deduplicate similar findings', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/duplicate.js'],
-        reviewType: 'full',
-        severity: 'medium'
-      };
+        it("should execute general-focused review", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/general.js"],
+                reviewType: "full",
+                severity: "low",
+            };
 
-      const result = await codeReviewExecutor.executeCodeReview(input);
+            const result = await codeReviewExecutor.executeFocusedReview(
+                input,
+                "general",
+            );
 
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
-      
-      // Check that findings are properly structured
-      for (const finding of result.findings) {
-        expect(finding.file).toBeDefined();
-        expect(finding.line).toBeGreaterThanOrEqual(0);
-        expect(finding.severity).toMatch(/^(low|medium|high|critical)$/);
-        expect(finding.category).toBeDefined();
-        expect(finding.message).toBeDefined();
-        expect(finding.confidence).toBeDefined();
-      }
-    });
-
-    it('should sort findings by severity and file', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/sorting.js', 'src/another.js'],
-        reviewType: 'full',
-        severity: 'medium'
-      };
-
-      const result = await codeReviewExecutor.executeCodeReview(input);
-
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
-      
-      // Verify sorting (critical first, then by file)
-      for (let i = 1; i < result.findings.length; i++) {
-        const prev = result.findings[i - 1];
-        const curr = result.findings[i];
-        
-        const severityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
-        const prevSeverity = severityOrder[prev.severity as keyof typeof severityOrder] || 0;
-        const currSeverity = severityOrder[curr.severity as keyof typeof severityOrder] || 0;
-        
-        // Either previous has higher severity, or same severity but earlier file
-        const isSorted = prevSeverity > currSeverity || 
-                        (prevSeverity === currSeverity && prev.file <= curr.file);
-        
-        expect(isSorted).toBe(true);
-      }
-    });
-  });
-
-  describe('Summary and Recommendations', () => {
-    it('should generate accurate summary statistics', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/summary.js', 'src/stats.js'],
-        reviewType: 'full',
-        severity: 'medium'
-      };
-
-      const result = await codeReviewExecutor.executeCodeReview(input);
-
-      expect(result.summary).toBeDefined();
-      expect(result.summary.total).toBeGreaterThanOrEqual(0);
-      expect(typeof result.summary.bySeverity).toBe('object');
-      expect(typeof result.summary.byCategory).toBe('object');
-      
-      // Verify summary counts match findings
-      const severityCount = Object.values(result.summary.bySeverity).reduce((sum, count) => sum + count, 0);
-      expect(severityCount).toBe(result.summary.total);
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+            expect(result.summary.total).toBeGreaterThanOrEqual(0);
+        });
     });
 
-    it('should generate meaningful recommendations', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/recommendations.js'],
-        reviewType: 'full',
-        severity: 'high'
-      };
+    describe("Incremental Reviews", () => {
+        it("should execute incremental review", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/feature.js", "src/feature-test.js"],
+                reviewType: "incremental",
+                severity: "medium",
+            };
 
-      const result = await codeReviewExecutor.executeCodeReview(input);
+            const result = await codeReviewExecutor.executeIncrementalReview(
+                input,
+                "main",
+            );
 
-      expect(result.recommendations).toBeInstanceOf(Array);
-      expect(result.recommendations.length).toBeGreaterThan(0);
-      
-      // Recommendations should be strings
-      for (const rec of result.recommendations) {
-        expect(typeof rec).toBe('string');
-        expect(rec.length).toBeGreaterThan(0);
-      }
-    });
-  });
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+            expect(result.summary.total).toBeGreaterThanOrEqual(0);
+        });
 
-  describe('Scoring', () => {
-    it('should calculate reasonable overall scores', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/scoring.js'],
-        reviewType: 'full',
-        severity: 'medium'
-      };
+        it("should execute incremental review without base branch", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/changed.js"],
+                reviewType: "incremental",
+                severity: "medium",
+            };
 
-      const result = await codeReviewExecutor.executeCodeReview(input);
+            const result =
+                await codeReviewExecutor.executeIncrementalReview(input);
 
-      expect(result.overallScore).toBeGreaterThanOrEqual(0);
-      expect(result.overallScore).toBeLessThanOrEqual(100);
-    });
-
-    it('should give perfect score for no findings', async () => {
-      const input: CodeReviewInput = {
-        files: [],
-        reviewType: 'full',
-        severity: 'low'
-      };
-
-      const result = await codeReviewExecutor.executeCodeReview(input);
-
-      expect(result.overallScore).toBe(100);
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+        });
     });
 
-    it('should deduct points for findings based on severity', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/severity.js'],
-        reviewType: 'full',
-        severity: 'critical' // Should trigger more severe findings
-      };
+    describe("Finding Aggregation", () => {
+        it("should deduplicate similar findings", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/duplicate.js"],
+                reviewType: "full",
+                severity: "medium",
+            };
 
-      const result = await codeReviewExecutor.executeCodeReview(input);
+            const result = await codeReviewExecutor.executeCodeReview(input);
 
-      expect(result.overallScore).toBeLessThan(100);
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+
+            // Check that findings are properly structured
+            for (const finding of result.findings) {
+                expect(finding.file).toBeDefined();
+                expect(finding.line).toBeGreaterThanOrEqual(0);
+                expect(finding.severity).toMatch(
+                    /^(low|medium|high|critical)$/,
+                );
+                expect(finding.category).toBeDefined();
+                expect(finding.message).toBeDefined();
+                expect(finding.confidence).toBeDefined();
+            }
+        });
+
+        it("should sort findings by severity and file", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/sorting.js", "src/another.js"],
+                reviewType: "full",
+                severity: "medium",
+            };
+
+            const result = await codeReviewExecutor.executeCodeReview(input);
+
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+
+            // Verify sorting (critical first, then by file)
+            for (let i = 1; i < result.findings.length; i++) {
+                const prev = result.findings[i - 1];
+                const curr = result.findings[i];
+
+                const severityOrder = {
+                    critical: 4,
+                    high: 3,
+                    medium: 2,
+                    low: 1,
+                };
+                const prevSeverity =
+                    severityOrder[
+                        prev.severity as keyof typeof severityOrder
+                    ] || 0;
+                const currSeverity =
+                    severityOrder[
+                        curr.severity as keyof typeof severityOrder
+                    ] || 0;
+
+                // Either previous has higher severity, or same severity but earlier file
+                const isSorted =
+                    prevSeverity > currSeverity ||
+                    (prevSeverity === currSeverity && prev.file <= curr.file);
+
+                expect(isSorted).toBe(true);
+            }
+        });
     });
-  });
 
-  describe('Error Handling', () => {
-    it('should handle invalid file paths gracefully', async () => {
-      const input: CodeReviewInput = {
-        files: ['nonexistent/file.js'],
-        reviewType: 'full',
-        severity: 'medium'
-      };
+    describe("Summary and Recommendations", () => {
+        it("should generate accurate summary statistics", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/summary.js", "src/stats.js"],
+                reviewType: "full",
+                severity: "medium",
+            };
 
-      // Should not throw, but may return empty findings
-      const result = await codeReviewExecutor.executeCodeReview(input);
-      expect(result).toBeDefined();
+            const result = await codeReviewExecutor.executeCodeReview(input);
+
+            expect(result.summary).toBeDefined();
+            expect(result.summary.total).toBeGreaterThanOrEqual(0);
+            expect(typeof result.summary.bySeverity).toBe("object");
+            expect(typeof result.summary.byCategory).toBe("object");
+
+            // Verify summary counts match findings
+            const severityCount = Object.values(
+                result.summary.bySeverity,
+            ).reduce((sum, count) => sum + count, 0);
+            expect(severityCount).toBe(result.summary.total);
+        });
+
+        it("should generate meaningful recommendations", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/recommendations.js"],
+                reviewType: "full",
+                severity: "high",
+            };
+
+            const result = await codeReviewExecutor.executeCodeReview(input);
+
+            expect(result.recommendations).toBeInstanceOf(Array);
+            expect(result.recommendations.length).toBeGreaterThan(0);
+
+            // Recommendations should be strings
+            for (const rec of result.recommendations) {
+                expect(typeof rec).toBe("string");
+                expect(rec.length).toBeGreaterThan(0);
+            }
+        });
     });
 
-    it('should handle agent failures gracefully', async () => {
-      // Create a coordinator that will fail
-      const failingConfig: AgentCoordinatorConfig = {
-        ...config,
-        defaultTimeout: 1 // Very short timeout to cause failures
-      };
-      const failingCoordinator = new AgentCoordinator(failingConfig);
-      const failingExecutor = new CodeReviewExecutor(failingCoordinator);
+    describe("Scoring", () => {
+        it("should calculate reasonable overall scores", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/scoring.js"],
+                reviewType: "full",
+                severity: "medium",
+            };
 
-      const input: CodeReviewInput = {
-        files: ['src/complex.js'],
-        reviewType: 'full',
-        severity: 'medium'
-      };
+            const result = await codeReviewExecutor.executeCodeReview(input);
 
-      // Should not throw, but may have limited results
-      const result = await failingExecutor.executeCodeReview(input);
-      expect(result).toBeDefined();
+            expect(result.overallScore).toBeGreaterThanOrEqual(0);
+            expect(result.overallScore).toBeLessThanOrEqual(100);
+        });
+
+        it("should give perfect score for no findings", async () => {
+            const input: CodeReviewInput = {
+                files: [],
+                reviewType: "full",
+                severity: "low",
+            };
+
+            const result = await codeReviewExecutor.executeCodeReview(input);
+
+            expect(result.overallScore).toBe(100);
+        });
+
+        it("should deduct points for findings based on severity", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/severity.js"],
+                reviewType: "full",
+                severity: "critical", // Should trigger more severe findings
+            };
+
+            const result = await codeReviewExecutor.executeCodeReview(input);
+
+            expect(result.overallScore).toBeLessThan(100);
+        });
     });
-  });
 
-  describe('File Type Detection', () => {
-    it('should include frontend review for frontend files', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/component.jsx', 'src/style.css', 'src/app.vue'],
-        reviewType: 'full',
-        severity: 'medium'
-      };
+    describe("Error Handling", () => {
+        it("should handle invalid file paths gracefully", async () => {
+            const input: CodeReviewInput = {
+                files: ["nonexistent/file.js"],
+                reviewType: "full",
+                severity: "medium",
+            };
 
-      const result = await codeReviewExecutor.executeCodeReview(input);
+            // Should not throw, but may return empty findings
+            const result = await codeReviewExecutor.executeCodeReview(input);
+            expect(result).toBeDefined();
+        });
 
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
+        it("should handle agent failures gracefully", async () => {
+            // Create a coordinator that will fail
+            const failingConfig: AgentCoordinatorConfig = {
+                ...config,
+                defaultTimeout: 1, // Very short timeout to cause failures
+            };
+            const failingCoordinator = new AgentCoordinator(failingConfig);
+            const failingExecutor = new CodeReviewExecutor(failingCoordinator);
+
+            const input: CodeReviewInput = {
+                files: ["src/complex.js"],
+                reviewType: "full",
+                severity: "medium",
+            };
+
+            // Should not throw, but may have limited results
+            const result = await failingExecutor.executeCodeReview(input);
+            expect(result).toBeDefined();
+        });
     });
 
-    it('should handle mixed file types', async () => {
-      const input: CodeReviewInput = {
-        files: ['src/backend.js', 'src/frontend.jsx', 'src/style.css', 'src/config.json'],
-        reviewType: 'full',
-        severity: 'medium'
-      };
+    describe("File Type Detection", () => {
+        it("should include frontend review for frontend files", async () => {
+            const input: CodeReviewInput = {
+                files: ["src/component.jsx", "src/style.css", "src/app.vue"],
+                reviewType: "full",
+                severity: "medium",
+            };
 
-      const result = await codeReviewExecutor.executeCodeReview(input);
+            const result = await codeReviewExecutor.executeCodeReview(input);
 
-      expect(result).toBeDefined();
-      expect(result.findings).toBeInstanceOf(Array);
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+        });
+
+        it("should handle mixed file types", async () => {
+            const input: CodeReviewInput = {
+                files: [
+                    "src/backend.js",
+                    "src/frontend.jsx",
+                    "src/style.css",
+                    "src/config.json",
+                ],
+                reviewType: "full",
+                severity: "medium",
+            };
+
+            const result = await codeReviewExecutor.executeCodeReview(input);
+
+            expect(result).toBeDefined();
+            expect(result.findings).toBeInstanceOf(Array);
+        });
     });
-  });
 });

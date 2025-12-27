@@ -14,11 +14,18 @@
  * - dist/skills/           (shared skill packs)
  */
 
-import { readdir, readFile, writeFile, mkdir, rm, copyFile } from "fs/promises";
-import { existsSync, watch } from "fs";
-import { join, basename, dirname } from "path";
+import { existsSync, watch } from "node:fs";
+import {
+    copyFile,
+    mkdir,
+    readFile,
+    readdir,
+    rm,
+    writeFile,
+} from "node:fs/promises";
+import { basename, dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import YAML from "yaml";
-import { fileURLToPath } from "url";
 
 const ROOT = process.env.TEST_ROOT ?? dirname(fileURLToPath(import.meta.url));
 const CONTENT_DIR = join(ROOT, "content");
@@ -140,22 +147,25 @@ function serializeFrontmatter(meta: Record<string, any>): string {
  * https://opencode.ai/docs/skills#validate-names
  */
 function validateSkillName(name: string, filePath: string): void {
-    if (name.length < SKILL_NAME_MIN_LENGTH || name.length > SKILL_NAME_MAX_LENGTH) {
+    if (
+        name.length < SKILL_NAME_MIN_LENGTH ||
+        name.length > SKILL_NAME_MAX_LENGTH
+    ) {
         throw new Error(
-            `Skill name '${name}' must be ${SKILL_NAME_MIN_LENGTH}-${SKILL_NAME_MAX_LENGTH} characters: ${filePath}`
+            `Skill name '${name}' must be ${SKILL_NAME_MIN_LENGTH}-${SKILL_NAME_MAX_LENGTH} characters: ${filePath}`,
         );
     }
     if (!SKILL_NAME_REGEX.test(name)) {
         throw new Error(
-            `Skill name '${name}' must be lowercase alphanumeric with single hyphens (regex: ${SKILL_NAME_REGEX}): ${filePath}`
+            `Skill name '${name}' must be lowercase alphanumeric with single hyphens (regex: ${SKILL_NAME_REGEX}): ${filePath}`,
         );
     }
 }
 
 interface SkillInfo {
     name: string;
-    sourceDir: string;  // Full path to skill directory
-    skillFile: string;  // Full path to SKILL.md
+    sourceDir: string; // Full path to skill directory
+    skillFile: string; // Full path to SKILL.md
 }
 
 /**
@@ -173,7 +183,7 @@ async function discoverSkills(skillsRoot: string): Promise<SkillInfo[]> {
         for (const entry of entries) {
             const fullPath = join(dir, entry.name);
             if (entry.isDirectory()) {
-                files.push(...await findSkillFiles(fullPath));
+                files.push(...(await findSkillFiles(fullPath)));
             } else if (entry.name === "SKILL.md") {
                 files.push(fullPath);
             }
@@ -196,7 +206,7 @@ async function discoverSkills(skillsRoot: string): Promise<SkillInfo[]> {
         // Validate name matches directory
         if (parsed.meta.name && parsed.meta.name !== dirName) {
             throw new Error(
-                `Skill frontmatter name '${parsed.meta.name}' must match directory name '${dirName}': ${skillFile}`
+                `Skill frontmatter name '${parsed.meta.name}' must match directory name '${dirName}': ${skillFile}`,
             );
         }
 
@@ -213,7 +223,10 @@ async function discoverSkills(skillsRoot: string): Promise<SkillInfo[]> {
  * Copy skills with flattened structure
  * Takes nested skills from source and copies them flat to destination
  */
-async function copySkillsFlat(skillsRoot: string, destDir: string): Promise<void> {
+async function copySkillsFlat(
+    skillsRoot: string,
+    destDir: string,
+): Promise<void> {
     const skills = await discoverSkills(skillsRoot);
 
     if (skills.length === 0) return;
@@ -225,7 +238,7 @@ async function copySkillsFlat(skillsRoot: string, destDir: string): Promise<void
     for (const skill of skills) {
         if (seenNames.has(skill.name)) {
             throw new Error(
-                `Duplicate skill name '${skill.name}' found in:\n  - ${seenNames.get(skill.name)}\n  - ${skill.sourceDir}`
+                `Duplicate skill name '${skill.name}' found in:\n  - ${seenNames.get(skill.name)}\n  - ${skill.sourceDir}`,
             );
         }
         seenNames.set(skill.name, skill.sourceDir);
@@ -251,15 +264,15 @@ function transformAgentMarkdownForOpenCode(
     const category = sanitizePathSegment(meta.category);
 
     // OpenCode agent name should be path-derived; frontmatter `name` overrides it.
-    delete meta.name;
+    meta.name = undefined;
     // category is only used for directory structure, not valid in OpenCode frontmatter
-    delete meta.category;
+    meta.category = undefined;
 
     // Transform named colors to hex format for OpenCode compatibility
     // OpenCode requires hex format: ^#[0-9a-fA-F]{6}$
-    if (meta.color && typeof meta.color === 'string') {
+    if (meta.color && typeof meta.color === "string") {
         const colorLower = meta.color.toLowerCase();
-        if (!meta.color.startsWith('#') && NAMED_COLOR_TO_HEX[colorLower]) {
+        if (!meta.color.startsWith("#") && NAMED_COLOR_TO_HEX[colorLower]) {
             meta.color = NAMED_COLOR_TO_HEX[colorLower];
         }
     }
@@ -280,7 +293,7 @@ function transformAgentMarkdownForOpenCode(
             meta.permission = cleanedPermission;
         } else {
             // Remove empty permission object
-            delete meta.permission;
+            meta.permission = undefined;
         }
     }
 
@@ -294,7 +307,7 @@ function transformAgentMarkdownForOpenCode(
 async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
     const cmdRoot = join(opencodeRoot, "command", NAMESPACE_PREFIX);
     const agentRoot = join(opencodeRoot, "agent", NAMESPACE_PREFIX);
-    const skillRoot = join(opencodeRoot, "skill");  // Note: singular
+    const skillRoot = join(opencodeRoot, "skill"); // Note: singular
 
     const commandFiles = await getMarkdownFiles(cmdRoot);
     const agentFiles = await getMarkdownFiles(agentRoot);
@@ -324,10 +337,12 @@ async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
         if (!body.trim()) errors.push(`OpenCode agent has empty body: ${fp}`);
 
         // Validate color format (if present) - OpenCode requires hex format: ^#[0-9a-fA-F]{6}$
-        if (meta.color && typeof meta.color === 'string') {
+        if (meta.color && typeof meta.color === "string") {
             const hexColorPattern = /^#[0-9a-fA-F]{6}$/;
             if (!hexColorPattern.test(meta.color)) {
-                errors.push(`OpenCode agent has invalid hex color format '${meta.color}': ${fp}`);
+                errors.push(
+                    `OpenCode agent has invalid hex color format '${meta.color}': ${fp}`,
+                );
             }
         }
 
@@ -361,7 +376,7 @@ async function validateOpenCodeOutput(opencodeRoot: string): Promise<void> {
                 const { meta } = parseFrontmatterStrict(content, skillMdPath);
                 if (meta.name && meta.name !== entry.name) {
                     errors.push(
-                        `Skill frontmatter name '${meta.name}' must match directory name '${entry.name}': ${skillMdPath}`
+                        `Skill frontmatter name '${meta.name}' must match directory name '${entry.name}': ${skillMdPath}`,
                     );
                 }
             } catch (e) {
@@ -456,7 +471,7 @@ async function buildOpenCode(): Promise<void> {
         // Clean target directories before building to remove stale files
         const commandsDir = join(targetDir, "command", NAMESPACE_PREFIX);
         const agentsDir = join(targetDir, "agent", NAMESPACE_PREFIX);
-        const skillsDir = join(targetDir, "skill");  // Note: singular, per OpenCode docs
+        const skillsDir = join(targetDir, "skill"); // Note: singular, per OpenCode docs
 
         if (existsSync(commandsDir)) {
             await rm(commandsDir, { recursive: true, force: true });
@@ -472,7 +487,9 @@ async function buildOpenCode(): Promise<void> {
         await mkdir(agentsDir, { recursive: true });
 
         // Commands: MD-first, copy as-is.
-        const commandFiles = await getMarkdownFiles(join(CONTENT_DIR, "commands"));
+        const commandFiles = await getMarkdownFiles(
+            join(CONTENT_DIR, "commands"),
+        );
         for (const src of commandFiles) {
             await copyFile(src, join(commandsDir, basename(src)));
         }
@@ -485,7 +502,10 @@ async function buildOpenCode(): Promise<void> {
 
             const categoryDir = join(agentsDir, transformed.category);
             await mkdir(categoryDir, { recursive: true });
-            await writeFile(join(categoryDir, basename(src)), transformed.markdown);
+            await writeFile(
+                join(categoryDir, basename(src)),
+                transformed.markdown,
+            );
         }
 
         // Skills: Copy to .opencode/skill/ (singular, flat structure)
@@ -495,7 +515,10 @@ async function buildOpenCode(): Promise<void> {
         // Copy OpenCode config
         const opencodeConfigSrc = join(ROOT, ".opencode", "opencode.jsonc");
         if (existsSync(opencodeConfigSrc)) {
-            await copyFile(opencodeConfigSrc, join(targetDir, "opencode.jsonc"));
+            await copyFile(
+                opencodeConfigSrc,
+                join(targetDir, "opencode.jsonc"),
+            );
         }
     }
 
@@ -533,7 +556,9 @@ async function buildNpmEntrypoint(): Promise<void> {
     // Skip if src/index.ts doesn't exist (e.g., in test environments)
     const srcIndexPath = join(ROOT, "src", "index.ts");
     if (!existsSync(srcIndexPath)) {
-        console.log("⚠️  Skipping npm entrypoint build (src/index.ts not found)");
+        console.log(
+            "⚠️  Skipping npm entrypoint build (src/index.ts not found)",
+        );
         return;
     }
 
@@ -570,10 +595,10 @@ async function buildNpmEntrypoint(): Promise<void> {
     await writeFile(
         rootIndexJsPath,
         [
-            '// Auto-generated compatibility shim for directory imports',
+            "// Auto-generated compatibility shim for directory imports",
             'export * from "./dist/index.js";',
             'export { AiEngSystem as default } from "./dist/index.js";',
-            '',
+            "",
         ].join("\n"),
     );
 
@@ -583,7 +608,7 @@ async function buildNpmEntrypoint(): Promise<void> {
         [
             'export * from "./dist/index";',
             'export { AiEngSystem as default } from "./dist/index";',
-            '',
+            "",
         ].join("\n"),
     );
 }
@@ -636,7 +661,9 @@ async function validateAgents(): Promise<void> {
         const { meta } = parseFrontmatterStrict(fileContent, fp);
 
         if (meta.permission) {
-            errors.push(`${fp}: Claude Code agents should not have permission field (use tools instead)`);
+            errors.push(
+                `${fp}: Claude Code agents should not have permission field (use tools instead)`,
+            );
         }
     }
 
@@ -655,7 +682,9 @@ async function validateAgents(): Promise<void> {
                 const validKeys = VALID_OPENCODE_PERMISSION_KEYS;
                 for (const key of Object.keys(meta.permission)) {
                     if (!validKeys.includes(key)) {
-                        errors.push(`${fp}: Invalid permission key '${key}' (only edit/bash/webfetch/doom_loop/external_directory allowed)`);
+                        errors.push(
+                            `${fp}: Invalid permission key '${key}' (only edit/bash/webfetch/doom_loop/external_directory allowed)`,
+                        );
                     }
                 }
             }
@@ -665,7 +694,9 @@ async function validateAgents(): Promise<void> {
     if (errors.length) {
         console.error("\n❌ Agent validation failed:\n");
         for (const e of errors) console.error(` - ${e}`);
-        throw new Error(`Agent validation failed with ${errors.length} error(s)`);
+        throw new Error(
+            `Agent validation failed with ${errors.length} error(s)`,
+        );
     }
 
     console.log("✅ All agents validated successfully");
