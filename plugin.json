@@ -1,0 +1,13 @@
+{
+	"name": "ferg-engineering-system",
+	"version": "1.0.0",
+	"description": "Engineering workflow automation with ai-eng-system toolkit",
+	"author": "johnferguson",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/johnferguson/ferg-engineering-system"
+	},
+	"skills": [],
+	"agents": [],
+	"commands": []
+}
