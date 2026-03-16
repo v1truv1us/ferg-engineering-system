@@ -47,7 +47,7 @@ This project requires the ai-eng-system toolkit installed globally:
 
 ```bash
 # Clone this repository
-git clone https://github.com/johnferguson/ferg-engineering-system.git
+git clone https://github.com/v1truv1us/ferg-engineering-system.git
 
 # Install ai-eng-system globally (see ai-eng-system docs)
 ```
